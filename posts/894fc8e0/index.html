@@ -1,0 +1,759 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>2021.12.24 考试总结 | Saiodgm の 博客儿</title><meta name="keywords" content="动态规划,数据结构,二分答案,单调队列,思维"><meta name="author" content="Saiodgm"><meta name="copyright" content="Saiodgm"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="记一次完全炸掉的考试">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2021.12.24 考试总结">
+<meta property="og:url" content="https://oi.saiodgm.gq/posts/894fc8e0/">
+<meta property="og:site_name" content="Saiodgm の 博客儿">
+<meta property="og:description" content="记一次完全炸掉的考试">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover4.webp">
+<meta property="article:published_time" content="2022-01-26T22:58:31.000Z">
+<meta property="article:modified_time" content="2022-02-01T10:10:08.000Z">
+<meta property="article:author" content="Saiodgm">
+<meta property="article:tag" content="动态规划">
+<meta property="article:tag" content="数据结构">
+<meta property="article:tag" content="二分答案">
+<meta property="article:tag" content="单调队列">
+<meta property="article:tag" content="思维">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover4.webp"><link rel="shortcut icon" href="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/favicon.webp" crossorigin><link rel="canonical" href="https://oi.saiodgm.gq/posts/894fc8e0/"><link rel="preconnect" href="//fastly.jsdelivr.net"/ crossorigin><link rel="preconnect" href="//busuanzi.ibruce.info"/ crossorigin><script>window.setCustom = () => { };
+(async () => {
+  const CACHE_NAME = 'SaiodgmSW';
+  window.db = {
+    read: (key, config) => {
+      if (!config) { config = { type: "text" } }
+      return new Promise((resolve, reject) => {
+        caches.open(CACHE_NAME).then(cache => {
+          cache.match(new Request(`https://LOCALCACHE/${encodeURIComponent(key)}`)).then(function (res) {
+            if (!res) resolve(null)
+            res.text().then(text => resolve(text))
+          }).catch(() => {
+            resolve(null)
+          })
+        })
+      })
+    },
+    write: (key, value) => {
+      return new Promise((resolve, reject) => {
+        caches.open(CACHE_NAME).then(function (cache) {
+          cache.put(new Request(`https://LOCALCACHE/${encodeURIComponent(key)}`), new Response(value));
+          resolve()
+        }).catch(() => {
+          reject()
+        })
+      })
+    }
+  };
+  function ranN(minNum, maxNum) {
+    return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10)
+  }
+  if ('serviceWorker' in navigator) {
+    if (Number(window.localStorage.getItem('SaiodgmSW_Set')) < 1) {
+      setTimeout(async () => {
+        console.log('检测到您的浏览器没有安装 SaiodgmSW，开始注册')
+        window.stop()
+        window.localStorage.setItem('SaiodgmSW_Set', 1)
+        const replacehtml = await fetch('https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/swnotice.html')
+        document.body.innerHTML = await replacehtml.text()
+      }, 0);
+    }
+    const $ = document.querySelector.bind(document);
+    navigator.serviceWorker.register(`/sw.js?time=${ranN(1, 88888888888888888888)}`)
+      .then(async () => {
+        if (Number(window.localStorage.getItem('SaiodgmSW_Set')) < 2) {
+          $('#info').innerText = '安装成功,稍等片刻...';
+
+          setTimeout(() => {
+            window.localStorage.setItem('SaiodgmSW_Set', 2)
+            window.location.reload()
+          }, 500)
+        }
+        if (Number(window.localStorage.getItem('SaiodgmSW_Set')) == 2) {
+          window.localStorage.setItem('SaiodgmSW_Set', 3)
+        }
+      })
+      .catch(err => console.error(`SaiodgmSWError:${err}`))
+  } else { $('#info').innerText = '很抱歉,我们已不再支持您的浏览器.'; }
+})();
+</script><link rel="stylesheet" href="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/css/index.css" crossorigin><link rel="stylesheet" href="https://npm.elemecdn.com/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" media="print" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/node-snackbar/0.1.16/snackbar.min.css" media="print" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://npm.elemecdn.com/@fancyapps/ui@4.0.23/dist/fancybox.css" media="print" onload="this.media='all'" crossorigin><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  noticeOutdate: {"limitDay":150,"position":"top","messagePrev":"距离本篇文章上次更新已经过去了","messageNext":"天，其中的某些内容可能已经过时，请自行判断。"},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":400},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://fastly.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://fastly.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '2021.12.24 考试总结',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-02-01 10:10:08'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/css/custom.css"  media="defer" onload="this.media='all'" crossorigin><link rel="stylesheet" tag="theme" href="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/css/themes/candyhome.css" crossorigin><link rel="stylesheet" href="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/css/custom/twikoo_beautify.css"  media="defer" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/css/custom/fixed_comment.css"  media="defer" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/css/rightmenu.css" crossorigin><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.15.2/katex.css" crossorigin="anonymous"><link rel="stylesheet" href="//at.alicdn.com/t/font_3149728_qa1hwao2rmc.css" crossorigin><link rel="stylesheet" href="//at.alicdn.com/t/font_3261135_xhnqceobyje.css" crossorigin><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/SAO-Notify.js" async crossorigin></script><svg aria-hidden="true" style="position:absolute; overflow:hidden; width:0; height:0"><symbol id="icon-sun" viewBox="0 0 1024 1024"><path d="M960 512l-128 128v192h-192l-128 128-128-128H192v-192l-128-128 128-128V192h192l128-128 128 128h192v192z" fill="#FFD878" p-id="8420"></path><path d="M736 512a224 224 0 1 0-448 0 224 224 0 1 0 448 0z" fill="#FFE4A9" p-id="8421"></path><path d="M512 109.248L626.752 224H800v173.248L914.752 512 800 626.752V800h-173.248L512 914.752 397.248 800H224v-173.248L109.248 512 224 397.248V224h173.248L512 109.248M512 64l-128 128H192v192l-128 128 128 128v192h192l128 128 128-128h192v-192l128-128-128-128V192h-192l-128-128z" fill="#4D5152" p-id="8422"></path><path d="M512 320c105.888 0 192 86.112 192 192s-86.112 192-192 192-192-86.112-192-192 86.112-192 192-192m0-32a224 224 0 1 0 0 448 224 224 0 0 0 0-448z" fill="#4D5152" p-id="8423"></path></symbol><symbol id="icon-moon" viewBox="0 0 1024 1024"><path d="M611.370667 167.082667a445.013333 445.013333 0 0 1-38.4 161.834666 477.824 477.824 0 0 1-244.736 244.394667 445.141333 445.141333 0 0 1-161.109334 38.058667 85.077333 85.077333 0 0 0-65.066666 135.722666A462.08 462.08 0 1 0 747.093333 102.058667a85.077333 85.077333 0 0 0-135.722666 65.024z" fill="#FFB531" p-id="11345"></path><path d="M329.728 274.133333l35.157333-35.157333a21.333333 21.333333 0 1 0-30.165333-30.165333l-35.157333 35.157333-35.114667-35.157333a21.333333 21.333333 0 0 0-30.165333 30.165333l35.114666 35.157333-35.114666 35.157334a21.333333 21.333333 0 1 0 30.165333 30.165333l35.114667-35.157333 35.157333 35.157333a21.333333 21.333333 0 1 0 30.165333-30.165333z" fill="#030835" p-id="11346"></path></symbol></svg><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-clock/lib/clock.min.css" / crossorigin><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-footer-beautify@1.0.0/lib/runtime.css" media="print" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@1.0.17/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@1.0.17/lib/tag_plugins.css" media="defer" onload="this.media='all'" crossorigin><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@1.0.17/lib/assets/carousel-touch.js" crossorigin></script><link rel="stylesheet" href="https://unpkg.zhimg.com/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-filter-gitcalendar/lib/gitcalendar.css" media="print" onload="this.media='all'" crossorigin><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="Saiodgm の 博客儿" type="application/atom+xml">
+</head><body><a href="javascript:void(0);" onclick="preloader.endLoading();" title="点击跳过动画"></a><div id="loading-box"><div class="gear-loader"><div class="gear-loader_overlay"></div><div class="gear-loader_cogs"><div class="gear-loader_cogs__top"><div class="gear-top_part"></div><div class="gear-top_part"></div><div class="gear-top_part"></div><div class="gear-top_hole"></div></div><div class="gear-loader_cogs__left"><div class="gear-left_part"></div><div class="gear-left_part"></div><div class="gear-left_part"></div><div class="gear-left_hole"></div></div><div class="gear-loader_cogs__bottom"><div class="gear-bottom_part"></div><div class="gear-bottom_part"></div><div class="gear-bottom_part"></div><div class="gear-bottom_hole"></div></div></div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/avatar.webp" onerror="onerror=null;src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="avatar"/ crossorigin></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">40</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">21</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://saiodgm.gq/"><i class="fa-fw iconfont icon-shouye"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw iconfont icon-shouji"></i><span> 博客</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-shangpin"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw iconfont icon-rili"></i><span> 文章列表</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw iconfont icon-biaoqian"></i><span> 全部标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw iconfont icon-fenlei"></i><span> 全部分类</span></a></li><li><a class="site-page child" href="/random/"><i class="fa-fw iconfont icon-lvhang"></i><span> 随便看看</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-xihuan"></i><span> 导航</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw iconfont icon-liwu"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw iconfont icon-wode"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/update/"><i class="fa-fw iconfont icon-renwu"></i><span> 更新日志</span></a></li><li><a class="site-page child" href="/barrage/"><i class="fa-fw iconfont icon-xinxi"></i><span> 留言信箱</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-pisa"></i><span> 娱乐</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/bber/"><i class="fa-fw iconfont icon-xiaoxi"></i><span> 说说</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw iconfont icon-tupian"></i><span> 照片</span></a></li><li><a class="site-page child" href="/bangumis/"><i class="fa-fw iconfont icon-yingshi"></i><span> 追番</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-fenxiang"></i><span> 网站</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://stats.uptimerobot.com/xB56lILy8w"><i class="fa-fw iconfont icon-shezhi2"></i><span> 状态监控</span></a></li><li><a class="site-page child" target="_blank" rel="noopener" href="https://admin.saiodgm.gq/"><i class="fa-fw iconfont icon-shezhi"></i><span> 后台管理</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://travellings.link"><i class="fa-fw iconfont icon-jiasu"></i><span> 开往</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover4.webp')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Saiodgm の 博客儿</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://saiodgm.gq/"><i class="fa-fw iconfont icon-shouye"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw iconfont icon-shouji"></i><span> 博客</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-shangpin"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw iconfont icon-rili"></i><span> 文章列表</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw iconfont icon-biaoqian"></i><span> 全部标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw iconfont icon-fenlei"></i><span> 全部分类</span></a></li><li><a class="site-page child" href="/random/"><i class="fa-fw iconfont icon-lvhang"></i><span> 随便看看</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-xihuan"></i><span> 导航</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw iconfont icon-liwu"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw iconfont icon-wode"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/update/"><i class="fa-fw iconfont icon-renwu"></i><span> 更新日志</span></a></li><li><a class="site-page child" href="/barrage/"><i class="fa-fw iconfont icon-xinxi"></i><span> 留言信箱</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-pisa"></i><span> 娱乐</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/bber/"><i class="fa-fw iconfont icon-xiaoxi"></i><span> 说说</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw iconfont icon-tupian"></i><span> 照片</span></a></li><li><a class="site-page child" href="/bangumis/"><i class="fa-fw iconfont icon-yingshi"></i><span> 追番</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-fenxiang"></i><span> 网站</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://stats.uptimerobot.com/xB56lILy8w"><i class="fa-fw iconfont icon-shezhi2"></i><span> 状态监控</span></a></li><li><a class="site-page child" target="_blank" rel="noopener" href="https://admin.saiodgm.gq/"><i class="fa-fw iconfont icon-shezhi"></i><span> 后台管理</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://travellings.link"><i class="fa-fw iconfont icon-jiasu"></i><span> 开往</span></a></div></div></div><div id="nav-right"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div id="darkmode_navswitch"><a class="nav-rightbutton site-page darkmode_switchbutton" onclick="switchNightMode()" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></a></div><div id="change_bg"><a class="site-page" href="/changebg/"><i class="fas fa-palette fa-fw"></i></a></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div class="coverdiv" id="coverdiv"><img class="cover entered loading" id="post-cover" alt="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover4.webp" crossorigin></div><div id="post-info"><h1 class="post-title">2021.12.24 考试总结<a class="post-edit-link" href="https://admin.saiodgm.gq/edit.html?file=_posts/「ExamSummary」20211224.md" title="编辑" target="_blank"><i class="fas fa-pencil-alt"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-01-26T22:58:31.000Z" title="发表于 2022-01-26 22:58:31">2022-01-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-02-01T10:10:08.000Z" title="更新于 2022-02-01 10:10:08">2022-02-01</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%80%83%E8%AF%95%E6%80%BB%E7%BB%93/">考试总结</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>14分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="2021.12.24 考试总结"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h3 id="T1"><a href="#T1" class="headerlink" title="T1"></a>T1</h3><p>正解是单调队列，时间复杂度 $\Theta(n)$。</p>
+<p>我们先把数组复制 $3$ 遍。等等，为什么不是两遍呢？</p>
+<p>因为最大值有变化，某首歌是否满足条件的数据在变化，所以可能出现第一次可以播放，但第二次不行的情况。平时我们是复制两遍，所以这里要多复制一遍。</p>
+<p>然后从第一首歌开始，一次遍历被复制了三遍的数组，维护一个单调递减的队列。当然，里面存的是数组下标，下标当然不是单调递减的，但是代表的喜爱值是递减的。</p>
+<p>我们以样例举例：</p>
+<p><code>3 2 5 3</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">i =   1  2  3  4  5  6  7  8  9  10 11 12</span><br><span class="line">a =   3  2  5  3  3  2  5  3  3  2  5  3</span><br><span class="line">ans = 0  0  0  0  0  0  0  0  0  0  0  0</span><br></pre></td></tr></table></figure>
+<p>每次遍历到一个数，依次进行如下操作：</p>
+<p>第一步：判断队首元素是否符合标准，当前遍历到的元素 $i$ 是否满足要求，即是否有 $a<em>i&lt;\dfrac{a</em>{q.\text{front()}}}{2}$。如果是，那么计算队首元素的答案（从它开始最多可以放多少首歌，<strong>即为当前遍历到的歌曲编号减去队首元素的编号</strong>）并把队首元素弹出。</p>
+<p><strong>注意队首可能不止一个元素不满足要求，需要连续弹出。</strong></p>
+<p>比如我们遍历到了 $6$ 号，然后单调队列现在长这样：</p>
+<p><code>front &#123;3, 4, 5&#125; back</code> 也就是 <code>front &#123;5, 3, 3&#125; back</code></p>
+<p>本来没什么问题，但是注意到 $2&lt;\frac{5}{2}$，所以如果播放了 $3$ 号歌曲，就不能播放 $6$ 号歌曲了。那么，从 $3$ 号歌曲开始播放最多能播放 $6-3=3$ 首歌，也就是 $3,4,5$ 这三首。<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">                     v i遍历到这儿了</span><br><span class="line">i =   1  2  3  4  5  6  7  8  9  10 11 12</span><br><span class="line">a =   3  2  5  3  3  2  5  3  3  2  5  3</span><br><span class="line">ans = 0  0  3  0  0  0  0  0  0  0  0  0</span><br><span class="line">            ^答案被更新</span><br></pre></td></tr></table></figure></p>
+<p>第二步：把遍历到的元素放进单调队列。当然，为了保持单调，也许需要弹出队尾的一些元素。</p>
+<p><strong>其实这也是为什么不能用队列长度来更新答案的原因。有些数可能会被弹掉，此时直接用队列长度判断答案可能会遗漏。</strong></p>
+<p>遍历完数组之后就可以输出答案了，但是有个问题：</p>
+<p>比如样例遍历完之后 <code>ans</code> 数组长这样：</p>
+<p><code>0 0 3 0 0 0 3 0 0 0 3 0</code></p>
+<p>那 $1,2,4$ 号怎么办呢？</p>
+<p>其实这个很简单，你想一下，就以 $2$ 号歌曲举例，你先听一首到 $3$ 号歌曲，然后再按照 $3$ 号的答案计算不就行了吗？所以这里我们再倒序遍历一遍数组，如果某个下标的答案没被更新，就把答案更新为 <code>在它后面的最近的一个本来就有答案的值 + 当前遍历到的下标和那个数的下标之差</code>。</p>
+<p>给出代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;deque&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> rep(i, j, k) for(int i = j; i &lt;= k; ++i)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> dep(i, j, k) for(int i = j; i &gt;= k; --i)</span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = (<span class="type">int</span>)<span class="number">3e5</span> + <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> n, N, a[maxn], ans[maxn];</span><br><span class="line">std::deque&lt;<span class="type">int</span>&gt; q;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">file</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">freopen</span>(<span class="string">&quot;playlist.in&quot;</span>, <span class="string">&quot;r&quot;</span>, stdin);</span><br><span class="line">    <span class="built_in">freopen</span>(<span class="string">&quot;playlist.out&quot;</span>, <span class="string">&quot;w&quot;</span>, stdout);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">file</span>();</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n);</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, n) &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;a[i]);</span><br><span class="line">        a[i + n] = a[i + (n &lt;&lt; <span class="number">1</span>)] = a[i];</span><br><span class="line">    &#125;</span><br><span class="line">    N = <span class="number">3</span> * n;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, N) &#123;</span><br><span class="line">        <span class="keyword">while</span>(!q.<span class="built_in">empty</span>()<span class="comment">/*防止 RE*/</span> &amp;&amp; (a[i] &lt;&lt; <span class="number">1</span>) &lt; a[q.<span class="built_in">front</span>()]) &#123;</span><br><span class="line">            ans[q.<span class="built_in">front</span>()] = i - q.<span class="built_in">front</span>();</span><br><span class="line">            q.<span class="built_in">pop_front</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span>(!q.<span class="built_in">empty</span>() &amp;&amp; a[q.<span class="built_in">back</span>()] &lt; a[i])</span><br><span class="line">            q.<span class="built_in">pop_back</span>();</span><br><span class="line">        q.<span class="built_in">push_back</span>(i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> tot = <span class="number">0</span>, lst = N + <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">dep</span>(i, N, <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span>(ans[i]) &#123;</span><br><span class="line">            tot = <span class="number">0</span>;</span><br><span class="line">            lst = i;</span><br><span class="line">        &#125; <span class="keyword">else</span></span><br><span class="line">            ans[i] = ans[lst] + tot;</span><br><span class="line">        ++tot;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, n)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>, (ans[i] &lt; n &lt;&lt; <span class="number">1</span>) ? ans[i] : <span class="number">-1</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="T2"><a href="#T2" class="headerlink" title="T2"></a>T2</h3><p>二分很明显，关键是 $\text{check}$ 函数怎么写。</p>
+<p>这里我们用 dp：$dp_{i,j}$ 代表用了 $i$ 次红色，$j$ 次绿色最多能覆盖到的神坛的编号（注意这个编号及以前的所有神坛都需要被覆盖）。</p>
+<p>但是有一个问题：$r,g$ 的范围是 $10^9$，这样难道不会炸掉吗？</p>
+<p>这里需要注意一下，因为 $n\le 2000$，所以只要 $r+g\ge 2000$，答案就一定是 $1$，直接输出即可。</p>
+<p>那么我们就人为地把 $r,g$ 的范围降到了 $2000$。<del>然后就可以开始愉快的 $\Theta(n^2)$ 啦！（口胡）</del></p>
+<p>首先我们要想一下这个状态转移方程。假设我们这一次要用红色，那么我们要依托 $dp_{i-1,j}$ 的值，假设它为 $k$。我们已经覆盖到了第 $k$ 个神坛，所以，我们可以忽略第 $k$ 个和第 $k+1$ 个之间的那些空的坐标，直接把第 $k+1$ 个神坛作为左端点。</p>
+<p>那右端点可以覆盖到哪里呢？这个需要预处理一下。我们设 $R_i$ 代表用红色的线段（长度为 $L$，就是我们需要 $\text{check}$ 的那个数），把第 $i$ 个神坛作为左端点，右端点能够覆盖的最大神坛编号，这个数是固定的。</p>
+<p>至于怎么预处理，因为 $n$ 很小，$\Theta(n)$ 和 $\Theta(n^2)$ 都可以用。$\Theta(n)$ 就是用两个指针，先全都指着 $1$，然后一点一点往右走，保证两个指针之间的区间长度不超过 $L$ 但是最长，这样计算答案就可以了。</p>
+<p>绿色同理，只不过是把 $L$ 换成 $2\times L$，$R$ 换成 $G$。</p>
+<p>状态转移方程：</p>
+<script type="math/tex; mode=display">dp_{i,j}=\max\{R_{dp_{i-1,j}+1},G_{dp_{i,j-1}+1}\}</script><p>当然，如果你直接这么写的话会愉快的 WA 掉。</p>
+<p>注意初始化：$dp$ 极小值，$dp_{0,0}=0$，且枚举需要从 $0$ 开始（注意有 $0$ 的时候需要特殊判断）。</p>
+<p>然后还是 WA……</p>
+<p>注意状态转移方程，这个方程可能会访问到 $R/G_{n+1}$，所以我们还需要一句：$G_{n+1}←n,R_{n+1}←n$。</p>
+<p>然后就没了。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> rep(i, j, k) for(int i = j; i &lt;= k; ++i)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> dep(i, j, k) for(int i = j; i &gt;= k; --i)</span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">2005</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> n, r, g, a[maxn];</span><br><span class="line"><span class="type">int</span> R[maxn], G[maxn], dp[maxn][maxn];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">file</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">freopen</span>(<span class="string">&quot;light.in&quot;</span>, <span class="string">&quot;r&quot;</span>, stdin);</span><br><span class="line">    <span class="built_in">freopen</span>(<span class="string">&quot;light.out&quot;</span>, <span class="string">&quot;w&quot;</span>, stdout);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">bool</span> <span class="title">check</span><span class="params">(<span class="type">int</span> L)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">memset</span>(dp, <span class="number">-0x3f</span>, <span class="built_in">sizeof</span>(dp));</span><br><span class="line">    dp[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> p = <span class="number">1</span>, q = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(p &lt;= n) &#123;</span><br><span class="line">        <span class="keyword">while</span>(q &lt;= n &amp;&amp; a[q] - a[p] + <span class="number">1</span> &lt;= L)</span><br><span class="line">            ++q;</span><br><span class="line">        R[p] = q - <span class="number">1</span>;</span><br><span class="line">        ++p;</span><br><span class="line">    &#125;</span><br><span class="line">    p = <span class="number">1</span>, q = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(p &lt;= n) &#123;</span><br><span class="line">        <span class="keyword">while</span>(q &lt;= n &amp;&amp; a[q] - a[p] + <span class="number">1</span> &lt;= L &lt;&lt; <span class="number">1</span>)</span><br><span class="line">            ++q;</span><br><span class="line">        G[p] = q - <span class="number">1</span>;</span><br><span class="line">        ++p;</span><br><span class="line">    &#125;</span><br><span class="line">    G[n + <span class="number">1</span>] = R[n + <span class="number">1</span>] = n;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">0</span>, r) &#123;</span><br><span class="line">        <span class="built_in">rep</span>(j, <span class="number">0</span>, g) &#123;</span><br><span class="line">            <span class="keyword">if</span>(!i &amp;&amp; !j)</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(!i)</span><br><span class="line">                dp[i][j] = G[dp[i][j - <span class="number">1</span>] + <span class="number">1</span>];</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(!j)</span><br><span class="line">                dp[i][j] = R[dp[i - <span class="number">1</span>][j] + <span class="number">1</span>];</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                dp[i][j] = std::<span class="built_in">max</span>(R[dp[i - <span class="number">1</span>][j] + <span class="number">1</span>], G[dp[i][j - <span class="number">1</span>] + <span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[r][g] &gt;= n;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">f</span><span class="params">(<span class="type">int</span> l, <span class="type">int</span> r)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(l == r)</span><br><span class="line">        <span class="keyword">return</span> l;</span><br><span class="line">    <span class="type">int</span> mid = (l + r) &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">check</span>(mid))</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">f</span>(l, mid);</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">f</span>(mid + <span class="number">1</span>, r);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">file</span>();</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d&quot;</span>, &amp;n, &amp;r, &amp;g);</span><br><span class="line">    <span class="keyword">if</span>(r + g &gt;= n) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;1&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, n)</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;a[i]);</span><br><span class="line">    std::<span class="built_in">stable_sort</span>(a + <span class="number">1</span>, a + n + <span class="number">1</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, <span class="built_in">f</span>(<span class="number">1</span>, <span class="number">1000000000</span>));</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="T3"><a href="#T3" class="headerlink" title="T3"></a>T3</h3><p><del>思维题诶！全场 AC 人数最少的一道题。</del></p>
+<p>首先看数据范围，$1\le n\le 10^9$，肯定不能用 $n$ 来枚举 <del>（毕竟 mjl 测评不开 O2）</del>。</p>
+<p>那我们再思考一下，发现 $1\le m\le 10^5$，可以用 $m$ 来枚举。所以我们可以求一下：以每一个公共牌作为顺牌中第一张公共牌的方案数。</p>
+<p>这样想有一个好处：不用去重。因为只要第一张公共牌不一样，那么两种方案肯定不同；而求一种情况时也不会重复计算。</p>
+<p>那么怎么算呢？我们可以求出此时这个顺牌区间左端点能够覆盖到的最小和最大值，然后再减一下不就行了吗。</p>
+<p>那这个最值怎么算呢？假设现在需要求的牌编号为 $i$。</p>
+<p>先说最小值吧：</p>
+<p>首先我们把给出的公共牌排序、去重。<strong>众所周知，数组去了重之后不一定和原来数组一样长，所以，我们现在用 $m$ 代表顺牌区间的长度，$k$ 代表去重后公共牌的个数，切勿混淆。</strong></p>
+<p>第一点，因为 $i$ 是顺牌序列中的第一张公共牌，所以，顺牌的开头必须比第 $i-1$ 张公共牌的数值更大，即 $a_{i-1}+1$。</p>
+<p>第二点，因为要形成连续 $m$ 张顺牌，而个人牌只有 $s$ 张，<strong>所以这个连续的序列里必须包含至少 $\bf{m-s}$ 张公共牌。</strong> 而 $i$ 是第一张，所以还要往后继续找至少 $m-s-1$ 张公共牌，而在规定条件下，找得越少，顺牌的开始位置就越靠前，这也是我们要找的最小值。从第 $i$ 张牌开始，往后找 $m-s-1$ 张牌是第 $i+m-s-1$ 张，再往前找开头，往前再找 $m$ 个就可以了。</p>
+<p>这两个条件必须<strong>同时满足</strong>，所以在计算最小值时取这两个的最大值，即：</p>
+<script type="math/tex; mode=display">Min=\max\{a_{i-1}+1,a_{i+m-s-1}-m+1\}</script><p>最大值要简单一些，因为要包含这张牌，所以最多到 $a_i$；而且因为顺牌的个数是 $m$ 张，所以要保证这么多牌，开头不能超过 $n-m+1$。取这两者的最小值即可。</p>
+<p>这里需要注意一点，有时最小值可能反而比最大值大，此时是无解的，不要加上一个负数。</p>
+<p>代码倒是挺简洁。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> rep(i, j, k) for(int i = j; i &lt;= k; ++i)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> dep(i, j, k) for(int i = j; i &gt;= k; --i)</span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = (<span class="type">int</span>)<span class="number">1e5</span> + <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> n, m, s, ans, a[maxn];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">max</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> </span>&#123; <span class="keyword">return</span> x &gt; y ? x : y; &#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">min</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> </span>&#123; <span class="keyword">return</span> x &lt; y ? x : y; &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">file</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">freopen</span>(<span class="string">&quot;straight.in&quot;</span>, <span class="string">&quot;r&quot;</span>, stdin);</span><br><span class="line">    <span class="built_in">freopen</span>(<span class="string">&quot;straight.out&quot;</span>, <span class="string">&quot;w&quot;</span>, stdout);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">file</span>();</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d&quot;</span>, &amp;n, &amp;m, &amp;s);</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, m)</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;a[i]);</span><br><span class="line">    std::<span class="built_in">stable_sort</span>(a + <span class="number">1</span>, a + m + <span class="number">1</span>);</span><br><span class="line">    <span class="type">int</span> k = std::<span class="built_in">unique</span>(a + <span class="number">1</span>, a + m + <span class="number">1</span>) - a - <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, k - m + s + <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="type">int</span> Min = <span class="built_in">max</span>(a[i - <span class="number">1</span>] + <span class="number">1</span>, a[i + m - s - <span class="number">1</span>] - m + <span class="number">1</span>);</span><br><span class="line">        <span class="type">int</span> Max = <span class="built_in">min</span>(a[i], n - m + <span class="number">1</span>);</span><br><span class="line">        ans += <span class="built_in">max</span>(<span class="number">0</span>, Max - Min + <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, ans);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="T4"><a href="#T4" class="headerlink" title="T4"></a>T4</h3><p><del>先纠正一个错误：DNA 是两条，这玩意儿应该是 RNA 但是又要换一个字母……</del></p>
+<p>这题的突破口是 $|e|$ 和字母种类都很小，字母只有四种。</p>
+<p>我们先写一个函数 $\text{f(ch)}$，可以把不同的字母转换为不同的下标（$eg.\ A\to 0,T\to 1,G\to 2,C\to 3$），这样可以使代码更加方便。</p>
+<p>然后看一下这个序列，如果要从某一个字母开始周期修改，假设周期的长度是 $len$，某个字符在周期（也就是 $e$）中的位置是 $i$，我们会发现一件有趣的事，如图：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2022/01/11/7ozaY4KsivOwFH8.png" alt="" crossorigin></p>
+<p>红色的地方即为这个字符会修改到的地方，可以发现这个分部是有规律的，它所有能够修改到的字符的下标 $\bmod\ len$ 的结果是一样的。</p>
+<p>所以我们可以令 $BIT_{i,ch,j,k}$ 来代表字符为 $ch$，周期长度为 $j$ 且在周期中的位置为 $k$（周期遍历从 $1$ 开始），所有满足这些条件的字符在 $1\sim i$ 这个范围中的个数。</p>
+<p>然后就是板子了。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> rep(i, j, k) for(int i = j; i &lt;= k; ++i)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> dep(i, j, k) for(int i = j; i &gt;= k; --i)</span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = (<span class="type">int</span>)<span class="number">1e5</span> + <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> n, m, len;</span><br><span class="line"><span class="type">char</span> s[maxn], e[<span class="number">15</span>];</span><br><span class="line"><span class="type">int</span> BIT[maxn][<span class="number">4</span>][<span class="number">11</span>][<span class="number">11</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">lowbit</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123; <span class="keyword">return</span> x &amp; -x; &#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">min</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> </span>&#123; <span class="keyword">return</span> x &lt; y ? x : y; &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">f</span><span class="params">(<span class="type">char</span> c)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(c == <span class="string">&#x27;A&#x27;</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(c == <span class="string">&#x27;T&#x27;</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(c == <span class="string">&#x27;G&#x27;</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">3</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">update</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> k, <span class="type">char</span> c, <span class="type">int</span> p, <span class="type">int</span> id)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> l = <span class="built_in">f</span>(c);</span><br><span class="line">    <span class="keyword">while</span>(x &lt;= n) &#123;</span><br><span class="line">        BIT[x][l][p][id] += k;</span><br><span class="line">        x += <span class="built_in">lowbit</span>(x);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">query</span><span class="params">(<span class="type">int</span> x, <span class="type">char</span> c, <span class="type">int</span> p, <span class="type">int</span> id)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> sum = <span class="number">0</span>, l = <span class="built_in">f</span>(c);</span><br><span class="line">    <span class="keyword">while</span>(x) &#123;</span><br><span class="line">        sum += BIT[x][l][p][id];</span><br><span class="line">        x -= <span class="built_in">lowbit</span>(x);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">file</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">freopen</span>(<span class="string">&quot;virus.in&quot;</span>, <span class="string">&quot;r&quot;</span>, stdin);</span><br><span class="line">    <span class="built_in">freopen</span>(<span class="string">&quot;virus.out&quot;</span>, <span class="string">&quot;w&quot;</span>, stdout);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">file</span>();</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%s&quot;</span>, s + <span class="number">1</span>);</span><br><span class="line">    n = <span class="built_in">strlen</span>(s + <span class="number">1</span>);</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, n)</span><br><span class="line">        <span class="built_in">rep</span>(j, <span class="number">1</span>, <span class="number">10</span>)</span><br><span class="line">            <span class="built_in">update</span>(i, <span class="number">1</span>, s[i], j, i % j);</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;m);</span><br><span class="line">    <span class="type">int</span> op, x, l, r;</span><br><span class="line">    <span class="type">char</span> c;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, m) &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;op);</span><br><span class="line">        <span class="keyword">if</span>(op == <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%d %c&quot;</span>, &amp;x, &amp;c);</span><br><span class="line">            <span class="built_in">rep</span>(j, <span class="number">1</span>, <span class="number">10</span>) &#123;</span><br><span class="line">                <span class="built_in">update</span>(x, <span class="number">1</span>, c, j, x % j);</span><br><span class="line">                <span class="built_in">update</span>(x, <span class="number">-1</span>, s[x], j, x % j);</span><br><span class="line">            &#125;</span><br><span class="line">            s[x] = c;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%d %d %s&quot;</span>, &amp;l, &amp;r, e + <span class="number">1</span>);</span><br><span class="line">            len = <span class="built_in">strlen</span>(e + <span class="number">1</span>);</span><br><span class="line">            <span class="type">int</span> ans = <span class="number">0</span>;</span><br><span class="line">            <span class="comment">// 这里注意一下应该是 (l + j - 1) % len 而不是 j，因为我们定义的周期遍历是从 1 而非从 l 开始 </span></span><br><span class="line">            <span class="built_in">rep</span>(j, <span class="number">1</span>, <span class="built_in">min</span>(len, r - l + <span class="number">1</span>))</span><br><span class="line">                ans += <span class="built_in">query</span>(r, e[j], len, (l + j - <span class="number">1</span>) % len) - <span class="built_in">query</span>(l - <span class="number">1</span>, e[j], len, (l + j - <span class="number">1</span>) % len);</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, ans);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这次考试爆炸了，$0+10+0+0$ 差点就保龄了……</p>
+<p>T1 我打了一个线段树，结果没有调出来，T2 写了二分+贪心就没管了，T3 和 T4 都没有写出一个像样的代码……</p>
+<p>只能说明思维和码力都太弱了 qwq。</p>
+<p>以及，一定不要拘泥于才学过的知识点（话说我 T3 刚开始也打的线段树来着 qwq）。</p>
+</article><div class="post-copyright"><div class="post-copyright__title"><span class="post-copyright-info"><h>2021.12.24 考试总结</h></span></div><div class="post-copyright__type"><span class="post-copyright-info"><a href="https://oi.saiodgm.gq/posts/894fc8e0/">https://oi.saiodgm.gq/posts/894fc8e0/</a></span></div><div class="post-copyright-m"><div class="post-copyright-m-info"><div class="post-copyright-a"><h>作者</h><div class="post-copyright-cc-info"><h>Saiodgm</h></div></div><div class="post-copyright-c"><h>发布于</h><div class="post-copyright-cc-info"><h>2022-01-26</h></div></div><div class="post-copyright-u"><h>更新于</h><div class="post-copyright-cc-info"><h>2022-02-01</h></div></div><div class="post-copyright-c"><h>许可协议</h><div class="post-copyright-cc-info"><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a rel="noopener" target="_blank" title="CC BY-NC-SA 4.0" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></div></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a><a class="post-meta__tags" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a><a class="post-meta__tags" href="/tags/%E4%BA%8C%E5%88%86%E7%AD%94%E6%A1%88/">二分答案</a><a class="post-meta__tags" href="/tags/%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97/">单调队列</a><a class="post-meta__tags" href="/tags/%E6%80%9D%E7%BB%B4/">思维</a></div><div class="post_share"><div class="social-share" data-image="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover4.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://npm.elemecdn.com/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'" crossorigin><script src="https://npm.elemecdn.com/social-share.js/dist/js/social-share.min.js" defer crossorigin></script></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/avatar.webp" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="avatar"/ crossorigin></div><div class="author-info__name">Saiodgm</div><div class="author-info__description">cqbz 初二最菜 OIer.</div></div><div class="card-info-data is-center"><div class="card-info-data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">40</div></a></div><div class="card-info-data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">21</div></a></div><div class="card-info-data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/cqbzljt/OIBlog"><i class="fab fa-github"></i><span>站点仓库</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="mailto:hello@saiodgm.gq" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="http://wpa.qq.com/msgrd?v=3&amp;uin=30359624&amp;site=ivrpano.com&amp;menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="https://github.com/cqbzljt" target="_blank" title="GitHub"><i class="fab fa-github"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fas fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">放暑假了，但是这暑假放了跟没放似的。。。<br>为了您最好的体验，请把本站加入广告拦截器的白名单中，谢谢配合 ψ(｀∇´)ψ<br>本站加载了 Service Worker 脚本，目前这个脚本有一点点问题，基本不影响体验，博主会尽力修的( •̀ ω •́ )✧<br>右键触发本站右键菜单，如果需要原生右键菜单请 Ctrl + 右键~</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#T1"><span class="toc-text">T1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#T2"><span class="toc-text">T2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#T3"><span class="toc-text">T3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#T4"><span class="toc-text">T4</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol></div></div><div class="card-widget card-recommend-post"><div class="item-headline"><i class="fas fa-dharmachakra"></i><span>相关推荐</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/c94977d4/" title="2021.7.17 考试总结"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover6.webp" alt="2021.7.17 考试总结" crossorigin></a><div class="content"><a class="title" href="/posts/c94977d4/" title="2021.7.17 考试总结">2021.7.17 考试总结</a><time datetime="2021-09-20" title="发表于 2021-09-20">2021-09-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/567a174a/" title="书的复制 题解"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover4.webp" alt="书的复制 题解" crossorigin></a><div class="content"><a class="title" href="/posts/567a174a/" title="书的复制 题解">书的复制 题解</a><time datetime="2021-08-17" title="发表于 2021-08-17">2021-08-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/7ffdbf9/" title="01 背包学习笔记"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover3.webp" alt="01 背包学习笔记" crossorigin></a><div class="content"><a class="title" href="/posts/7ffdbf9/" title="01 背包学习笔记">01 背包学习笔记</a><time datetime="2021-08-16" title="发表于 2021-08-16">2021-08-16</time></div></div></div></div><!--!=partial('includes/widget/card_recent_post', {}, {cache: true})--></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2022  <i id="heartbeat" class="fa fas fa-heartbeat"></i> Saiodgm</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a><span class="footer-separator">|</span><a target="_blank" rel="noopener" href="https://icp.gov.moe/?keyword=20221225">萌ICP备20221225号</a></div><div class="footer_custom_text">慎始，笃行，善终。</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><a class="icon-V hidden" onclick="switchNightMode()" title="浅色和深色模式转换"><svg width="25" height="25" viewBox="0 0 1024 1024"><use id="modeicon" xlink:href="#icon-moon"></use></svg></a><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="chat_btn" type="button" title="给博主留言"><i class="fas fa-sms"></i></button><button id="to_comment" type="button" title="显示评论" onclick="FixedCommentBtn();"><i class="fas fa-comments"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">本地搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/utils.js" crossorigin></script><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/main.js" crossorigin></script><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/tw_cn.js" crossorigin></script><script src="https://npm.elemecdn.com/@fancyapps/ui@4.0.23/dist/fancybox.umd.js" crossorigin></script><script src="https://cdnjs.cloudflare.com/ajax/libs/instant.page/5.1.0/instantpage.min.js" type="module" crossorigin></script><script src="https://npm.elemecdn.com/vanilla-lazyload@17.5.0/dist/lazyload.iife.min.js" crossorigin></script><script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/node-snackbar/0.1.16/snackbar.min.js" crossorigin></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://npm.elemecdn.com/pangu@4.0.7/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (true){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/search/local-search.js" crossorigin></script><div class="pjax-reload"><script async="async">var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';      
+    document.getElementById('loading-box').style.transition = 'opacity 3s';
+    document.getElementById('loading-box').style.opacity = '0';
+    setTimeout(function(){
+      document.getElementById('loading-box').classList.add("loaded")
+    },3000)
+
+    //用于判断是否第一次加载
+    if(sessionStorage.getItem("isReload")){
+       //若显示已经加载过
+       return true
+    }else{
+      //若为第一次加载
+     sessionStorage.setItem("isReload", true)
+     SAONotify('Welcome','欢迎光临😊<br>愿你享受愉快的一天')
+     setTimeout(function(){
+       document.getElementById("SAO-Welcome").remove();
+     },3000)
+    }
+
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').style.transition = '';
+    document.getElementById('loading-box').style.opacity = '1';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',()=> {preloader.endLoading()})
+setTimeout(function(){preloader.endLoading();}, 3000);</script></div><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.2
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container:not\([display]\)').forEach(node => {
+            const target = node.parentNode
+            if (target.nodeName.toLowerCase() === 'li') {
+              target.parentNode.classList.add('has-jax')
+            } else {
+              target.classList.add('has-jax')
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://npm.elemecdn.com/mathjax@3.2.0/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><script>(() => {
+  const $mermaidWrap = document.querySelectorAll('#article-container .mermaid-wrap')
+  if ($mermaidWrap.length) {
+    window.runMermaid = () => {
+      window.loadMermaid = true
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+      Array.from($mermaidWrap).forEach((item, index) => {
+        const mermaidSrc = item.firstElementChild
+        const mermaidThemeConfig = '%%{init:{ \'theme\':\'' + theme + '\'}}%%\n'
+        const mermaidID = 'mermaid-' + index
+        const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+        mermaid.mermaidAPI.render(mermaidID, mermaidDefinition, (svgCode) => {
+          mermaidSrc.insertAdjacentHTML('afterend', svgCode)
+        })
+      })
+    }
+
+    const loadMermaid = () => {
+      window.loadMermaid ? runMermaid() : getScript('https://npm.elemecdn.com/mermaid@8.13.10/dist/mermaid.min.js').then(runMermaid)
+    }
+
+    window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+  }
+})()</script><script>(()=>{
+  const init = () => {
+    twikoo.init(Object.assign({
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo-omega-livid.vercel.app/',
+      region: '',
+      onCommentLoaded: function () {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.vemoji)'))
+      }
+    }, null))
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-omega-livid.vercel.app/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      document.getElementById('twikoo-count').innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const runFn = () => {
+    init()
+    
+  }
+
+  const loadTwikoo = () => {
+    if (typeof twikoo === 'object') {
+      setTimeout(runFn,0)
+      return
+    } 
+    getScript('https://npm.elemecdn.com/twikoo@1.5.11/dist/twikoo.all.min.js').then(runFn)
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script>window.addEventListener('load', () => {
+  const changeContent = (content) => {
+    if (content === '') return content
+
+    content = content.replace(/<img.*?src="(.*?)"?[^\>]+>/ig, '[图片]') // replace image link
+    content = content.replace(/<a[^>]+?href=["']?([^"']+)["']?[^>]*>([^<]+)<\/a>/gi, '[链接]') // replace url
+    content = content.replace(/<pre><code>.*?<\/pre>/gi, '[代码]') // replace code
+    content = content.replace(/<[^>]+>/g,"") // remove html tag
+
+    if (content.length > 150) {
+      content = content.substring(0,150) + '...'
+    }
+    return content
+  }
+
+  const getComment = () => {
+    const runTwikoo = () => {
+      twikoo.getRecentComments({
+        envId: 'https://twikoo-omega-livid.vercel.app/',
+        region: '',
+        pageSize: 3,
+        includeReply: true
+      }).then(function (res) {
+        const twikooArray = res.map(e => {
+          return {
+            'content': changeContent(e.comment),
+            'avatar': e.avatar,
+            'nick': e.nick,
+            'url': e.url + '#' + e.id,
+            'date': new Date(e.created).toISOString()
+          }
+        })
+
+        saveToLocal.set('twikoo-newest-comments', JSON.stringify(twikooArray), 10/(60*24))
+        generateHtml(twikooArray)
+      }).catch(function (err) {
+        const $dom = document.querySelector('#card-newest-comments .aside-list')
+        $dom.innerHTML= "无法获取评论，请确认相关配置是否正确"
+      })
+    }
+
+    if (typeof twikoo === 'object') {
+      runTwikoo()
+    } else {
+      getScript('https://npm.elemecdn.com/twikoo@1.5.11/dist/twikoo.all.min.js').then(runTwikoo)
+    }
+  }
+
+  const generateHtml = array => {
+    let result = ''
+
+    if (array.length) {
+      for (let i = 0; i < array.length; i++) {
+        result += '<div class=\'aside-list-item\'>'
+
+        if (false) {
+          const name = 'data-lazy-src'
+          result += `<a href='${array[i].url}' class='thumbnail'><img ${name}='${array[i].avatar}' alt='${array[i].nick}'></a>`
+        }
+        
+        result += `<div class='content'>
+        <a class='comment' href='${array[i].url}' title='${array[i].content}'>${array[i].content}</a>
+        <div class='name'><span>${array[i].nick} / </span><time datetime="${array[i].date}">${btf.diffDate(array[i].date, true)}</time></div>
+        </div></div>`
+      }
+    } else {
+      result += '没有评论'
+    }
+
+    let $dom = document.querySelector('#card-newest-comments .aside-list')
+    $dom.innerHTML= result
+    window.lazyLoadInstance && window.lazyLoadInstance.update()
+    window.pjax && window.pjax.refresh($dom)
+  }
+
+  const newestCommentInit = () => {
+    if (document.querySelector('#card-newest-comments .aside-list')) {
+      const data = saveToLocal.get('twikoo-newest-comments')
+      if (data) {
+        generateHtml(JSON.parse(data))
+      } else {
+        getComment()
+      }
+    }
+  }
+
+  newestCommentInit()
+  document.addEventListener('pjax:complete', newestCommentInit)
+})</script><div class="aplayer no-destroy" data-id="6997741264" data-server="netease" data-type="playlist" data-fixed="true" data-mini="true" data-listFolded="true" data-order="random" data-preload="none" muted></div><script async src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/diytitle.js" crossorigin></script><script data-pjax defer src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/custom/fixed_comment.js" crossorigin></script><script data-pjax defer src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/custom/fixed_card_widget.js" crossorigin></script><script async src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/custom/leaves.js" crossorigin></script><script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.6.0/jquery.min.js" crossorigin></script><script data-pjax src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/custom.js" crossorigin></script><script defer data-pjax src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/kernel.js" crossorigin></script><script defer src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/modify.js" crossorigin></script><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/rightmenu.js" crossorigin></script><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/changebg.js" crossorigin></script><script async src="//at.alicdn.com/t/font_3113667_5ghhue7sqj5.js" crossorigin></script><script async src="//at.alicdn.com/t/font_3167278_4b5nw9t030c.js" crossorigin></script><script async src="//at.alicdn.com/t/font_2032782_ev6ytrh30f.js" crossorigin></script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.15.2/katex.js" crossorigin="anonymous"></script><script defer src="https://npm.elemecdn.com/katex@0.15.2/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script><script async src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/sun_moon.js" crossorigin></script><canvas class="fireworks" mobile="true"></canvas><script src="https://npm.elemecdn.com/butterfly-extsrc@1.1.0/dist/fireworks.min.js" crossorigin></script><script id="canvas_nest" defer="defer" color="100,100,100" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://npm.elemecdn.com/butterfly-extsrc@1.1.0/dist/canvas-nest.min.js" crossorigin></script><script src="https://npm.elemecdn.com/butterfly-extsrc@1.1.0/dist/activate-power-mode.min.js" crossorigin></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script src="//code.tidio.co/vdvuphhthk3fupcq7kxksxstjqcms2ru.js" async="async" crossorigin></script><script>function onTidioChatApiReady() {
+  window.tidioChatApi.hide();
+  window.tidioChatApi.on("close", function() {
+    window.tidioChatApi.hide();
+  });
+}
+if (window.tidioChatApi) {
+  window.tidioChatApi.on("ready", onTidioChatApiReady);
+} else {
+  document.addEventListener("tidioChat-ready", onTidioChatApiReady);
+}
+
+var chatBtnFn = () => {
+  document.getElementById("chat_btn").addEventListener("click", function(){
+    window.tidioChatApi.show();
+    window.tidioChatApi.open();
+  });
+}
+chatBtnFn()
+</script><link rel="stylesheet" href="https://npm.elemecdn.com/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'" crossorigin><script src="https://npm.elemecdn.com/aplayer@1.10.1/dist/APlayer.min.js" crossorigin></script><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/meting.js" crossorigin></script><script src="https://npm.elemecdn.com/pjax@0.2.8/pjax.min.js" crossorigin></script><script>let pjaxSelectors = ["title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show","#fixedcard-dashboard","#web_bg",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"]):not([href="/barrage/"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" crossorigin></script><div id="fixedcard-dashboard"><button class="fixedcard-activebtn" type="button" title="用户信息" onclick="FixedCardWidget(&quot;class&quot;,&quot;card-info&quot;,&quot;0&quot;)"><i class="fas fa-address-book"></i></button><button class="fixedcard-activebtn" type="button" title="最新文章" onclick="FixedCardWidget(&quot;class&quot;,&quot;card-recommend-post&quot;,&quot;0&quot;)"><i class="fas fa-dharmachakra"></i></button><div class="fixedcard-user-avatar fixedcard-activebtn" onclick="RemoveFixedCardWidget()"><img class="fixedcard-user-avatar-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/avatar.webp" title="Saiodgm" crossorigin></div></div><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><a class="rightMenu-item" href="javascript:window.history.back();"><i class="iconfont icon-back"></i></a><a class="rightMenu-item" href="javascript:window.history.forward();"><i class="iconfont icon-enter"></i></a><a class="rightMenu-item" href="javascript:window.location.reload();"><i class="iconfont icon-chexiao"></i></a><a class="rightMenu-item" href="javascript:kk.scrollToTop();"><i class="iconfont icon-top"></i></a></div><div class="rightMenu-group rightMenu-line hide" id="menu-text"><a class="rightMenu-item" href="javascript:kk.copySelect();"><i class="iconfont icon-copy"></i><span>复制</span></a><a class="rightMenu-item" href="javascript:kk.commentSelect();"><i class="fas fa-comments"></i><span>评论</span></a></div><div class="rightMenu-group rightMenu-line"><a class="rightMenu-item" href="javascript:switchNightMode();"><i class="iconfont icon-DarkTheme"></i><span>昼夜切换</span></a><a class="rightMenu-item" href="javascript:kk.switchReadMode();"><i class="iconfont icon-read"></i><span>阅读模式</span></a><a class="rightMenu-item" id="menu-translate"><i class="fas fa-language"></i><span>简繁切换</span></a><a class="rightMenu-item" href="javascript:kk.switchTheme();"><i class="iconfont icon-theme"></i><span>主题切换</span></a></div></div></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_clock_injector_config(){
+    var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+    var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img class="entered loading" id="card-clock-loading" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://npm.elemecdn.com/hexo-butterfly-clock/lib/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading"/ crossorigin></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = '/posts/'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_injector_config();
+  }
+  </script><script src="https://pv.sohu.com/cityjson?ie=utf-8" crossorigin></script><script data-pjax src="https://npm.elemecdn.com/hexo-butterfly-clock/lib/clock.min.js" crossorigin></script><script data-pjax>
+  function butterfly_footer_beautify_injector_config(){
+    var parent_div_git = document.getElementById('footer-wrap');
+    var item_html = '<div id="ghbdages" style="overflow:hidden;max-height:90px;height:auto;text-align:center;margin-top:10px"><div class="swiper-wrapper"><div class="swiper-slide"><a class="github-badge" target="_blank" href="https://hexo.io" style="margin-inline:5px" title="本站框架为 Hexo 6.2.0"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Frame-Hexo-blue?style=for-the-badge&amp;logo=hexo" alt=""/ crossorigin></a><a class="github-badge" target="_blank" href="https://butterfly.js.org/" style="margin-inline:5px" title="本站主题为 Butterfly 4.0.1"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=for-the-badge&amp;logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAABS2lUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxNDIgNzkuMTYwOTI0LCAyMDE3LzA3LzEzLTAxOjA2OjM5ICAgICAgICAiPgogPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIi8+CiA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgo8P3hwYWNrZXQgZW5kPSJyIj8+nhxg7wAAAblJREFUOI2t1LtrFUEUx/HPDT5SKBYKomJ8BSSC+Ggs1EQQROwSNQhqFay0sLJRbExKsbCwUmtB/A9ELUSwihJEbSx9g4VEkcDPYueSvWty4+vAsuc3M3znzPzOLkjSfm4leVPTf/RAj86Yxkbc8ZfRBL4r71Fc/B/Auh7H7n8Frm/oq7/J6KmLegw09AGc6gI7h3tY3DFaXFqV5Gt+jSdzONqbZLLMT9RdrgPH5oC1Y28DuD3JTJJXzbZZVJhLcKnL0Y7gccnvqrrhMFpzrk4y3qW6JHlaqthU9IskA42qlzFrytEu1cHm8j7WrgEj2FZ0q523gR8WAK5EP/YX/QUrsLroQaypA8/g/QLQQbNtdUN178/Rh+N4xKwpr1VNvQW7cKjs2F/GfmCo6GEsxbNS+XVcLlVXLtV6qBcnsa/k0/iEnWX+Nh7gCqawoYxNQatVTC8ujXRx+UJZsy7JaJKhJAeTtJp9WP/05vsRTOJhyT9jLb7hvsrtjqgDb2KmMT+hutOtqjb5jpf4OM/mHUfuSfK2HHEyyZ7acZYnOZHkfMnn/WPXgWNJriXZUVt0NslwTZ9O0tcN+BPSStKOpIECLQAAAABJRU5ErkJggg==" alt=""/ crossorigin></a><a class="github-badge" target="_blank" href="https://arcitcgn.cn/171.html" style="margin-inline:5px" title="本站使用 ADN 为静态资源提供 CDN 加速"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/CDN-ADN-black?style=for-the-badge&amp;logo=data:image/png;base64,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" alt=""/ crossorigin></a></div><div class="swiper-slide"><a class="github-badge" target="_blank" href="https://vercel.com/" style="margin-inline:5px" title="本站主站部署于 Vercel"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Hosted-Vercel-brightgreen?style=for-the-badge&amp;logo=Vercel" alt=""/ crossorigin></a><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" title="本站项目由 Github 托管"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Source-Github-d021d6?style=for-the-badge&amp;logo=GitHub" alt=""/ crossorigin></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" title="本站采用知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议进行许可"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=for-the-badge&amp;logo=Claris" alt=""/ crossorigin></a></div></div></div><style>a.github-badge:hover:before {display:none}</style>';
+    console.log('已挂载butterfly_footer_beautify')
+    parent_div_git.insertAdjacentHTML("beforeend",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_footer_beautify_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_footer_beautify_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js" crossorigin></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-footer-beautify@latest/lib/swiperbdage_init.min.js" crossorigin></script><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js" crossorigin></script><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '50ms');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '50ms');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('article-sort-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '50ms');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '50ms');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-clock');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '50ms');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('categoryBar');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '50ms');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '2s');
+    arr[i].setAttribute('data-wow-delay', '50ms');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script></div><script defer src="https://unpkg.zhimg.com/hexo-butterfly-wowjs/lib/wow.min.js" crossorigin></script><script defer src="https://unpkg.zhimg.com/hexo-butterfly-wowjs/lib/wow_init.js" crossorigin></script><script data-pjax src="https://npm.elemecdn.com/hexo-filter-gitcalendar/lib/gitcalendar.js" crossorigin></script><script data-pjax>
+  function gitcalendar_injector_config(){
+      var parent_div_git = document.getElementById('recent-posts');
+      var item_html = '<div class="recent-post-item" style="width:100%;height:auto;padding:10px;"><style>#git_container{min-height: 280px}@media screen and (max-width:650px) {#git_container{min-height: 0px}}</style><div id="git_loading" style="width:10%;height:100%;margin:0 auto;display: block;"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50" xml:space="preserve"><path fill="#d0d0d0" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z" transform="rotate(275.098 25 25)"><animatetransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animatetransform></path></svg><style>#git_container{display: none;}</style></div><div id="git_container"></div></div>';
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+      console.log('已挂载gitcalendar')
+      }
+
+    if( document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+        gitcalendar_injector_config()
+        GitCalendarInit("https://github-calendar-api.vercel.app/api?cqbzljt",['#e4dfd7', '#f9f4dc', '#f7e8aa', '#f7e8aa', '#f8df72', '#fcd217', '#fcc515', '#f28e16', '#fb8b05', '#d85916', '#f43e06'],'cqbzljt')
+    }
+  </script><!-- hexo injector body_end end --><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/wanko.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false});</script></body></html>

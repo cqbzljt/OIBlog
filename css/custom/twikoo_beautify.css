@@ -1,0 +1,11 @@
+#twikoo .tk-content{
+  background: #e1eaf988;
+  padding: 16px;
+  border-radius: 8px;
+}
+.tk-input[data-v-619b4c52] .el-textarea__inner {
+  height: 130px !important;
+}
+.tk-preview-container img {
+  width: 100%;
+}

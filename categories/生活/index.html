@@ -1,0 +1,604 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>分类: 生活 | Saiodgm の 博客儿</title><meta name="keywords" content="Saiodgm's blog"><meta name="author" content="Saiodgm"><meta name="copyright" content="Saiodgm"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="cqbz 最菜">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Saiodgm の 博客儿">
+<meta property="og:url" content="https://oi.saiodgm.gq/categories/%E7%94%9F%E6%B4%BB/">
+<meta property="og:site_name" content="Saiodgm の 博客儿">
+<meta property="og:description" content="cqbz 最菜">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/avatar.webp">
+<meta property="article:author" content="Saiodgm">
+<meta property="article:tag" content="Saiodgm&#39;s blog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/avatar.webp"><link rel="shortcut icon" href="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/favicon.webp" crossorigin><link rel="canonical" href="https://oi.saiodgm.gq/categories/%E7%94%9F%E6%B4%BB/"><link rel="preconnect" href="//fastly.jsdelivr.net"/ crossorigin><link rel="preconnect" href="//busuanzi.ibruce.info"/ crossorigin><script>window.setCustom = () => { };
+(async () => {
+  const CACHE_NAME = 'SaiodgmSW';
+  window.db = {
+    read: (key, config) => {
+      if (!config) { config = { type: "text" } }
+      return new Promise((resolve, reject) => {
+        caches.open(CACHE_NAME).then(cache => {
+          cache.match(new Request(`https://LOCALCACHE/${encodeURIComponent(key)}`)).then(function (res) {
+            if (!res) resolve(null)
+            res.text().then(text => resolve(text))
+          }).catch(() => {
+            resolve(null)
+          })
+        })
+      })
+    },
+    write: (key, value) => {
+      return new Promise((resolve, reject) => {
+        caches.open(CACHE_NAME).then(function (cache) {
+          cache.put(new Request(`https://LOCALCACHE/${encodeURIComponent(key)}`), new Response(value));
+          resolve()
+        }).catch(() => {
+          reject()
+        })
+      })
+    }
+  };
+  function ranN(minNum, maxNum) {
+    return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10)
+  }
+  if ('serviceWorker' in navigator) {
+    if (Number(window.localStorage.getItem('SaiodgmSW_Set')) < 1) {
+      setTimeout(async () => {
+        console.log('检测到您的浏览器没有安装 SaiodgmSW，开始注册')
+        window.stop()
+        window.localStorage.setItem('SaiodgmSW_Set', 1)
+        const replacehtml = await fetch('https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/swnotice.html')
+        document.body.innerHTML = await replacehtml.text()
+      }, 0);
+    }
+    const $ = document.querySelector.bind(document);
+    navigator.serviceWorker.register(`/sw.js?time=${ranN(1, 88888888888888888888)}`)
+      .then(async () => {
+        if (Number(window.localStorage.getItem('SaiodgmSW_Set')) < 2) {
+          $('#info').innerText = '安装成功,稍等片刻...';
+
+          setTimeout(() => {
+            window.localStorage.setItem('SaiodgmSW_Set', 2)
+            window.location.reload()
+          }, 500)
+        }
+        if (Number(window.localStorage.getItem('SaiodgmSW_Set')) == 2) {
+          window.localStorage.setItem('SaiodgmSW_Set', 3)
+        }
+      })
+      .catch(err => console.error(`SaiodgmSWError:${err}`))
+  } else { $('#info').innerText = '很抱歉,我们已不再支持您的浏览器.'; }
+})();
+</script><link rel="stylesheet" href="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/css/index.css" crossorigin><link rel="stylesheet" href="https://npm.elemecdn.com/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" media="print" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/node-snackbar/0.1.16/snackbar.min.css" media="print" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://npm.elemecdn.com/@fancyapps/ui@4.0.23/dist/fancybox.css" media="print" onload="this.media='all'" crossorigin><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  noticeOutdate: {"limitDay":150,"position":"top","messagePrev":"距离本篇文章上次更新已经过去了","messageNext":"天，其中的某些内容可能已经过时，请自行判断。"},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":400},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://fastly.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://fastly.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '分类: 生活',
+  isPost: false,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2022-07-24 06:30:15'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/css/custom.css"  media="defer" onload="this.media='all'" crossorigin><link rel="stylesheet" tag="theme" href="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/css/themes/candyhome.css" crossorigin><link rel="stylesheet" href="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/css/custom/twikoo_beautify.css"  media="defer" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/css/custom/fixed_comment.css"  media="defer" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/css/rightmenu.css" crossorigin><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.15.2/katex.css" crossorigin="anonymous"><link rel="stylesheet" href="//at.alicdn.com/t/font_3149728_qa1hwao2rmc.css" crossorigin><link rel="stylesheet" href="//at.alicdn.com/t/font_3261135_xhnqceobyje.css" crossorigin><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/SAO-Notify.js" async crossorigin></script><svg aria-hidden="true" style="position:absolute; overflow:hidden; width:0; height:0"><symbol id="icon-sun" viewBox="0 0 1024 1024"><path d="M960 512l-128 128v192h-192l-128 128-128-128H192v-192l-128-128 128-128V192h192l128-128 128 128h192v192z" fill="#FFD878" p-id="8420"></path><path d="M736 512a224 224 0 1 0-448 0 224 224 0 1 0 448 0z" fill="#FFE4A9" p-id="8421"></path><path d="M512 109.248L626.752 224H800v173.248L914.752 512 800 626.752V800h-173.248L512 914.752 397.248 800H224v-173.248L109.248 512 224 397.248V224h173.248L512 109.248M512 64l-128 128H192v192l-128 128 128 128v192h192l128 128 128-128h192v-192l128-128-128-128V192h-192l-128-128z" fill="#4D5152" p-id="8422"></path><path d="M512 320c105.888 0 192 86.112 192 192s-86.112 192-192 192-192-86.112-192-192 86.112-192 192-192m0-32a224 224 0 1 0 0 448 224 224 0 0 0 0-448z" fill="#4D5152" p-id="8423"></path></symbol><symbol id="icon-moon" viewBox="0 0 1024 1024"><path d="M611.370667 167.082667a445.013333 445.013333 0 0 1-38.4 161.834666 477.824 477.824 0 0 1-244.736 244.394667 445.141333 445.141333 0 0 1-161.109334 38.058667 85.077333 85.077333 0 0 0-65.066666 135.722666A462.08 462.08 0 1 0 747.093333 102.058667a85.077333 85.077333 0 0 0-135.722666 65.024z" fill="#FFB531" p-id="11345"></path><path d="M329.728 274.133333l35.157333-35.157333a21.333333 21.333333 0 1 0-30.165333-30.165333l-35.157333 35.157333-35.114667-35.157333a21.333333 21.333333 0 0 0-30.165333 30.165333l35.114666 35.157333-35.114666 35.157334a21.333333 21.333333 0 1 0 30.165333 30.165333l35.114667-35.157333 35.157333 35.157333a21.333333 21.333333 0 1 0 30.165333-30.165333z" fill="#030835" p-id="11346"></path></symbol></svg><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-clock/lib/clock.min.css" / crossorigin><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-footer-beautify@1.0.0/lib/runtime.css" media="print" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@1.0.17/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@1.0.17/lib/tag_plugins.css" media="defer" onload="this.media='all'" crossorigin><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@1.0.17/lib/assets/carousel-touch.js" crossorigin></script><link rel="stylesheet" href="https://unpkg.zhimg.com/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-filter-gitcalendar/lib/gitcalendar.css" media="print" onload="this.media='all'" crossorigin><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="Saiodgm の 博客儿" type="application/atom+xml">
+</head><body><a href="javascript:void(0);" onclick="preloader.endLoading();" title="点击跳过动画"></a><div id="loading-box"><div class="gear-loader"><div class="gear-loader_overlay"></div><div class="gear-loader_cogs"><div class="gear-loader_cogs__top"><div class="gear-top_part"></div><div class="gear-top_part"></div><div class="gear-top_part"></div><div class="gear-top_hole"></div></div><div class="gear-loader_cogs__left"><div class="gear-left_part"></div><div class="gear-left_part"></div><div class="gear-left_part"></div><div class="gear-left_hole"></div></div><div class="gear-loader_cogs__bottom"><div class="gear-bottom_part"></div><div class="gear-bottom_part"></div><div class="gear-bottom_part"></div><div class="gear-bottom_hole"></div></div></div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/avatar.webp" onerror="onerror=null;src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="avatar"/ crossorigin></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">40</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">21</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://saiodgm.gq/"><i class="fa-fw iconfont icon-shouye"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw iconfont icon-shouji"></i><span> 博客</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-shangpin"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw iconfont icon-rili"></i><span> 文章列表</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw iconfont icon-biaoqian"></i><span> 全部标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw iconfont icon-fenlei"></i><span> 全部分类</span></a></li><li><a class="site-page child" href="/random/"><i class="fa-fw iconfont icon-lvhang"></i><span> 随便看看</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-xihuan"></i><span> 导航</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw iconfont icon-liwu"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw iconfont icon-wode"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/update/"><i class="fa-fw iconfont icon-renwu"></i><span> 更新日志</span></a></li><li><a class="site-page child" href="/barrage/"><i class="fa-fw iconfont icon-xinxi"></i><span> 留言信箱</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-pisa"></i><span> 娱乐</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/bber/"><i class="fa-fw iconfont icon-xiaoxi"></i><span> 说说</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw iconfont icon-tupian"></i><span> 照片</span></a></li><li><a class="site-page child" href="/bangumis/"><i class="fa-fw iconfont icon-yingshi"></i><span> 追番</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-fenxiang"></i><span> 网站</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://stats.uptimerobot.com/xB56lILy8w"><i class="fa-fw iconfont icon-shezhi2"></i><span> 状态监控</span></a></li><li><a class="site-page child" target="_blank" rel="noopener" href="https://admin.saiodgm.gq/"><i class="fa-fw iconfont icon-shezhi"></i><span> 后台管理</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://travellings.link"><i class="fa-fw iconfont icon-jiasu"></i><span> 开往</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-home-page" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Saiodgm の 博客儿</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://saiodgm.gq/"><i class="fa-fw iconfont icon-shouye"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw iconfont icon-shouji"></i><span> 博客</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-shangpin"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw iconfont icon-rili"></i><span> 文章列表</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw iconfont icon-biaoqian"></i><span> 全部标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw iconfont icon-fenlei"></i><span> 全部分类</span></a></li><li><a class="site-page child" href="/random/"><i class="fa-fw iconfont icon-lvhang"></i><span> 随便看看</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-xihuan"></i><span> 导航</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw iconfont icon-liwu"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw iconfont icon-wode"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/update/"><i class="fa-fw iconfont icon-renwu"></i><span> 更新日志</span></a></li><li><a class="site-page child" href="/barrage/"><i class="fa-fw iconfont icon-xinxi"></i><span> 留言信箱</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-pisa"></i><span> 娱乐</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/bber/"><i class="fa-fw iconfont icon-xiaoxi"></i><span> 说说</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw iconfont icon-tupian"></i><span> 照片</span></a></li><li><a class="site-page child" href="/bangumis/"><i class="fa-fw iconfont icon-yingshi"></i><span> 追番</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-fenxiang"></i><span> 网站</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://stats.uptimerobot.com/xB56lILy8w"><i class="fa-fw iconfont icon-shezhi2"></i><span> 状态监控</span></a></li><li><a class="site-page child" target="_blank" rel="noopener" href="https://admin.saiodgm.gq/"><i class="fa-fw iconfont icon-shezhi"></i><span> 后台管理</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://travellings.link"><i class="fa-fw iconfont icon-jiasu"></i><span> 开往</span></a></div></div></div><div id="nav-right"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div id="darkmode_navswitch"><a class="nav-rightbutton site-page darkmode_switchbutton" onclick="switchNightMode()" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></a></div><div id="change_bg"><a class="site-page" href="/changebg/"><i class="fas fa-palette fa-fw"></i></a></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div class="coverdiv" id="coverdiv"><img class="cover entered loading" id="post-cover" alt="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="null"></div><div id="page-site-info"><h1 id="site-title">生活</h1></div></header><main class="layout" id="content-inner"><div id="category"><div class="article-sort-title">分类 - 生活</div><div class="article-sort"><div class="article-sort-item year"><span>2022</span><svg class="icon" aria-hidden="true" style="width: 1em!important; height: 1em!important;"><use xlink:href="#icon-tiger"></use></svg></div><div class="article-sort-item"><a class="article-sort-item-img" href="/posts/9bb15805/" title="AFO 随心记"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover4.webp" alt="AFO 随心记" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/404.webp'" crossorigin></a><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2022-07-10T19:59:14.000Z" title="发表于 2022-07-10 19:59:14">2022-07-10</time></div><a class="article-sort-item-title" href="/posts/9bb15805/" title="AFO 随心记">AFO 随心记</a></div></div><div class="article-sort-item year"><span>2021</span><svg class="icon" aria-hidden="true" style="width: 1em!important; height: 1em!important;"><use xlink:href="#icon-ox"></use></svg></div><div class="article-sort-item"><a class="article-sort-item-img" href="/posts/407315f9/" title="NOIP2021 爆炸记"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover8.webp" alt="NOIP2021 爆炸记" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/404.webp'" crossorigin></a><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2021-12-04T15:42:48.000Z" title="发表于 2021-12-04 15:42:48">2021-12-04</time></div><a class="article-sort-item-title" href="/posts/407315f9/" title="NOIP2021 爆炸记">NOIP2021 爆炸记</a></div></div><div class="article-sort-item"><a class="article-sort-item-img" href="/posts/9ec8265c/" title="CSP2021 游记"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover4.webp" alt="CSP2021 游记" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/404.webp'" crossorigin></a><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2021-11-07T10:55:12.000Z" title="发表于 2021-11-07 10:55:12">2021-11-07</time></div><a class="article-sort-item-title" href="/posts/9ec8265c/" title="CSP2021 游记">CSP2021 游记</a></div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/avatar.webp" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="avatar"/ crossorigin></div><div class="author-info__name">Saiodgm</div><div class="author-info__description">cqbz 初二最菜 OIer.</div></div><div class="card-info-data is-center"><div class="card-info-data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">40</div></a></div><div class="card-info-data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">21</div></a></div><div class="card-info-data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/cqbzljt/OIBlog"><i class="fab fa-github"></i><span>站点仓库</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="mailto:hello@saiodgm.gq" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="http://wpa.qq.com/msgrd?v=3&amp;uin=30359624&amp;site=ivrpano.com&amp;menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="https://github.com/cqbzljt" target="_blank" title="GitHub"><i class="fab fa-github"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fas fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">放暑假了，但是这暑假放了跟没放似的。。。<br>为了您最好的体验，请把本站加入广告拦截器的白名单中，谢谢配合 ψ(｀∇´)ψ<br>本站加载了 Service Worker 脚本，目前这个脚本有一点点问题，基本不影响体验，博主会尽力修的( •̀ ω •́ )✧<br>右键触发本站右键菜单，如果需要原生右键菜单请 Ctrl + 右键~</div></div><div class="sticky_layout"><div class="card-widget card-friend-link"><div class="item-headline"><i class="far fa-address-book"></i><span>通讯录</span></div><div class="card-friend-link-container"><details class="card-friend-class-name"><summary class="card-friend-class-desc" title="好朋友啦 qwq"><sapn>🍀特别置顶</sapn><span class="online-friend-number"></span><sapn>1</sapn></summary><a class="card-friend-item online-friend-link" href="https://xsc062.gitee.io" title="XSC062" target="_blank"><img class="no-lightbox card-friend-avatar" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="http://q1.qlogo.cn/g?b=qq&amp;nk=942987023&amp;s=100" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="XSC062"/ crossorigin><div class="card-friend-details"><div class="card-friend-name">XSC062</div><div class="card-friend-descr" title="A Motherlesser | The King of Nature | A Lovely Cabbage">A Motherlesser | The King of Nature | A Lovely Cabbage</div></div></a></details><details class="card-friend-class-name"><summary class="card-friend-class-desc" title="按照昵称字典序从前到后排序，不分大小写。"><sapn>💻同级巨佬们</sapn><span class="online-friend-number"></span><sapn>16</sapn></summary><a class="card-friend-item online-friend-link" href="https://cqbzljh.blog.luogu.org/" title="cqbzljh" target="_blank"><img class="no-lightbox card-friend-avatar" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="http://q1.qlogo.cn/g?b=qq&amp;nk=799839896&amp;s=100" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="cqbzljh"/ crossorigin><div class="card-friend-details"><div class="card-friend-name">cqbzljh</div><div class="card-friend-descr" title="with blog">with blog</div></div></a><a class="card-friend-item online-friend-link" href="https://www.luogu.com.cn/blog/cqbzwwh/" title="cqbzwwh" target="_blank"><img class="no-lightbox card-friend-avatar" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="http://q1.qlogo.cn/g?b=qq&amp;nk=1907281932&amp;s=100" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="cqbzwwh"/ crossorigin><div class="card-friend-details"><div class="card-friend-name">cqbzwwh</div><div class="card-friend-descr" title="H.">H.</div></div></a><a class="card-friend-item online-friend-link" href="https://www.luogu.com.cn/blog/cqbzxzj-blog/" title="cqbzxzj" target="_blank"><img class="no-lightbox card-friend-avatar" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="http://q1.qlogo.cn/g?b=qq&amp;nk=1951943569&amp;s=100" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="cqbzxzj"/ crossorigin><div class="card-friend-details"><div class="card-friend-name">cqbzxzj</div><div class="card-friend-descr" title="他也没写 qwq">他也没写 qwq</div></div></a><a class="card-friend-item online-friend-link" href="https://383791.blog.luogu.org/" title="cqbzzjh" target="_blank"><img class="no-lightbox card-friend-avatar" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="http://q1.qlogo.cn/g?b=qq&amp;nk=2301437609&amp;s=100" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="cqbzzjh"/ crossorigin><div class="card-friend-details"><div class="card-friend-name">cqbzzjh</div><div class="card-friend-descr" title="Very Interesting~~">Very Interesting~~</div></div></a><a class="card-friend-item online-friend-link" href="https://www.luogu.com.cn/blog/azzr-lg/" title="cqbzzmq" target="_blank"><img class="no-lightbox card-friend-avatar" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="http://q1.qlogo.cn/g?b=qq&amp;nk=250353161&amp;s=100" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="cqbzzmq"/ crossorigin><div class="card-friend-details"><div class="card-friend-name">cqbzzmq</div><div class="card-friend-descr" title="Nothing.">Nothing.</div></div></a><a class="card-friend-item online-friend-link" href="https://www.luogu.com.cn/blog/cqbzzqw/" title="cqbzzqw" target="_blank"><img class="no-lightbox card-friend-avatar" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.luogu.com.cn/upload/usericon/383782.png" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="cqbzzqw"/ crossorigin><div class="card-friend-details"><div class="card-friend-name">cqbzzqw</div><div class="card-friend-descr" title="执手中之剑，为心之所向，心之所往，心之所爱。">执手中之剑，为心之所向，心之所往，心之所爱。</div></div></a><a class="card-friend-item online-friend-link" href="https://www.luogu.com.cn/blog/488539/" title="E_firework" target="_blank"><img class="no-lightbox card-friend-avatar" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.luogu.com.cn/upload/usericon/488539.png" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="E_firework"/ crossorigin><div class="card-friend-details"><div class="card-friend-name">E_firework</div><div class="card-friend-descr" title="天干夜燥，小心火烛。">天干夜燥，小心火烛。</div></div></a><a class="card-friend-item online-friend-link" href="https://www.cnblogs.com/harry-hedwig" title="Harry_Hedwig" target="_blank"><img class="no-lightbox card-friend-avatar" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="http://q1.qlogo.cn/g?b=qq&amp;nk=1141557250&amp;s=100" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="Harry_Hedwig"/ crossorigin><div class="card-friend-details"><div class="card-friend-name">Harry_Hedwig</div><div class="card-friend-descr" title="一直向前走，你看，白昼也有启明星。">一直向前走，你看，白昼也有启明星。</div></div></a><a class="card-friend-item online-friend-link" href="https://www.luogu.com.cn/blog/mybook-cqbzywy/" title="markywy" target="_blank"><img class="no-lightbox card-friend-avatar" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.luogu.com.cn/upload/usericon/407225.png" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="markywy"/ crossorigin><div class="card-friend-details"><div class="card-friend-name">markywy</div><div class="card-friend-descr" title="markywy 的秘密基地">markywy 的秘密基地</div></div></a><a class="card-friend-item online-friend-link" href="https://www.luogu.com.cn/blog/271260/" title="PosVII" target="_blank"><img class="no-lightbox card-friend-avatar" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="http://q1.qlogo.cn/g?b=qq&amp;nk=1211826801&amp;s=100" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="PosVII"/ crossorigin><div class="card-friend-details"><div class="card-friend-name">PosVII</div><div class="card-friend-descr" title="草就多练练">草就多练练</div></div></a><a class="card-friend-item online-friend-link" href="https://www.luogu.com.cn/blog/Vecinrix/" title="Vecinrix_dabreck" target="_blank"><img class="no-lightbox card-friend-avatar" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="http://q1.qlogo.cn/g?b=qq&amp;nk=3634688607&amp;s=100" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="Vecinrix_dabreck"/ crossorigin><div class="card-friend-details"><div class="card-friend-name">Vecinrix_dabreck</div><div class="card-friend-descr" title="欢迎来到 Vecinrix_dabreck 的博客">欢迎来到 Vecinrix_dabreck 的博客</div></div></a><a class="card-friend-item online-friend-link" href="https://www.luogu.com.cn/blog/cqbzcgy/" title="whkfuler" target="_blank"><img class="no-lightbox card-friend-avatar" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="http://q1.qlogo.cn/g?b=qq&amp;nk=464723393&amp;s=100" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="whkfuler"/ crossorigin><div class="card-friend-details"><div class="card-friend-name">whkfuler</div><div class="card-friend-descr" title="I can be AKed by IOI.">I can be AKed by IOI.</div></div></a><a class="card-friend-item offline-friend-link" href="https://my.oschina.net/nothusuhan" title="cqbzhsh(AFO)" target="_blank"><img class="no-lightbox card-friend-avatar" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="http://q1.qlogo.cn/g?b=qq&amp;nk=3229237835&amp;s=100" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="cqbzhsh(AFO)"/ crossorigin><div class="card-friend-details"><div class="card-friend-name">cqbzhsh(AFO)</div><div class="card-friend-descr" title="hh">hh</div></div></a><a class="card-friend-item offline-friend-link" href="https://www.luogu.com.cn/blog/200803050946hyf/" title="cqbzhyf(AFO)" target="_blank"><img class="no-lightbox card-friend-avatar" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="http://q1.qlogo.cn/g?b=qq&amp;nk=281109419&amp;s=100" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="cqbzhyf(AFO)"/ crossorigin><div class="card-friend-details"><div class="card-friend-name">cqbzhyf(AFO)</div><div class="card-friend-descr" title="cqbzhyf's blog">cqbzhyf's blog</div></div></a><a class="card-friend-item offline-friend-link" href="https://www.luogu.com.cn/blog/384530/" title="cqbzjyh(AFO)" target="_blank"><img class="no-lightbox card-friend-avatar" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="http://q1.qlogo.cn/g?b=qq&amp;nk=1004986425&amp;s=100" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="cqbzjyh(AFO)"/ crossorigin><div class="card-friend-details"><div class="card-friend-name">cqbzjyh(AFO)</div><div class="card-friend-descr" title="他没写 qwq">他没写 qwq</div></div></a><a class="card-friend-item offline-friend-link" href="https://www.luogu.com.cn/blog/cangqiongyouluan/" title="EH_Kindred_Lovely(AFO)" target="_blank"><img class="no-lightbox card-friend-avatar" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.luogu.com.cn/upload/usericon/427484.png" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="EH_Kindred_Lovely(AFO)"/ crossorigin><div class="card-friend-details"><div class="card-friend-name">EH_Kindred_Lovely(AFO)</div><div class="card-friend-descr" title="他还没写 qwq">他还没写 qwq</div></div></a></details><details class="card-friend-class-name"><summary class="card-friend-class-desc" title="这一栏好像没有学妹呢（"><sapn>🌱学弟学妹们</sapn><span class="online-friend-number"></span><sapn>8</sapn></summary><a class="card-friend-item online-friend-link" href="https://www.luogu.com.cn/blog/A-box-of-yogurt/" title="A_box_of_yogurt" target="_blank"><img class="no-lightbox card-friend-avatar" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="http://q1.qlogo.cn/g?b=qq&amp;nk=3218368236&amp;s=100" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="A_box_of_yogurt"/ crossorigin><div class="card-friend-details"><div class="card-friend-name">A_box_of_yogurt</div><div class="card-friend-descr" title="のvの">のvの</div></div></a><a class="card-friend-item online-friend-link" href="https://www.luogu.com.cn/blog/cqbzfsk/" title="BigJoker" target="_blank"><img class="no-lightbox card-friend-avatar" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.luogu.com.cn/upload/usericon/364122.png" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="BigJoker"/ crossorigin><div class="card-friend-details"><div class="card-friend-name">BigJoker</div><div class="card-friend-descr" title="Q">Q</div></div></a><a class="card-friend-item online-friend-link" href="https://www.luogu.com.cn/blog/taozhilin/" title="cqbztzl" target="_blank"><img class="no-lightbox card-friend-avatar" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="http://q1.qlogo.cn/g?b=qq&amp;nk=546434&amp;s=100" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="cqbztzl"/ crossorigin><div class="card-friend-details"><div class="card-friend-name">cqbztzl</div><div class="card-friend-descr" title="——tzl">——tzl</div></div></a><a class="card-friend-item online-friend-link" href="https://www.luogu.com.cn/blog/557117/#" title="Little_Cathy" target="_blank"><img class="no-lightbox card-friend-avatar" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.luogu.com.cn/upload/usericon/557117.png" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="Little_Cathy"/ crossorigin><div class="card-friend-details"><div class="card-friend-name">Little_Cathy</div><div class="card-friend-descr" title="羁绊无影无踪，藤蔓一斩就断">羁绊无影无踪，藤蔓一斩就断</div></div></a><a class="card-friend-item online-friend-link" href="https://www.luogu.com.cn/blog/493271/" title="Little_ROY" target="_blank"><img class="no-lightbox card-friend-avatar" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.luogu.com.cn/upload/usericon/493271.png" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="Little_ROY"/ crossorigin><div class="card-friend-details"><div class="card-friend-name">Little_ROY</div><div class="card-friend-descr" title="记忆触手可得，蓝天延绵不绝">记忆触手可得，蓝天延绵不绝</div></div></a><a class="card-friend-item online-friend-link" href="https://www.luogu.com.cn/blog/Super-Cube666/" title="Super_Cube" target="_blank"><img class="no-lightbox card-friend-avatar" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.luogu.com.cn/upload/usericon/481893.png" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="Super_Cube"/ crossorigin><div class="card-friend-details"><div class="card-friend-name">Super_Cube</div><div class="card-friend-descr" title="一介懒人，懒得不成人形 || 传说中的 Cube">一介懒人，懒得不成人形 || 传说中的 Cube</div></div></a><a class="card-friend-item online-friend-link" href="https://www.luogu.com.cn/blog/wzy2009blog/" title="咸鱼吖" target="_blank"><img class="no-lightbox card-friend-avatar" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="http://q1.qlogo.cn/g?b=qq&amp;nk=1262264033&amp;s=100" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="咸鱼吖"/ crossorigin><div class="card-friend-details"><div class="card-friend-name">咸鱼吖</div><div class="card-friend-descr" title="cqbzwzy 的博客">cqbzwzy 的博客</div></div></a><a class="card-friend-item online-friend-link" href="https://www.luogu.com.cn/blog/ranchengzhu/" title="ZhuRanCheng" target="_blank"><img class="no-lightbox card-friend-avatar" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.luogu.com.cn/upload/usericon/421483.png" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="ZhuRanCheng"/ crossorigin><div class="card-friend-details"><div class="card-friend-name">ZhuRanCheng</div><div class="card-friend-descr" title="……">……</div></div></a></details></div><div class="ja-pjax"><script>var addressbook = document.getElementsByClassName("card-friend-class-name");
+for (var i=0; i<addressbook.length; i++){
+  var online = addressbook[i].getElementsByClassName("online-friend-link").length;
+  addressbook[i].getElementsByClassName("online-friend-number")[0].innerHTML = "  "+online+"/";
+}</script></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/1130b63d/" title="单调队列优化 &amp; 斜率优化"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover4.webp" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/404.webp'" alt="单调队列优化 &amp; 斜率优化"/ crossorigin></a><div class="content"><a class="title" href="/posts/1130b63d/" title="单调队列优化 &amp; 斜率优化">单调队列优化 &amp; 斜率优化</a><time datetime="2022-07-10T21:21:42.000Z" title="发表于 2022-07-10 21:21:42">2022-07-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/9bb15805/" title="AFO 随心记"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover4.webp" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/404.webp'" alt="AFO 随心记"/ crossorigin></a><div class="content"><a class="title" href="/posts/9bb15805/" title="AFO 随心记">AFO 随心记</a><time datetime="2022-07-10T19:59:14.000Z" title="发表于 2022-07-10 19:59:14">2022-07-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/ad2e3741/" title="butterfly 魔改日记"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover8.webp" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/404.webp'" alt="butterfly 魔改日记"/ crossorigin></a><div class="content"><a class="title" href="/posts/ad2e3741/" title="butterfly 魔改日记">butterfly 魔改日记</a><time datetime="2022-05-21T09:01:34.000Z" title="发表于 2022-05-21 09:01:34">2022-05-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/534cd243/" title="树链剖分 / 轻重链剖分"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover3.webp" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/404.webp'" alt="树链剖分 / 轻重链剖分"/ crossorigin></a><div class="content"><a class="title" href="/posts/534cd243/" title="树链剖分 / 轻重链剖分">树链剖分 / 轻重链剖分</a><time datetime="2022-05-14T20:34:14.000Z" title="发表于 2022-05-14 20:34:14">2022-05-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/d17dcd42/" title="最近公共祖先（LCA）"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover7.webp" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/404.webp'" alt="最近公共祖先（LCA）"/ crossorigin></a><div class="content"><a class="title" href="/posts/d17dcd42/" title="最近公共祖先（LCA）">最近公共祖先（LCA）</a><time datetime="2022-05-14T12:50:49.000Z" title="发表于 2022-05-14 12:50:49">2022-05-14</time></div></div></div></div><div class="card-widget" id="card-newest-comments"><div class="item-headline"><i class="fas fa-comment-dots"></i><span>最新评论</span></div><div class="aside-list"><span>正在加载中...</span></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            
+            </div>
+            <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%81%9A%E9%A2%98%E8%AE%B0%E5%BD%95/"><span class="card-category-list-name">做题记录</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"><span class="card-category-list-name">学习笔记</span><span class="card-category-list-count">10</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%B0%B4%E8%B4%B4/"><span class="card-category-list-name">水贴</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E7%94%9F%E6%B4%BB/"><span class="card-category-list-name">生活</span><span class="card-category-list-count">3</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E7%BD%91%E7%AB%99/"><span class="card-category-list-name">网站</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%80%83%E8%AF%95%E6%80%BB%E7%BB%93/"><span class="card-category-list-name">考试总结</span><span class="card-category-list-count">5</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%AF%81%E6%98%8E/"><span class="card-category-list-name">证明</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%A2%98%E8%A7%A3/"><span class="card-category-list-name">题解</span><span class="card-category-list-count">16</span></a></li>
+            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/Hexo/" style="font-size: 1.18em; color: #999ca1">Hexo</a> <a href="/tags/STL/" style="font-size: 1.1em; color: #999">STL</a> <a href="/tags/butterfly/" style="font-size: 1.18em; color: #999ca1">butterfly</a> <a href="/tags/%E4%BA%8C%E5%88%86%E7%AD%94%E6%A1%88/" style="font-size: 1.26em; color: #999fa8">二分答案</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="font-size: 1.5em; color: #99a9bf">动态规划</a> <a href="/tags/%E5%8D%95%E8%B0%83%E9%98%9F%E5%88%97/" style="font-size: 1.1em; color: #999">单调队列</a> <a href="/tags/%E5%93%88%E5%B8%8C/" style="font-size: 1.1em; color: #999">哈希</a> <a href="/tags/%E5%9B%BE%E8%AE%BA/" style="font-size: 1.18em; color: #999ca1">图论</a> <a href="/tags/%E6%80%9D%E7%BB%B4/" style="font-size: 1.18em; color: #999ca1">思维</a> <a href="/tags/%E6%90%9C%E7%B4%A2/" style="font-size: 1.26em; color: #999fa8">搜索</a> <a href="/tags/%E6%95%B0%E5%AD%A6/" style="font-size: 1.34em; color: #99a3b0">数学</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 1.18em; color: #999ca1">数据结构</a> <a href="/tags/%E6%A0%91%E5%BD%A2%E7%BB%93%E6%9E%84/" style="font-size: 1.18em; color: #999ca1">树形结构</a> <a href="/tags/%E6%A8%A1%E6%8B%9F/" style="font-size: 1.42em; color: #99a6b7">模拟</a> <a href="/tags/%E6%B8%B8%E8%AE%B0/" style="font-size: 1.18em; color: #999ca1">游记</a> <a href="/tags/%E7%BC%96%E8%AF%91%E5%99%A8/" style="font-size: 1.1em; color: #999">编译器</a> <a href="/tags/%E8%B4%AA%E5%BF%83/" style="font-size: 1.42em; color: #99a6b7">贪心</a> <a href="/tags/%E9%80%92%E6%8E%A8%EF%BC%8C%E9%80%92%E5%BD%92/" style="font-size: 1.34em; color: #99a3b0">递推，递归</a> <a href="/tags/%E9%93%BE%E8%A1%A8/" style="font-size: 1.1em; color: #999">链表</a> <a href="/tags/%E9%97%B2%E8%81%8A/" style="font-size: 1.1em; color: #999">闲聊</a> <a href="/tags/%E9%AB%98%E7%B2%BE%E5%BA%A6/" style="font-size: 1.18em; color: #999ca1">高精度</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span><a class="card-more-btn" href="/archives/" title="查看更多">
+    <i class="fas fa-angle-right"></i></a></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/07/"><span class="card-archive-list-date">七月 2022</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/05/"><span class="card-archive-list-date">五月 2022</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/03/"><span class="card-archive-list-date">三月 2022</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/01/"><span class="card-archive-list-date">一月 2022</span><span class="card-archive-list-count">5</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/12/"><span class="card-archive-list-date">十二月 2021</span><span class="card-archive-list-count">4</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/11/"><span class="card-archive-list-date">十一月 2021</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/10/"><span class="card-archive-list-date">十月 2021</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/09/"><span class="card-archive-list-date">九月 2021</span><span class="card-archive-list-count">6</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">博客版本 :</div><div class="item-count">1.3.0</div></div><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">40</div></div><div class="webinfo-item"><div class="item-name">已运行时间 :</div><div class="item-count" id="runtimeshow" data-publishDate="2021-08-10T00:00:00.000Z"></div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">108.5k</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2022-07-24T06:30:14.899Z"></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2022  <i id="heartbeat" class="fa fas fa-heartbeat"></i> Saiodgm</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a><span class="footer-separator">|</span><a target="_blank" rel="noopener" href="https://icp.gov.moe/?keyword=20221225">萌ICP备20221225号</a></div><div class="footer_custom_text">慎始，笃行，善终。</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="translateLink" type="button" title="简繁转换">繁</button><a class="icon-V hidden" onclick="switchNightMode()" title="浅色和深色模式转换"><svg width="25" height="25" viewBox="0 0 1024 1024"><use id="modeicon" xlink:href="#icon-moon"></use></svg></a><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="chat_btn" type="button" title="给博主留言"><i class="fas fa-sms"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">本地搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/utils.js" crossorigin></script><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/main.js" crossorigin></script><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/tw_cn.js" crossorigin></script><script src="https://npm.elemecdn.com/@fancyapps/ui@4.0.23/dist/fancybox.umd.js" crossorigin></script><script src="https://cdnjs.cloudflare.com/ajax/libs/instant.page/5.1.0/instantpage.min.js" type="module" crossorigin></script><script src="https://npm.elemecdn.com/vanilla-lazyload@17.5.0/dist/lazyload.iife.min.js" crossorigin></script><script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/node-snackbar/0.1.16/snackbar.min.js" crossorigin></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://npm.elemecdn.com/pangu@4.0.7/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (true){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/search/local-search.js" crossorigin></script><div class="pjax-reload"><script async="async">var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';      
+    document.getElementById('loading-box').style.transition = 'opacity 3s';
+    document.getElementById('loading-box').style.opacity = '0';
+    setTimeout(function(){
+      document.getElementById('loading-box').classList.add("loaded")
+    },3000)
+
+    //用于判断是否第一次加载
+    if(sessionStorage.getItem("isReload")){
+       //若显示已经加载过
+       return true
+    }else{
+      //若为第一次加载
+     sessionStorage.setItem("isReload", true)
+     SAONotify('Welcome','欢迎光临😊<br>愿你享受愉快的一天')
+     setTimeout(function(){
+       document.getElementById("SAO-Welcome").remove();
+     },3000)
+    }
+
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').style.transition = '';
+    document.getElementById('loading-box').style.opacity = '1';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',()=> {preloader.endLoading()})
+setTimeout(function(){preloader.endLoading();}, 3000);</script></div><div class="js-pjax"><script>(() => {
+  const $mermaidWrap = document.querySelectorAll('#article-container .mermaid-wrap')
+  if ($mermaidWrap.length) {
+    window.runMermaid = () => {
+      window.loadMermaid = true
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+      Array.from($mermaidWrap).forEach((item, index) => {
+        const mermaidSrc = item.firstElementChild
+        const mermaidThemeConfig = '%%{init:{ \'theme\':\'' + theme + '\'}}%%\n'
+        const mermaidID = 'mermaid-' + index
+        const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+        mermaid.mermaidAPI.render(mermaidID, mermaidDefinition, (svgCode) => {
+          mermaidSrc.insertAdjacentHTML('afterend', svgCode)
+        })
+      })
+    }
+
+    const loadMermaid = () => {
+      window.loadMermaid ? runMermaid() : getScript('https://npm.elemecdn.com/mermaid@8.13.10/dist/mermaid.min.js').then(runMermaid)
+    }
+
+    window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+  }
+})()</script></div><script>window.addEventListener('load', () => {
+  const changeContent = (content) => {
+    if (content === '') return content
+
+    content = content.replace(/<img.*?src="(.*?)"?[^\>]+>/ig, '[图片]') // replace image link
+    content = content.replace(/<a[^>]+?href=["']?([^"']+)["']?[^>]*>([^<]+)<\/a>/gi, '[链接]') // replace url
+    content = content.replace(/<pre><code>.*?<\/pre>/gi, '[代码]') // replace code
+    content = content.replace(/<[^>]+>/g,"") // remove html tag
+
+    if (content.length > 150) {
+      content = content.substring(0,150) + '...'
+    }
+    return content
+  }
+
+  const getComment = () => {
+    const runTwikoo = () => {
+      twikoo.getRecentComments({
+        envId: 'https://twikoo-omega-livid.vercel.app/',
+        region: '',
+        pageSize: 3,
+        includeReply: true
+      }).then(function (res) {
+        const twikooArray = res.map(e => {
+          return {
+            'content': changeContent(e.comment),
+            'avatar': e.avatar,
+            'nick': e.nick,
+            'url': e.url + '#' + e.id,
+            'date': new Date(e.created).toISOString()
+          }
+        })
+
+        saveToLocal.set('twikoo-newest-comments', JSON.stringify(twikooArray), 10/(60*24))
+        generateHtml(twikooArray)
+      }).catch(function (err) {
+        const $dom = document.querySelector('#card-newest-comments .aside-list')
+        $dom.innerHTML= "无法获取评论，请确认相关配置是否正确"
+      })
+    }
+
+    if (typeof twikoo === 'object') {
+      runTwikoo()
+    } else {
+      getScript('https://npm.elemecdn.com/twikoo@1.5.11/dist/twikoo.all.min.js').then(runTwikoo)
+    }
+  }
+
+  const generateHtml = array => {
+    let result = ''
+
+    if (array.length) {
+      for (let i = 0; i < array.length; i++) {
+        result += '<div class=\'aside-list-item\'>'
+
+        if (false) {
+          const name = 'data-lazy-src'
+          result += `<a href='${array[i].url}' class='thumbnail'><img ${name}='${array[i].avatar}' alt='${array[i].nick}'></a>`
+        }
+        
+        result += `<div class='content'>
+        <a class='comment' href='${array[i].url}' title='${array[i].content}'>${array[i].content}</a>
+        <div class='name'><span>${array[i].nick} / </span><time datetime="${array[i].date}">${btf.diffDate(array[i].date, true)}</time></div>
+        </div></div>`
+      }
+    } else {
+      result += '没有评论'
+    }
+
+    let $dom = document.querySelector('#card-newest-comments .aside-list')
+    $dom.innerHTML= result
+    window.lazyLoadInstance && window.lazyLoadInstance.update()
+    window.pjax && window.pjax.refresh($dom)
+  }
+
+  const newestCommentInit = () => {
+    if (document.querySelector('#card-newest-comments .aside-list')) {
+      const data = saveToLocal.get('twikoo-newest-comments')
+      if (data) {
+        generateHtml(JSON.parse(data))
+      } else {
+        getComment()
+      }
+    }
+  }
+
+  newestCommentInit()
+  document.addEventListener('pjax:complete', newestCommentInit)
+})</script><div class="aplayer no-destroy" data-id="6997741264" data-server="netease" data-type="playlist" data-fixed="true" data-mini="true" data-listFolded="true" data-order="random" data-preload="none" muted></div><script async src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/diytitle.js" crossorigin></script><script data-pjax defer src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/custom/fixed_comment.js" crossorigin></script><script data-pjax defer src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/custom/fixed_card_widget.js" crossorigin></script><script async src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/custom/leaves.js" crossorigin></script><script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.6.0/jquery.min.js" crossorigin></script><script data-pjax src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/custom.js" crossorigin></script><script defer data-pjax src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/kernel.js" crossorigin></script><script defer src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/modify.js" crossorigin></script><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/rightmenu.js" crossorigin></script><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/changebg.js" crossorigin></script><script async src="//at.alicdn.com/t/font_3113667_5ghhue7sqj5.js" crossorigin></script><script async src="//at.alicdn.com/t/font_3167278_4b5nw9t030c.js" crossorigin></script><script async src="//at.alicdn.com/t/font_2032782_ev6ytrh30f.js" crossorigin></script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.15.2/katex.js" crossorigin="anonymous"></script><script defer src="https://npm.elemecdn.com/katex@0.15.2/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script><script async src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/sun_moon.js" crossorigin></script><canvas class="fireworks" mobile="true"></canvas><script src="https://npm.elemecdn.com/butterfly-extsrc@1.1.0/dist/fireworks.min.js" crossorigin></script><script id="canvas_nest" defer="defer" color="100,100,100" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://npm.elemecdn.com/butterfly-extsrc@1.1.0/dist/canvas-nest.min.js" crossorigin></script><script src="https://npm.elemecdn.com/butterfly-extsrc@1.1.0/dist/activate-power-mode.min.js" crossorigin></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script src="//code.tidio.co/vdvuphhthk3fupcq7kxksxstjqcms2ru.js" async="async" crossorigin></script><script>function onTidioChatApiReady() {
+  window.tidioChatApi.hide();
+  window.tidioChatApi.on("close", function() {
+    window.tidioChatApi.hide();
+  });
+}
+if (window.tidioChatApi) {
+  window.tidioChatApi.on("ready", onTidioChatApiReady);
+} else {
+  document.addEventListener("tidioChat-ready", onTidioChatApiReady);
+}
+
+var chatBtnFn = () => {
+  document.getElementById("chat_btn").addEventListener("click", function(){
+    window.tidioChatApi.show();
+    window.tidioChatApi.open();
+  });
+}
+chatBtnFn()
+</script><link rel="stylesheet" href="https://npm.elemecdn.com/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'" crossorigin><script src="https://npm.elemecdn.com/aplayer@1.10.1/dist/APlayer.min.js" crossorigin></script><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/meting.js" crossorigin></script><script src="https://npm.elemecdn.com/pjax@0.2.8/pjax.min.js" crossorigin></script><script>let pjaxSelectors = ["title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show","#fixedcard-dashboard","#web_bg",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"]):not([href="/barrage/"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" crossorigin></script><div id="fixedcard-dashboard"><button class="fixedcard-activebtn" type="button" title="用户信息" onclick="FixedCardWidget(&quot;class&quot;,&quot;card-info&quot;,&quot;0&quot;)"><i class="fas fa-address-book"></i></button><button class="fixedcard-activebtn" type="button" title="电子钟" onclick="FixedCardWidget(&quot;class&quot;,&quot;card-clock&quot;,&quot;0&quot;)"><i class="fas fa-cloud-sun"></i></button><button class="fixedcard-activebtn" type="button" title="通讯录" onclick="FixedCardWidget(&quot;class&quot;,&quot;card-friend-link&quot;,&quot;0&quot;)"><i class="far fa-address-book"></i></button><button class="fixedcard-activebtn" type="button" title="最新文章" onclick="FixedCardWidget(&quot;class&quot;,&quot;card-recent-post&quot;,&quot;0&quot;)"><i class="fas fa-history"></i></button><button class="fixedcard-activebtn" type="button" title="最新评论" onclick="FixedCardWidget(&quot;id&quot;,&quot;card-newest-comments&quot;,&quot;0&quot;)"><i class="fas fa-comment-dots"></i></button><button class="fixedcard-activebtn" type="button" title="标签" onclick="FixedCardWidget(&quot;class&quot;,&quot;card-tags&quot;,&quot;0&quot;)"><i class="fas fa-tags"></i></button><button class="fixedcard-activebtn" type="button" title="网站信息" onclick="FixedCardWidget(&quot;class&quot;,&quot;card-webinfo&quot;,&quot;0&quot;)"><i class="fas fa-chart-line"></i></button><div class="fixedcard-user-avatar fixedcard-activebtn" onclick="RemoveFixedCardWidget()"><img class="fixedcard-user-avatar-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/avatar.webp" title="Saiodgm" crossorigin></div></div><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><a class="rightMenu-item" href="javascript:window.history.back();"><i class="iconfont icon-back"></i></a><a class="rightMenu-item" href="javascript:window.history.forward();"><i class="iconfont icon-enter"></i></a><a class="rightMenu-item" href="javascript:window.location.reload();"><i class="iconfont icon-chexiao"></i></a><a class="rightMenu-item" href="javascript:kk.scrollToTop();"><i class="iconfont icon-top"></i></a></div><div class="rightMenu-group rightMenu-line hide" id="menu-text"><a class="rightMenu-item" href="javascript:kk.copySelect();"><i class="iconfont icon-copy"></i><span>复制</span></a><a class="rightMenu-item" href="javascript:kk.commentSelect();"><i class="fas fa-comments"></i><span>评论</span></a></div><div class="rightMenu-group rightMenu-line"><a class="rightMenu-item" href="javascript:switchNightMode();"><i class="iconfont icon-DarkTheme"></i><span>昼夜切换</span></a><a class="rightMenu-item" href="javascript:kk.switchReadMode();"><i class="iconfont icon-read"></i><span>阅读模式</span></a><a class="rightMenu-item" id="menu-translate"><i class="fas fa-language"></i><span>简繁切换</span></a><a class="rightMenu-item" href="javascript:kk.switchTheme();"><i class="iconfont icon-theme"></i><span>主题切换</span></a></div></div></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_clock_injector_config(){
+    var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+    var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img class="entered loading" id="card-clock-loading" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://npm.elemecdn.com/hexo-butterfly-clock/lib/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading"/ crossorigin></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = '/posts/'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_injector_config();
+  }
+  </script><script src="https://pv.sohu.com/cityjson?ie=utf-8" crossorigin></script><script data-pjax src="https://npm.elemecdn.com/hexo-butterfly-clock/lib/clock.min.js" crossorigin></script><script data-pjax>
+  function butterfly_footer_beautify_injector_config(){
+    var parent_div_git = document.getElementById('footer-wrap');
+    var item_html = '<div id="ghbdages" style="overflow:hidden;max-height:90px;height:auto;text-align:center;margin-top:10px"><div class="swiper-wrapper"><div class="swiper-slide"><a class="github-badge" target="_blank" href="https://hexo.io" style="margin-inline:5px" title="本站框架为 Hexo 6.2.0"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Frame-Hexo-blue?style=for-the-badge&amp;logo=hexo" alt=""/ crossorigin></a><a class="github-badge" target="_blank" href="https://butterfly.js.org/" style="margin-inline:5px" title="本站主题为 Butterfly 4.0.1"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=for-the-badge&amp;logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAABS2lUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxNDIgNzkuMTYwOTI0LCAyMDE3LzA3LzEzLTAxOjA2OjM5ICAgICAgICAiPgogPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIi8+CiA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgo8P3hwYWNrZXQgZW5kPSJyIj8+nhxg7wAAAblJREFUOI2t1LtrFUEUx/HPDT5SKBYKomJ8BSSC+Ggs1EQQROwSNQhqFay0sLJRbExKsbCwUmtB/A9ELUSwihJEbSx9g4VEkcDPYueSvWty4+vAsuc3M3znzPzOLkjSfm4leVPTf/RAj86Yxkbc8ZfRBL4r71Fc/B/Auh7H7n8Frm/oq7/J6KmLegw09AGc6gI7h3tY3DFaXFqV5Gt+jSdzONqbZLLMT9RdrgPH5oC1Y28DuD3JTJJXzbZZVJhLcKnL0Y7gccnvqrrhMFpzrk4y3qW6JHlaqthU9IskA42qlzFrytEu1cHm8j7WrgEj2FZ0q523gR8WAK5EP/YX/QUrsLroQaypA8/g/QLQQbNtdUN178/Rh+N4xKwpr1VNvQW7cKjs2F/GfmCo6GEsxbNS+XVcLlVXLtV6qBcnsa/k0/iEnWX+Nh7gCqawoYxNQatVTC8ujXRx+UJZsy7JaJKhJAeTtJp9WP/05vsRTOJhyT9jLb7hvsrtjqgDb2KmMT+hutOtqjb5jpf4OM/mHUfuSfK2HHEyyZ7acZYnOZHkfMnn/WPXgWNJriXZUVt0NslwTZ9O0tcN+BPSStKOpIECLQAAAABJRU5ErkJggg==" alt=""/ crossorigin></a><a class="github-badge" target="_blank" href="https://arcitcgn.cn/171.html" style="margin-inline:5px" title="本站使用 ADN 为静态资源提供 CDN 加速"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/CDN-ADN-black?style=for-the-badge&amp;logo=data:image/png;base64,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" alt=""/ crossorigin></a></div><div class="swiper-slide"><a class="github-badge" target="_blank" href="https://vercel.com/" style="margin-inline:5px" title="本站主站部署于 Vercel"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Hosted-Vercel-brightgreen?style=for-the-badge&amp;logo=Vercel" alt=""/ crossorigin></a><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" title="本站项目由 Github 托管"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Source-Github-d021d6?style=for-the-badge&amp;logo=GitHub" alt=""/ crossorigin></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" title="本站采用知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议进行许可"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=for-the-badge&amp;logo=Claris" alt=""/ crossorigin></a></div></div></div><style>a.github-badge:hover:before {display:none}</style>';
+    console.log('已挂载butterfly_footer_beautify')
+    parent_div_git.insertAdjacentHTML("beforeend",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_footer_beautify_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_footer_beautify_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js" crossorigin></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-footer-beautify@latest/lib/swiperbdage_init.min.js" crossorigin></script><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js" crossorigin></script><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '50ms');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '50ms');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('article-sort-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '50ms');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '50ms');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-clock');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '50ms');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('categoryBar');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '50ms');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '2s');
+    arr[i].setAttribute('data-wow-delay', '50ms');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script></div><script defer src="https://unpkg.zhimg.com/hexo-butterfly-wowjs/lib/wow.min.js" crossorigin></script><script defer src="https://unpkg.zhimg.com/hexo-butterfly-wowjs/lib/wow_init.js" crossorigin></script><script data-pjax src="https://npm.elemecdn.com/hexo-filter-gitcalendar/lib/gitcalendar.js" crossorigin></script><script data-pjax>
+  function gitcalendar_injector_config(){
+      var parent_div_git = document.getElementById('recent-posts');
+      var item_html = '<div class="recent-post-item" style="width:100%;height:auto;padding:10px;"><style>#git_container{min-height: 280px}@media screen and (max-width:650px) {#git_container{min-height: 0px}}</style><div id="git_loading" style="width:10%;height:100%;margin:0 auto;display: block;"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50" xml:space="preserve"><path fill="#d0d0d0" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z" transform="rotate(275.098 25 25)"><animatetransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animatetransform></path></svg><style>#git_container{display: none;}</style></div><div id="git_container"></div></div>';
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+      console.log('已挂载gitcalendar')
+      }
+
+    if( document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+        gitcalendar_injector_config()
+        GitCalendarInit("https://github-calendar-api.vercel.app/api?cqbzljt",['#e4dfd7', '#f9f4dc', '#f7e8aa', '#f7e8aa', '#f8df72', '#fcd217', '#fcc515', '#f28e16', '#fb8b05', '#d85916', '#f43e06'],'cqbzljt')
+    }
+  </script><!-- hexo injector body_end end --><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/wanko.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false});</script></body></html>

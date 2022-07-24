@@ -1,0 +1,825 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>树形 DP | Saiodgm の 博客儿</title><meta name="keywords" content="动态规划"><meta name="author" content="Saiodgm"><meta name="copyright" content="Saiodgm"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="完结撒花 qwq">
+<meta property="og:type" content="article">
+<meta property="og:title" content="树形 DP">
+<meta property="og:url" content="https://oi.saiodgm.gq/posts/c2587cc4/">
+<meta property="og:site_name" content="Saiodgm の 博客儿">
+<meta property="og:description" content="完结撒花 qwq">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover8.webp">
+<meta property="article:published_time" content="2022-03-27T10:28:57.000Z">
+<meta property="article:modified_time" content="2022-03-27T10:28:57.000Z">
+<meta property="article:author" content="Saiodgm">
+<meta property="article:tag" content="动态规划">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover8.webp"><link rel="shortcut icon" href="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/favicon.webp" crossorigin><link rel="canonical" href="https://oi.saiodgm.gq/posts/c2587cc4/"><link rel="preconnect" href="//fastly.jsdelivr.net"/ crossorigin><link rel="preconnect" href="//busuanzi.ibruce.info"/ crossorigin><script>window.setCustom = () => { };
+(async () => {
+  const CACHE_NAME = 'SaiodgmSW';
+  window.db = {
+    read: (key, config) => {
+      if (!config) { config = { type: "text" } }
+      return new Promise((resolve, reject) => {
+        caches.open(CACHE_NAME).then(cache => {
+          cache.match(new Request(`https://LOCALCACHE/${encodeURIComponent(key)}`)).then(function (res) {
+            if (!res) resolve(null)
+            res.text().then(text => resolve(text))
+          }).catch(() => {
+            resolve(null)
+          })
+        })
+      })
+    },
+    write: (key, value) => {
+      return new Promise((resolve, reject) => {
+        caches.open(CACHE_NAME).then(function (cache) {
+          cache.put(new Request(`https://LOCALCACHE/${encodeURIComponent(key)}`), new Response(value));
+          resolve()
+        }).catch(() => {
+          reject()
+        })
+      })
+    }
+  };
+  function ranN(minNum, maxNum) {
+    return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10)
+  }
+  if ('serviceWorker' in navigator) {
+    if (Number(window.localStorage.getItem('SaiodgmSW_Set')) < 1) {
+      setTimeout(async () => {
+        console.log('检测到您的浏览器没有安装 SaiodgmSW，开始注册')
+        window.stop()
+        window.localStorage.setItem('SaiodgmSW_Set', 1)
+        const replacehtml = await fetch('https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/swnotice.html')
+        document.body.innerHTML = await replacehtml.text()
+      }, 0);
+    }
+    const $ = document.querySelector.bind(document);
+    navigator.serviceWorker.register(`/sw.js?time=${ranN(1, 88888888888888888888)}`)
+      .then(async () => {
+        if (Number(window.localStorage.getItem('SaiodgmSW_Set')) < 2) {
+          $('#info').innerText = '安装成功,稍等片刻...';
+
+          setTimeout(() => {
+            window.localStorage.setItem('SaiodgmSW_Set', 2)
+            window.location.reload()
+          }, 500)
+        }
+        if (Number(window.localStorage.getItem('SaiodgmSW_Set')) == 2) {
+          window.localStorage.setItem('SaiodgmSW_Set', 3)
+        }
+      })
+      .catch(err => console.error(`SaiodgmSWError:${err}`))
+  } else { $('#info').innerText = '很抱歉,我们已不再支持您的浏览器.'; }
+})();
+</script><link rel="stylesheet" href="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/css/index.css" crossorigin><link rel="stylesheet" href="https://npm.elemecdn.com/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" media="print" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/node-snackbar/0.1.16/snackbar.min.css" media="print" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://npm.elemecdn.com/@fancyapps/ui@4.0.23/dist/fancybox.css" media="print" onload="this.media='all'" crossorigin><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  noticeOutdate: {"limitDay":150,"position":"top","messagePrev":"距离本篇文章上次更新已经过去了","messageNext":"天，其中的某些内容可能已经过时，请自行判断。"},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":400},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://fastly.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://fastly.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '树形 DP',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-03-27 10:28:57'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/css/custom.css"  media="defer" onload="this.media='all'" crossorigin><link rel="stylesheet" tag="theme" href="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/css/themes/candyhome.css" crossorigin><link rel="stylesheet" href="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/css/custom/twikoo_beautify.css"  media="defer" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/css/custom/fixed_comment.css"  media="defer" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/css/rightmenu.css" crossorigin><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.15.2/katex.css" crossorigin="anonymous"><link rel="stylesheet" href="//at.alicdn.com/t/font_3149728_qa1hwao2rmc.css" crossorigin><link rel="stylesheet" href="//at.alicdn.com/t/font_3261135_xhnqceobyje.css" crossorigin><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/SAO-Notify.js" async crossorigin></script><svg aria-hidden="true" style="position:absolute; overflow:hidden; width:0; height:0"><symbol id="icon-sun" viewBox="0 0 1024 1024"><path d="M960 512l-128 128v192h-192l-128 128-128-128H192v-192l-128-128 128-128V192h192l128-128 128 128h192v192z" fill="#FFD878" p-id="8420"></path><path d="M736 512a224 224 0 1 0-448 0 224 224 0 1 0 448 0z" fill="#FFE4A9" p-id="8421"></path><path d="M512 109.248L626.752 224H800v173.248L914.752 512 800 626.752V800h-173.248L512 914.752 397.248 800H224v-173.248L109.248 512 224 397.248V224h173.248L512 109.248M512 64l-128 128H192v192l-128 128 128 128v192h192l128 128 128-128h192v-192l128-128-128-128V192h-192l-128-128z" fill="#4D5152" p-id="8422"></path><path d="M512 320c105.888 0 192 86.112 192 192s-86.112 192-192 192-192-86.112-192-192 86.112-192 192-192m0-32a224 224 0 1 0 0 448 224 224 0 0 0 0-448z" fill="#4D5152" p-id="8423"></path></symbol><symbol id="icon-moon" viewBox="0 0 1024 1024"><path d="M611.370667 167.082667a445.013333 445.013333 0 0 1-38.4 161.834666 477.824 477.824 0 0 1-244.736 244.394667 445.141333 445.141333 0 0 1-161.109334 38.058667 85.077333 85.077333 0 0 0-65.066666 135.722666A462.08 462.08 0 1 0 747.093333 102.058667a85.077333 85.077333 0 0 0-135.722666 65.024z" fill="#FFB531" p-id="11345"></path><path d="M329.728 274.133333l35.157333-35.157333a21.333333 21.333333 0 1 0-30.165333-30.165333l-35.157333 35.157333-35.114667-35.157333a21.333333 21.333333 0 0 0-30.165333 30.165333l35.114666 35.157333-35.114666 35.157334a21.333333 21.333333 0 1 0 30.165333 30.165333l35.114667-35.157333 35.157333 35.157333a21.333333 21.333333 0 1 0 30.165333-30.165333z" fill="#030835" p-id="11346"></path></symbol></svg><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-clock/lib/clock.min.css" / crossorigin><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-footer-beautify@1.0.0/lib/runtime.css" media="print" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@1.0.17/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@1.0.17/lib/tag_plugins.css" media="defer" onload="this.media='all'" crossorigin><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@1.0.17/lib/assets/carousel-touch.js" crossorigin></script><link rel="stylesheet" href="https://unpkg.zhimg.com/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-filter-gitcalendar/lib/gitcalendar.css" media="print" onload="this.media='all'" crossorigin><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="Saiodgm の 博客儿" type="application/atom+xml">
+</head><body><a href="javascript:void(0);" onclick="preloader.endLoading();" title="点击跳过动画"></a><div id="loading-box"><div class="gear-loader"><div class="gear-loader_overlay"></div><div class="gear-loader_cogs"><div class="gear-loader_cogs__top"><div class="gear-top_part"></div><div class="gear-top_part"></div><div class="gear-top_part"></div><div class="gear-top_hole"></div></div><div class="gear-loader_cogs__left"><div class="gear-left_part"></div><div class="gear-left_part"></div><div class="gear-left_part"></div><div class="gear-left_hole"></div></div><div class="gear-loader_cogs__bottom"><div class="gear-bottom_part"></div><div class="gear-bottom_part"></div><div class="gear-bottom_part"></div><div class="gear-bottom_hole"></div></div></div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/avatar.webp" onerror="onerror=null;src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="avatar"/ crossorigin></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">40</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">21</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://saiodgm.gq/"><i class="fa-fw iconfont icon-shouye"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw iconfont icon-shouji"></i><span> 博客</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-shangpin"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw iconfont icon-rili"></i><span> 文章列表</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw iconfont icon-biaoqian"></i><span> 全部标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw iconfont icon-fenlei"></i><span> 全部分类</span></a></li><li><a class="site-page child" href="/random/"><i class="fa-fw iconfont icon-lvhang"></i><span> 随便看看</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-xihuan"></i><span> 导航</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw iconfont icon-liwu"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw iconfont icon-wode"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/update/"><i class="fa-fw iconfont icon-renwu"></i><span> 更新日志</span></a></li><li><a class="site-page child" href="/barrage/"><i class="fa-fw iconfont icon-xinxi"></i><span> 留言信箱</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-pisa"></i><span> 娱乐</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/bber/"><i class="fa-fw iconfont icon-xiaoxi"></i><span> 说说</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw iconfont icon-tupian"></i><span> 照片</span></a></li><li><a class="site-page child" href="/bangumis/"><i class="fa-fw iconfont icon-yingshi"></i><span> 追番</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-fenxiang"></i><span> 网站</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://stats.uptimerobot.com/xB56lILy8w"><i class="fa-fw iconfont icon-shezhi2"></i><span> 状态监控</span></a></li><li><a class="site-page child" target="_blank" rel="noopener" href="https://admin.saiodgm.gq/"><i class="fa-fw iconfont icon-shezhi"></i><span> 后台管理</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://travellings.link"><i class="fa-fw iconfont icon-jiasu"></i><span> 开往</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover8.webp')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Saiodgm の 博客儿</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://saiodgm.gq/"><i class="fa-fw iconfont icon-shouye"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw iconfont icon-shouji"></i><span> 博客</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-shangpin"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw iconfont icon-rili"></i><span> 文章列表</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw iconfont icon-biaoqian"></i><span> 全部标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw iconfont icon-fenlei"></i><span> 全部分类</span></a></li><li><a class="site-page child" href="/random/"><i class="fa-fw iconfont icon-lvhang"></i><span> 随便看看</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-xihuan"></i><span> 导航</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw iconfont icon-liwu"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw iconfont icon-wode"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/update/"><i class="fa-fw iconfont icon-renwu"></i><span> 更新日志</span></a></li><li><a class="site-page child" href="/barrage/"><i class="fa-fw iconfont icon-xinxi"></i><span> 留言信箱</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-pisa"></i><span> 娱乐</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/bber/"><i class="fa-fw iconfont icon-xiaoxi"></i><span> 说说</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw iconfont icon-tupian"></i><span> 照片</span></a></li><li><a class="site-page child" href="/bangumis/"><i class="fa-fw iconfont icon-yingshi"></i><span> 追番</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-fenxiang"></i><span> 网站</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://stats.uptimerobot.com/xB56lILy8w"><i class="fa-fw iconfont icon-shezhi2"></i><span> 状态监控</span></a></li><li><a class="site-page child" target="_blank" rel="noopener" href="https://admin.saiodgm.gq/"><i class="fa-fw iconfont icon-shezhi"></i><span> 后台管理</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://travellings.link"><i class="fa-fw iconfont icon-jiasu"></i><span> 开往</span></a></div></div></div><div id="nav-right"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div id="darkmode_navswitch"><a class="nav-rightbutton site-page darkmode_switchbutton" onclick="switchNightMode()" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></a></div><div id="change_bg"><a class="site-page" href="/changebg/"><i class="fas fa-palette fa-fw"></i></a></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div class="coverdiv" id="coverdiv"><img class="cover entered loading" id="post-cover" alt="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover8.webp" crossorigin></div><div id="post-info"><h1 class="post-title">树形 DP<a class="post-edit-link" href="https://admin.saiodgm.gq/edit.html?file=_posts/「Algorithm」树形DP.md" title="编辑" target="_blank"><i class="fas fa-pencil-alt"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-03-27T10:28:57.000Z" title="发表于 2022-03-27 10:28:57">2022-03-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-03-27T10:28:57.000Z" title="更新于 2022-03-27 10:28:57">2022-03-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>29分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="树形 DP"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>树形 DP，顾名思义，就是在树上的 DP。因为树是一个递归定义的概念，所以，树形 DP需要在 DFS 中进行，所以有人说树形 DP 是一种记忆化搜索。<del>（ZQW：没错就是我）</del></p>
+<h2 id="树上背包"><a href="#树上背包" class="headerlink" title="树上背包"></a>树上背包</h2><p>这个类型的问题让我想起了背包问题中“有依赖的背包问题”，也就是说，这种背包问题的某些物品只有在选了前置物品的条件下才能选，具体的关系构成一棵树。</p>
+<p>让我们来看一道例题：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2015">Luogu P2015 二叉苹果树</a>。</p>
+<p>这道题有两个要求，第一个是必须保留 $Q$ 条边，第二个是要求留下的边的权值加起来最大。</p>
+<p>因为树的任何一个节点都可以作为根节点，所以这里我们默认 $1$ 为根节点（下文同理）。</p>
+<p>那么，跟普通背包一样，$dp$ 数组第一维代表抉择的物品，第二维代表背包容量，令 $dp_{u,j}$ 为根节点为 $u$ 的子树上保留 $j$ 条边能达到的最大权值和。</p>
+<p>那该怎么状态转移呢？</p>
+<p>首先，当我们求 $dp_{u,?}$ 的时候，肯定是要知道它所有子节点的答案。所以，<strong>DFS 向下递归的语句应该在状态转移语句的前面。</strong></p>
+<p>其次，和普通背包一样，每一个物品（这里是每一条边）都有选和不选两种情况。只是这里，令 $u$ 的一个子节点为 $v$，假如 $(u,v)$ 这一条边没取，那以 $v$ 为根节点的这一棵子树都取不了了，所以只能忽略这棵子树，答案还是原来的 $dp_{u,i}$。而取的时候，情况就比较复杂了，我们需要考虑一下这棵子树到底要保留多少条，所以我们还需要一层循环 $k$，代表这棵子树上保留 $k$ 条边，$(u,v)$ 有一条边，所以剩下的所有子树加起来有 $j-k-1$ 条边。所以对于每一个子节点 $v$，状态转移方程如下：</p>
+<script type="math/tex; mode=display">dp_{u,j}=\max_{k=j-1}^0\limits\{dp_{v,k}+dp_{u,j-k-1}+val_{u,v}\}</script><p>这里要注意：</p>
+<ol>
+<li>$k$ 到 $0$ 结束，$k=0$ 是不取的情况。</li>
+<li>因为计算 $dp_{u,j}$ 时需要用到 $dp_{u,j-k-1}$ 的值，而 $dp_{j-k-1}$ 是<strong>其它子树上的最大权值之和</strong>，不能算上 $v$ 这一棵子树，所以 $j,k$ 枚举的顺序应该是倒着枚，以免重复（和 01 背包滚动数组背包容量要倒过来枚举是一样的道理）。</li>
+</ol>
+<p>代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> rep(i, j, k) for(int i = j; i &lt;= k; ++i)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> dep(i, j, k) for(int i = j; i &gt;= k; --i)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">node</span> &#123;</span><br><span class="line">    <span class="type">int</span> to, val;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="type">int</span> n, q, dp[<span class="number">105</span>][<span class="number">105</span>];</span><br><span class="line"><span class="type">bool</span> b[<span class="number">105</span>];</span><br><span class="line">std::vector&lt;node&gt; G[<span class="number">105</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">max</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> </span>&#123; <span class="keyword">return</span> x &gt; y ? x : y; &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">dfs</span><span class="params">(<span class="type">int</span> i)</span> </span>&#123;</span><br><span class="line">    b[i] = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> len = G[i].<span class="built_in">size</span>();</span><br><span class="line">    <span class="keyword">if</span>(len == <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    <span class="built_in">rep</span>(v, <span class="number">0</span>, len - <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span>(!b[G[i][v].to]) &#123;</span><br><span class="line">            <span class="built_in">dfs</span>(G[i][v].to);</span><br><span class="line">            <span class="built_in">dep</span>(j, q, <span class="number">0</span>)</span><br><span class="line">                <span class="built_in">dep</span>(k, j - <span class="number">1</span>, <span class="number">0</span>)</span><br><span class="line">                    dp[i][j] = <span class="built_in">max</span>(dp[i][j], G[i][v].val + dp[G[i][v].to][k] + dp[i][j - k - <span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d&quot;</span>, &amp;n, &amp;q);</span><br><span class="line">    <span class="type">int</span> u, v, w;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, n - <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d&quot;</span>, &amp;u, &amp;v, &amp;w);</span><br><span class="line">        G[u].<span class="built_in">push_back</span>(<span class="built_in">node</span>(&#123;v, w&#125;));</span><br><span class="line">        G[v].<span class="built_in">push_back</span>(<span class="built_in">node</span>(&#123;u, w&#125;));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">dfs</span>(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, dp[<span class="number">1</span>][q]);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>变式练习：</p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2014">「CTSC1997」选课</a></p>
+<p>  和例题基本上一样，只是这道题给的是一个森林而非一棵树。处理方法也很简单，只需要建一个 $0$ 号节点，把所有树的根节点连上去，然后以 $0$ 为根处理就行了。</p>
+</li>
+</ul>
+<hr>
+<h2 id="树的直径"><a href="#树的直径" class="headerlink" title="树的直径"></a>树的直径</h2><p>树的直径就是一棵树上最长的链，所以一棵树上可能不止一条直径。</p>
+<h3 id="只求长度"><a href="#只求长度" class="headerlink" title="只求长度"></a>只求长度</h3><p>例题如下：</p>
+<blockquote>
+<p>如果一个数 $x$ 的约数和 $y$（不包括他本身）比他本身小，那么 $x$ 可以变成 $y$，$y$ 也可以变成 $x$。例如 $4$ 可以变为 $3$，$1$ 可以变为 $7$。限定所有数字变换在不超过 $n$ 的正整数范围内进行，求不断进行数字变换且不出现重复数字的最多变换步数。</p>
+</blockquote>
+<p>这道题转换挺巧妙的，该怎么看出来这是个求树的直径的问题呢？</p>
+<p>其实，我们只需要画一张图，把数字作为节点，可以相互变换的数字连在一起就可以了：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2022/03/19/fK1GaiWLA6Jse7Q.png" alt="" crossorigin></p>
+<p>这个时候就有人问了：那怎么证明这个图里没有环？</p>
+<p>令对一个数 $a$ 求约数和的操作为 $f(a)$。假设 $f(x)=y,f(y)=z$，那如果想要构成一个环，就要求 $f(x)=z$，或者 $f(z)=x$。</p>
+<p>第一种情况很好排除，因为只有 $y=z$ 时才能构成环，而 $f(y)=z$，所以，只有像 $6$ 那样的“完全数”才能满足。但是，既然 $y$ 已经是完全数了，那么说明 $x=y$，实际上这是一个自环，对结果没有影响，我们直接忽略掉它。</p>
+<p>第二种情况乍一看不太好整，但是注意到题目要求可以发现 $x&gt;y&gt;z$，然后又要求 $f(z)&lt;z$，很显然 $f(z)\neq x$。（所以第一种情况也可以直接排除了，因为完全数是不被允许的）</p>
+<p>好的，现在我们可以证明这张图是一棵树了，接下来的事情就简单了。因为不能重复，所以我们只能从一个节点走到另一个节点不能回头，那只需要找到树上最长的链就行了，也就是树的直径。</p>
+<p>那回归正题：怎么求树的直径的长度？</p>
+<p>我们知道，一个节点上能产生的影响<strong>经过此节点的最长链</strong>的长度的链只有三条：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2022/03/19/aS38NEZUgfYJx1D.png" alt="" crossorigin></p>
+<p>设节点 $u$ 往下的最长链长度为 $d1_u$，次长链为 $d2_u$，往上的链（经过它的父节点）为 $up_u$，那么这条链的长度要么是 $d1_u+d2_u$，要么是 $d1_u+up_u$，反正不可能是 $d2_u+up_u$（因为保证 $d1_u\ge d2_u$），所以我们可以发现是一定有 $d1_u$ 的。</p>
+<p>那么，对于 $u$ 的所有父节点 $r$（这个 $r$ 指的不是某一个节点，而是所有 $u$ 的直系父节点，可以是它的爸爸，也可以是它的爷爷，一直往上追溯到根节点），$d1_u+up_u$ 和 $\max\{d1_r+d2_r\}$ 是一样的，因为后者其实包含了 $d1_u$ 和所有 $up_u$ 中的所有情况。这个大家自己画画图就知道了，用语言不太好描述 qwq。</p>
+<p>所以，我们只需要遍历一下每一个节点的 $d1,d2$ 之和就可以了。</p>
+<p>那 $d1,d2$ 该怎么求呢？</p>
+<p>这就回归到了树形 DP。我们还是 DFS 往下找，遍历每一个节点 $u$ 的所有子节点 $v$。对于每一个子节点，先对它 DFS，此时每一个 $v$ 都有自己的 $d1_v$，我们只需要找到最大的两个 $d1_v$ ，再加上 $1$ 就可以求出 $d1_u$ 和 $d2_u$。</p>
+<p>那为什么不能用 $d2_v$ 来更新呢？确实有这种情况：某个节点的最长链和次长链的下一个节点都在一个子节点上。但是我们的要求是：<strong>这两条链不能重合！</strong> 不然树的直径就经过重复的节点了，所以我们不能用 $d2_v$ 来更新 $d1_u$ 和 $d2_u$。</p>
+<p>所以，光求长度跟 $up$ 数组没有半毛钱关系。</p>
+<p>这道题的代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cmath&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> rep(i, j, k) for(int i = j; i &lt;= k; ++i)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> dep(i, j, k) for(int i = j; i &gt;= k; --i)</span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = (<span class="type">int</span>)<span class="number">5e4</span> + <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> n, ans, h1[maxn], h2[maxn], q[maxn];</span><br><span class="line">std::vector&lt;<span class="type">int</span>&gt; G[maxn];</span><br><span class="line"><span class="type">bool</span> b[maxn];</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">max</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> </span>&#123; <span class="keyword">return</span> x &gt; y ? x : y; &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">mk</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> s = <span class="number">0</span>, p = <span class="built_in">floor</span>(<span class="built_in">sqrt</span>(x));</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, p)</span><br><span class="line">        s += x % i ? <span class="number">0</span> : i + x / i;</span><br><span class="line">    <span class="keyword">if</span>(p * p == x)</span><br><span class="line">        s -= p;</span><br><span class="line">    <span class="keyword">return</span> s - x;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">dfs</span><span class="params">(<span class="type">int</span> u)</span> </span>&#123;</span><br><span class="line">    b[u] = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> len = G[u].<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">0</span>, len) &#123;</span><br><span class="line">        <span class="type">int</span> v = G[u][i];</span><br><span class="line">        <span class="keyword">if</span>(!b[v]) &#123;</span><br><span class="line">            <span class="built_in">dfs</span>(v);</span><br><span class="line">            <span class="keyword">if</span>(h1[v] + <span class="number">1</span> &gt; h1[u]) &#123;</span><br><span class="line">                h2[u] = h1[u];</span><br><span class="line">                h1[u] = h1[v] + <span class="number">1</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span>(h1[v] + <span class="number">1</span> &gt; h2[u])</span><br><span class="line">                h2[u] = h1[v] + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ans = <span class="built_in">max</span>(ans, h1[u] + h2[u]);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n);</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">2</span>, n)</span><br><span class="line">        q[i] = <span class="built_in">mk</span>(i);</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">2</span>, n) &#123;</span><br><span class="line">        <span class="keyword">if</span>(q[i] &gt; i)</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        G[i].<span class="built_in">push_back</span>(q[i]);</span><br><span class="line">        <span class="keyword">if</span>(i != q[i])</span><br><span class="line">            G[q[i]].<span class="built_in">push_back</span>(i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    rep(i, 1, n) &#123;</span></span><br><span class="line"><span class="comment">        printf(&quot;%d: &quot;, i);</span></span><br><span class="line"><span class="comment">        rep(j, 0, (int)G[i].size() - 1)</span></span><br><span class="line"><span class="comment">            printf(&quot;%d &quot;, G[i][j]);</span></span><br><span class="line"><span class="comment">        printf(&quot;\n&quot;);</span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="built_in">dfs</span>(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, ans);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><del>提交记录 #1145000。</del></p>
+<hr>
+<h3 id="求直径上的节点"><a href="#求直径上的节点" class="headerlink" title="求直径上的节点"></a>求直径上的节点</h3><p>来看上道题的加强版：要求我们输出所有在树的直径上的节点编号。</p>
+<p>思路还是那个思路，不过这下我们就需要求 $up$ 了，这样我们才能知道每一个节点上的最长链到底等不等于树的直径的长度。</p>
+<p>那怎么求某个节点 $u$ 的 $up$ 值呢？有两种情况：</p>
+<ol>
+<li>先从它父节点 $r$ 的 $up$ 值代表的路径走到 $r$，再走到 $u$，$up_u=up_r+1$；</li>
+<li>先从 $r$ 的 $d1$ 值代表的路径走到 $r$，再走到 $u$，$up_u=d1_r+1$。</li>
+</ol>
+<p>过程就是这样吗？不完全是，请看图：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img-blog.csdnimg.cn/a1efbdc1dc354a39beff28877b8a059c.png" alt="" crossorigin></p>
+<p>我们在更新 $up_4$ 的值时，会发现 $d1_2+1=4$，但是实际上很明显 $up_2=3$。这是因为 $d1_2$ 这一条路径会经过 $4$ 节点，而树的直径要求不能经过重复的节点，于是就出问题了。</p>
+<p>解决方案是：当判断到 $d1_r$ 这条路径经过 $u$ 的时候，把 $d1_r+1$ 更换为 $d2_r+1$ 即可，如果 $d1_r$ 经过另外 $u$，那么 $d2_r$ 一定不经过 $u$。</p>
+<p>输出答案时一个节点一个节点地判断，如果经过这个节点的最长链长度等于树的直径，那就输出。</p>
+<p>代码如下（调了好久 qwq）：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> rep(i, j, k) for(int i = j; i &lt;= k; ++i)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> dep(i, j, k) for(int i = j; i &gt;= k; --i)</span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = (<span class="type">int</span>)<span class="number">2e5</span> + <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> n, ans, d1[maxn], d2[maxn], up[maxn]; <span class="comment">// d1 为向下最长链，d2 为向下次长链，up 为第一步先到父节点之后不再折返回来的最长链 </span></span><br><span class="line">std::vector&lt;<span class="type">int</span>&gt; p, G[maxn]; <span class="comment">// G 存图，p 存答案 </span></span><br><span class="line"><span class="type">bool</span> b[maxn]; <span class="comment">// 标记走过的节点，以免重复走到 </span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">max</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> </span>&#123; <span class="keyword">return</span> x &gt; y ? x : y; &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">dfs1</span><span class="params">(<span class="type">int</span> u)</span> </span>&#123; <span class="comment">// 从下往上递归，求解 d1, d2 和直径的长度 </span></span><br><span class="line">    b[u] = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> len = G[u].<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">0</span>, len) &#123; <span class="comment">// 遍历此节点的所有子节点 </span></span><br><span class="line">        <span class="type">int</span> v = G[u][i];</span><br><span class="line">        <span class="keyword">if</span>(!b[v]) &#123;</span><br><span class="line">            <span class="built_in">dfs1</span>(v); </span><br><span class="line">            <span class="comment">// 用 d1[v] 去更新 d1[u] 和 d2[u]</span></span><br><span class="line">            <span class="comment">// ※注意不能用 d2[v]</span></span><br><span class="line">            <span class="keyword">if</span>(d1[v] + <span class="number">1</span> &gt; d1[u]) &#123;</span><br><span class="line">                d2[u] = d1[u];</span><br><span class="line">                d1[u] = d1[v] + <span class="number">1</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span>(d1[v] + <span class="number">1</span> &gt; d2[u])</span><br><span class="line">                d2[u] = d1[v] + <span class="number">1</span>;</span><br><span class="line">            ans = <span class="built_in">max</span>(ans, d1[u] + d2[u]); <span class="comment">// 更新最长链的长度，为了方便没有计算 u </span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">dfs2</span><span class="params">(<span class="type">int</span> u)</span> </span>&#123; <span class="comment">// 从上往下递归，求解 up </span></span><br><span class="line">    b[u] = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> len = G[u].<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">0</span>, len) &#123;</span><br><span class="line">        <span class="type">int</span> v = G[u][i];</span><br><span class="line">        <span class="keyword">if</span>(!b[v]) &#123;</span><br><span class="line">            <span class="keyword">if</span>(d1[v] + <span class="number">1</span> == d1[u]) <span class="comment">// 这说明 u 的最长链经过了 v，因为会重复走 v，所以不能用 d1 更新 up 而是应该用 d2 </span></span><br><span class="line">                up[v] = <span class="built_in">max</span>(up[u], d2[u]) + <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="comment">// 其余情况就正常更新 </span></span><br><span class="line">                up[v] = <span class="built_in">max</span>(up[u], d1[u]) + <span class="number">1</span>;</span><br><span class="line">            <span class="built_in">dfs2</span>(v);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span>; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">void debug() &#123;</span></span><br><span class="line"><span class="comment">    puts(&quot;--------------DEBUG--------------&quot;);</span></span><br><span class="line"><span class="comment">    printf(&quot;ans = %d\n&quot;, ans);</span></span><br><span class="line"><span class="comment">    printf(&quot;num  d1  d2  up\n&quot;);</span></span><br><span class="line"><span class="comment">    rep(i, 1, n)</span></span><br><span class="line"><span class="comment">        printf(&quot;%-5d%-4d%-4d%-4d\n&quot;, i, d1[i], d2[i], up[i]);</span></span><br><span class="line"><span class="comment">    puts(&quot;---------------------------------\n&quot;);</span></span><br><span class="line"><span class="comment">    return;</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n);</span><br><span class="line">    <span class="type">int</span> u, v;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, n - <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d&quot;</span>, &amp;u, &amp;v);</span><br><span class="line">        ++u, ++v;</span><br><span class="line">        G[u].<span class="built_in">push_back</span>(v);</span><br><span class="line">        G[v].<span class="built_in">push_back</span>(u);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">dfs1</span>(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">memset</span>(b, <span class="number">0</span>, <span class="built_in">sizeof</span>(b));</span><br><span class="line">    <span class="built_in">dfs2</span>(<span class="number">1</span>);</span><br><span class="line">    <span class="comment">// debug();</span></span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, n) &#123;</span><br><span class="line">        <span class="keyword">if</span>(d1[i] + <span class="built_in">max</span>(up[i], d2[i]) == ans) <span class="comment">// i 在最长链上</span></span><br><span class="line">            p.<span class="built_in">push_back</span>(i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> anslen = p.<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">0</span>, anslen)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, p[i] - <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="与相邻节点有关的树形-DP"><a href="#与相邻节点有关的树形-DP" class="headerlink" title="与相邻节点有关的树形 DP"></a>与相邻节点有关的树形 DP</h2><p><del>实在不知道应该写什么名字才写的这个。</del></p>
+<p>这种树形 DP 一般来说会有一维来记录此节点的状态（比如说要在树上染色，开一维代表这个节点有没有染色时候的状态）。</p>
+<h3 id="例题-1"><a href="#例题-1" class="headerlink" title="例题 1"></a>例题 1</h3><p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2016">Luogu P2016 战略游戏</a></p>
+<p>通过读题我们知道，当一条边的两个端点中有至少一个节点放了士兵，这条边就被监视了，所以可以定义 $dp_{u,0/1}$ 为把 $u$ 作为根节点时有/没有放士兵，<strong>而且这个子树上的所有边都被监视了</strong>的时候这课子树上能放的最少的士兵数量。</p>
+<p>状态转移如下：</p>
+<ul>
+<li>$dp_{u,1}$：$u$ 已经放了士兵，所以它的子节点有没有放士兵都没有关系，方程是 $dp_{u,1}=\min\{dp_{v,0},dp_{v,1}\}$；</li>
+<li>$dp_{u,0}$：$u$ 没放士兵，所以它的儿子必须自力更生，方程是 $dp_{u,0}=\min\{dp_{v,0}\}$。</li>
+</ul>
+<p>然后就没了。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> rep(i, j, k) for(int i = j; i &lt;= k; ++i)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> dep(i, j, k) for(int i = j; i &gt;= k; --i)</span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">1505</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> n, dp[maxn][<span class="number">2</span>];</span><br><span class="line"><span class="type">bool</span> G[maxn][maxn], b[maxn];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">min</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> </span>&#123; <span class="keyword">return</span> x &lt; y ? x : y; &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">dfs</span><span class="params">(<span class="type">int</span> t)</span> </span>&#123;</span><br><span class="line">    b[t] = <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, n) &#123;</span><br><span class="line">        <span class="keyword">if</span>(G[t][i] &amp;&amp; !b[i]) &#123;</span><br><span class="line">            <span class="built_in">dfs</span>(i);</span><br><span class="line">            dp[t][<span class="number">0</span>] += dp[i][<span class="number">1</span>];</span><br><span class="line">            dp[t][<span class="number">1</span>] += <span class="built_in">min</span>(dp[i][<span class="number">0</span>], dp[i][<span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ++dp[t][<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n);</span><br><span class="line">    <span class="type">int</span> u, v, s;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, n) &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d&quot;</span>, &amp;u, &amp;s);</span><br><span class="line">        ++u;</span><br><span class="line">        <span class="built_in">rep</span>(j, <span class="number">1</span>, s) &#123;</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;v);</span><br><span class="line">            ++v;</span><br><span class="line">            G[u][v] = G[v][u] = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">dfs</span>(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, <span class="built_in">min</span>(dp[<span class="number">1</span>][<span class="number">0</span>], dp[<span class="number">1</span>][<span class="number">1</span>]));</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="例题-2"><a href="#例题-2" class="headerlink" title="例题 2"></a>例题 2</h3><p>基本上和例题 $1$ 一样，不过监视的对象从边换成了节点，然后每个节点安排士兵的时候都有一个输入给出的权值。</p>
+<p>权值这个倒是没什么影响，但是从边变到节点，就出了一个问题，对于一个节点，只要它的儿子、它的父亲和它本身三者中有至少一个放了士兵，那这个节点就是合法的。所以，这道题的第二维有三种情况：</p>
+<ul>
+<li>$dp_{u,0}$ 代表 $u$ 节点自己就放了士兵，它的子节点 $v$ 不管状态是啥都是允许的，所以 $dp_{u,0}=\max{dp_{v,0},dp_{v,1},dp_{v,2}}$。</li>
+<li>$dp_{u,1}$ 代表 $u$ 节点的父节点放了士兵，而它自己不放士兵，所以它的子节点就不能依靠父节点（也就是 $u$），$dp_{u,1}=\max\{dp_{v,0},dp_{v,2}\}$。</li>
+<li>$dp_{u,2}$ 代表 $u$ 的至少一个子节点放了士兵，它自己不放。<strong>注意不是每个子结点都必须放，只需要有一个就行了，而且此时的子节点也不能依靠父节点。</strong> 所以 $dp_{u,2}$ 相较于 $dp_{u,1}$，只相差了一个子节点的贡献。我们通过一个循环找出一个子节点，使得它放了士兵和它没放士兵时相差的贡献值最小，这样就能保证 $dp_{u,2}$ 尽量接近 $dp_{u,1}$，也就是保障最优情况。方程是 $dp_{u,2}=dp_{u,1}-\min\{dp_{v,0},dp_{v,2}\}$。</li>
+</ul>
+<p>最后求答案的时候注意，根节点没有父节点，所以最终答案是 $\max\{dp_{1,0},dp_{1,2}\}$，没有 $dp_{1,1}$。</p>
+<p>代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> rep(i, j, k) for(int i = j; i &lt;= k; ++i)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> dep(i, j, k) for(int i = j; i &gt;= k; --i)</span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">1505</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> n, dp[maxn][<span class="number">3</span>], m[maxn];</span><br><span class="line"><span class="type">bool</span> G[maxn][maxn], b[maxn];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">min</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> </span>&#123; <span class="keyword">return</span> x &lt; y ? x : y; &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">dfs</span><span class="params">(<span class="type">int</span> u)</span> </span>&#123;</span><br><span class="line">    b[u] = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> Min = <span class="number">1</span> &lt;&lt; <span class="number">30</span>;</span><br><span class="line">    <span class="built_in">rep</span>(v, <span class="number">1</span>, n) &#123;</span><br><span class="line">        <span class="keyword">if</span>(G[u][v] &amp;&amp; !b[v]) &#123;</span><br><span class="line">            <span class="built_in">dfs</span>(v);</span><br><span class="line">            dp[u][<span class="number">0</span>] += <span class="built_in">min</span>(dp[v][<span class="number">0</span>], <span class="built_in">min</span>(dp[v][<span class="number">1</span>], dp[v][<span class="number">2</span>]));</span><br><span class="line">            dp[u][<span class="number">1</span>] += <span class="built_in">min</span>(dp[v][<span class="number">0</span>], dp[v][<span class="number">2</span>]);</span><br><span class="line">            Min = <span class="built_in">min</span>(Min, dp[v][<span class="number">0</span>] - <span class="built_in">min</span>(dp[v][<span class="number">0</span>], dp[v][<span class="number">2</span>]));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    dp[u][<span class="number">0</span>] += m[u];</span><br><span class="line">    dp[u][<span class="number">2</span>] = dp[u][<span class="number">1</span>] + Min;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n);</span><br><span class="line">    <span class="type">int</span> u, v, s, num;</span><br><span class="line">    <span class="keyword">if</span>(n == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d&quot;</span>, &amp;u, &amp;num);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, num);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, n) &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d&quot;</span>, &amp;u, &amp;num, &amp;s);</span><br><span class="line">        m[u] = num;</span><br><span class="line">        <span class="built_in">rep</span>(j, <span class="number">1</span>, s) &#123;</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;v);</span><br><span class="line">            G[u][v] = G[v][u] = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">dfs</span>(<span class="number">1</span>);</span><br><span class="line">    <span class="type">int</span> ans = <span class="built_in">min</span>(dp[<span class="number">1</span>][<span class="number">0</span>], dp[<span class="number">1</span>][<span class="number">2</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, ans);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="例题-3"><a href="#例题-3" class="headerlink" title="例题 3"></a>例题 3</h3><p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P1352">Luogu P1352 没有上司的舞会</a></p>
+<p>对于一个人来说还是两种情况，要么就是他自己不来，要么就是他的上司不来。</p>
+<ul>
+<li>他来的话，他的所有部下都不能来。</li>
+<li>他不来的话，他的部下既可以来也可以不来。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> rep(i, j, k) for(int i = j; i &lt;= k; ++i)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> dep(i, j, k) for(int i = j; i &gt;= k; --i)</span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">6005</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> n, p[maxn], dp[maxn][<span class="number">2</span>];</span><br><span class="line">std::vector&lt;<span class="type">int</span>&gt; G[maxn];</span><br><span class="line"><span class="type">bool</span> b[maxn];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">max</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123; <span class="keyword">return</span> a &gt; b ? a : b; &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">dfs</span><span class="params">(<span class="type">int</span> u)</span> </span>&#123;</span><br><span class="line">    b[u] = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> len = G[u].<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">0</span>, len) &#123;</span><br><span class="line">        <span class="type">int</span> v = G[u][i];</span><br><span class="line">        <span class="keyword">if</span>(!b[v]) &#123;</span><br><span class="line">            <span class="built_in">dfs</span>(v);</span><br><span class="line">            dp[u][<span class="number">0</span>] += <span class="built_in">max</span>(dp[v][<span class="number">0</span>], dp[v][<span class="number">1</span>]);</span><br><span class="line">            dp[u][<span class="number">1</span>] += dp[v][<span class="number">0</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    dp[u][<span class="number">1</span>] += p[u];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n);</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, n)</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;p[i]);</span><br><span class="line">    <span class="type">int</span> u, v;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, n - <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d&quot;</span>, &amp;u, &amp;v);</span><br><span class="line">        G[u].<span class="built_in">push_back</span>(v);</span><br><span class="line">        G[v].<span class="built_in">push_back</span>(u);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">dfs</span>(<span class="number">1</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, <span class="built_in">max</span>(<span class="number">0</span>, <span class="built_in">max</span>(dp[<span class="number">1</span>][<span class="number">0</span>], dp[<span class="number">1</span>][<span class="number">1</span>])));</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="例题-4"><a href="#例题-4" class="headerlink" title="例题 4"></a>例题 4</h3><p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P3155">「CQOI2009」叶子的染色</a></p>
+<p>这题的题面说得很迷惑，其实你可以想象成拿一桶水，水最开始是无色的，从根节点往下流，最后流到叶子节点上，水的颜色遇到染色的节点就会变成节点的颜色（只有黑和白），但是这一股水颜色的变化只对以此节点为根的这棵子树有影响。要求确定每一个叶子节点收到的水的颜色，问你最少要让多少个节点染色。</p>
+<p>$dp_{u.0/1}$ 代表经过 $u$ 节点的水流的颜色是黑/白时这棵子树上最少染色节点的数量。</p>
+<p>我们先假设我们给 $u$ 的子节点 $v$ 染了色，所以最后需要加上 $1$。然后我们发现，如果水流经过 $u$ 和 $v$ 的颜色是一样的，那 $v$ 就可以不染色，所以在动规方程里，这种情况需要 $-1$。</p>
+<p>叶子节点的初始化，颜色为 $c_u$ 时等于 $1$，不是 $c_u$ 的那一个设成极大值即可。</p>
+<p>然后我们随便选一个非叶子节点作为根节点，把水倒下去就可以了。</p>
+<p>代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> rep(i, j, k) for(int i = j; i &lt;= k; ++i)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> dep(i, j, k) for(int i = j; i &gt;= k; --i)</span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = (<span class="type">int</span>)<span class="number">1e4</span> + <span class="number">5</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> inf = <span class="number">1</span> &lt;&lt; <span class="number">30</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> n, m, ans, c[maxn], dp[maxn][<span class="number">2</span>];</span><br><span class="line">std::vector&lt;<span class="type">int</span>&gt; G[maxn];</span><br><span class="line"><span class="type">bool</span> b[maxn];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">min</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> </span>&#123; <span class="keyword">return</span> x &lt; y ? x : y; &#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">f</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123; <span class="keyword">return</span> x ? <span class="number">0</span> : <span class="number">1</span>; &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">dfs</span><span class="params">(<span class="type">int</span> u)</span> </span>&#123;</span><br><span class="line">    b[u] = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> len = G[u].<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">0</span>, len) &#123;</span><br><span class="line">        <span class="type">int</span> v = G[u][i];</span><br><span class="line">        <span class="keyword">if</span>(!b[v]) &#123;</span><br><span class="line">            <span class="built_in">dfs</span>(v);</span><br><span class="line">            dp[u][<span class="number">0</span>] += <span class="built_in">min</span>(dp[v][<span class="number">0</span>] - <span class="number">1</span>, dp[v][<span class="number">1</span>]);</span><br><span class="line">            dp[u][<span class="number">1</span>] += <span class="built_in">min</span>(dp[v][<span class="number">1</span>] - <span class="number">1</span>, dp[v][<span class="number">0</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ++dp[u][<span class="number">0</span>], ++dp[u][<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">if</span>(u &lt;= m) &#123;</span><br><span class="line">        dp[u][c[u]] = <span class="number">1</span>;</span><br><span class="line">        dp[u][<span class="built_in">f</span>(c[u])] = inf;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d&quot;</span>, &amp;n, &amp;m);</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, m)</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;c[i]);</span><br><span class="line">    <span class="type">int</span> u, v;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, n - <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d %d&quot;</span>, &amp;u, &amp;v);</span><br><span class="line">        G[u].<span class="built_in">push_back</span>(v);</span><br><span class="line">        G[v].<span class="built_in">push_back</span>(u);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">dfs</span>(m + <span class="number">1</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, <span class="built_in">min</span>(dp[m + <span class="number">1</span>][<span class="number">0</span>], dp[m + <span class="number">1</span>][<span class="number">1</span>]));</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="例题-5"><a href="#例题-5" class="headerlink" title="例题 5"></a>例题 5</h3><p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2279">「HNOI2003」消防局的设立</a></p>
+<p><del>人类在 2003 年许下的美好愿望，到了 2020 年终于是没实现。</del></p>
+<p>这题乍一看跟例 $2$ 好像也没啥区别是吧？</p>
+<p>怎么可能！虽然保管的距离只是从 $1$ 变成了 $2$，但是要麻烦多了。</p>
+<p>这题有两种做法，一个是树形 DP，有五种状态（它爷爷，它爸爸，它自己，它儿子，它孙子），<del>因为笔者不会，所以</del>请大家自行推导；还有一种就是今天要介绍的贪心方法，这个贪心的策略浓缩成一句话就是：<strong>从下往上找，如果不满足条件，就在这里修一个消防站。</strong></p>
+<p>首先 DFS 预处理每一个节点的深度，然后再按照深度从大到小排序。注意这里因为要排序，所以记录节点深度的数组 $deep$ 应该是一个结构体，分别存深度大小和是哪一个节点。</p>
+<p>我们需要两个数组，一个是 $q$，$q_u$ 代表排完序之后 $u$ 这个节点和它的深度在 $deep$ 数组的位置（下标，这个数组是为了方便寻找某个节点的父节点，这样可以直接找到某个节点的深度），另一个是 $data$，$data_u$ 代表现在离 $u$ 最近的一个消防站有多远。</p>
+<p>按照深度从大到小枚举节点，然后判断这个节点有没有被消防站覆盖，如果没有就盖一个，顺便更新一下它父亲和爷爷的 $data$ 值。</p>
+<p>然后就没了。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> rep(i, j, k) for(int i = j; i &lt;= k; ++i)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> dep(i, j, k) for(int i = j; i &gt;= k; --i)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">node</span> &#123;</span><br><span class="line">    <span class="type">int</span> num, id;</span><br><span class="line">&#125; deep[<span class="number">1005</span>];</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> n, ans, data[<span class="number">1005</span>], q[<span class="number">1005</span>];</span><br><span class="line">std::vector&lt;<span class="type">int</span>&gt; G[<span class="number">1005</span>];</span><br><span class="line"><span class="type">bool</span> b[<span class="number">1005</span>], build[<span class="number">1005</span>];</span><br><span class="line"></span><br><span class="line"><span class="type">bool</span> <span class="keyword">operator</span>&lt;(node x, node y) &#123; <span class="keyword">return</span> x.num &gt; y.num; &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">min</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> </span>&#123; <span class="keyword">return</span> x &lt; y ? x : y; &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">getdeep</span><span class="params">(<span class="type">int</span> u, <span class="type">int</span> dep)</span> </span>&#123;</span><br><span class="line">    b[u] = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> len = G[u].<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">0</span>, len) &#123;</span><br><span class="line">        <span class="type">int</span> v = G[u][i];</span><br><span class="line">        <span class="keyword">if</span>(!b[v])</span><br><span class="line">            <span class="built_in">getdeep</span>(v, dep + <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    deep[u].id = u;</span><br><span class="line">    deep[u].num = dep;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">fa</span><span class="params">(<span class="type">int</span> u)</span> </span>&#123; <span class="comment">// 找 u 的父亲</span></span><br><span class="line">    <span class="type">int</span> len = G[u].<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">0</span>, len) &#123;</span><br><span class="line">        <span class="type">int</span> v = G[u][i];</span><br><span class="line">        <span class="keyword">if</span>(deep[q[v]].num == deep[q[u]].num - <span class="number">1</span>)</span><br><span class="line">            <span class="keyword">return</span> v;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">memset</span>(data, <span class="number">0x3f3f3f</span>, <span class="built_in">sizeof</span>(data));</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n);</span><br><span class="line">    <span class="type">int</span> v;</span><br><span class="line">    <span class="built_in">rep</span>(u, <span class="number">2</span>, n) &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;v);</span><br><span class="line">        G[u].<span class="built_in">push_back</span>(v);</span><br><span class="line">        G[v].<span class="built_in">push_back</span>(u);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">getdeep</span>(<span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">    std::<span class="built_in">stable_sort</span>(deep + <span class="number">1</span>, deep + n + <span class="number">1</span>);</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, n)</span><br><span class="line">        q[deep[i].id] = i;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, n) &#123; </span><br><span class="line">    <span class="comment">// *需要注意，这个循环里面我们要判断修不修消防站的是 gf 节点，所以我们需要知道它两代及以内的所有节点，即 u, ft, ggf, gggf</span></span><br><span class="line">        <span class="type">int</span> ft = <span class="built_in">fa</span>(deep[i].id);</span><br><span class="line">        <span class="type">int</span> gf = <span class="built_in">fa</span>(ft);</span><br><span class="line">        <span class="keyword">if</span>(!build[ft] &amp;&amp; !build[gf] &amp;&amp; data[deep[i].id] &gt; <span class="number">2</span> &amp;&amp; data[ft] &gt; <span class="number">1</span> &amp;&amp; data[gf] &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            ++ans;</span><br><span class="line">            <span class="comment">// printf(&quot;%d: build %d\n&quot;, deep[i].id, gf);</span></span><br><span class="line">            build[gf] = <span class="number">1</span>;</span><br><span class="line">            data[deep[i].id] = <span class="built_in">min</span>(data[deep[i].id], <span class="number">0</span>);</span><br><span class="line">            <span class="type">int</span> ggf = <span class="built_in">fa</span>(gf);</span><br><span class="line">            <span class="type">int</span> gggf = <span class="built_in">fa</span>(ggf);</span><br><span class="line">            data[ggf] = <span class="built_in">min</span>(data[ggf], <span class="number">1</span>);</span><br><span class="line">            data[gggf] = <span class="built_in">min</span>(data[gggf], <span class="number">2</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, ans);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="换根-DP"><a href="#换根-DP" class="headerlink" title="换根 DP"></a>换根 DP</h2><p>换根 DP，就是在求解的过程中以不同的节点为根来求解问题。</p>
+<p>看例题：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P3478">Luogu P3478 STA-Station</a>。</p>
+<p>求解这个问题需要知道以每个节点为根时的深度总和，但是我们不可能每一个节点都 DFS 一次，这样就超时了。但是，有没有方法可以只 DFS 一个节点，然后根据这个节点的答案去求解其它节点的答案？</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://s2.loli.net/2022/03/12/93xVLqbsACiFyPT.png" alt="" crossorigin></p>
+<p>这张图是我们把根节点从 $2$ 转移到 $4$ 的过程。可以发现，在 $4$ 为根节点时，以 $2$ 为根节点的子树（红色框）所有节点到根节点的距离都会加上 $w$；而在 $2$ 为根节点时，以 $4$ 为根节点的子树（蓝色框）所有节点到根节点的距离都会减少 $w$，只要知道两棵子树分别有多少个节点，就可以根据 $2$ 的答案求解出 $4$ 的答案，公式是 $ans_4=ans_2+size(red)\times w-size(blue)\times w$。</p>
+<p>所以，我们可以先打一个预处理的 DFS 函数，把以 $1$ 为根节点时每一棵子树的节点总量都求出来。设 $num_i$ 为以 $1$ 为根节点，子树根节点为 $i$ 时这棵子树节点的数量。</p>
+<p>当然，在实际求解的时候，因为求解过程中转移时的根节点不一定是 $1$，但是某个子树（假设根节点为 $u$）里面包含我们预处理时的根节点 $1$。所以这个子树的节点总数就不能直接用 $num_u$，而应该用 $n-num_v$（$v$ 为 $u$ 的另一个子节点，以上图举例，$u=2,v=4$）。</p>
+<p>然后就是代码了：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> int long long</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> rep(i, j, k) for(int i = j; i &lt;= k; ++i)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> dep(i, j, k) for(int i = j; i &gt;= k; --i)</span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = (<span class="type">int</span>)<span class="number">1e6</span> + <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> n, ans, p, deepsum[maxn], num[maxn];</span><br><span class="line"><span class="type">bool</span> b[maxn];</span><br><span class="line">std::vector&lt;<span class="type">int</span>&gt; G[maxn];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">min</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> </span>&#123; <span class="keyword">return</span> x &lt; y ? x : y; &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">dfs1</span><span class="params">(<span class="type">int</span> u, <span class="type">int</span> s)</span> </span>&#123; <span class="comment">// 预处理</span></span><br><span class="line">    b[u] = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> len = G[u].<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">0</span>, len) &#123;</span><br><span class="line">        <span class="type">int</span> v = G[u][i];</span><br><span class="line">        <span class="keyword">if</span>(!b[v]) &#123;</span><br><span class="line">            <span class="built_in">dfs1</span>(v, s + <span class="number">1</span>);</span><br><span class="line">            deepsum[u] += deepsum[v];</span><br><span class="line">            num[u] += num[v];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    deepsum[u] += s;</span><br><span class="line">    ++num[u];</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">dfs2</span><span class="params">(<span class="type">int</span> u, <span class="type">int</span> Num)</span> </span>&#123; <span class="comment">// 换根 DP</span></span><br><span class="line">    b[u] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span>(ans &lt; Num) &#123;</span><br><span class="line">        ans = Num;</span><br><span class="line">        p = u;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(ans == Num)</span><br><span class="line">        p = <span class="built_in">min</span>(u, p);</span><br><span class="line">    <span class="type">int</span> len = G[u].<span class="built_in">size</span>() - <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">0</span>, len) &#123;</span><br><span class="line">        <span class="type">int</span> v = G[u][i];</span><br><span class="line">        <span class="keyword">if</span>(!b[v])</span><br><span class="line">            <span class="built_in">dfs2</span>(v, Num + n - (num[v] &lt;&lt; <span class="number">1</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">signed</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%lld&quot;</span>, &amp;n);</span><br><span class="line">    <span class="type">int</span> u, v;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, n - <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%lld %lld&quot;</span>, &amp;u, &amp;v);</span><br><span class="line">        G[u].<span class="built_in">push_back</span>(v);</span><br><span class="line">        G[v].<span class="built_in">push_back</span>(u);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">dfs1</span>(<span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">    <span class="built_in">memset</span>(b, <span class="number">0</span>, <span class="built_in">sizeof</span>(b));</span><br><span class="line">    ans = deepsum[<span class="number">1</span>];</span><br><span class="line">    p = <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">dfs2</span>(<span class="number">1</span>, deepsum[<span class="number">1</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lld&quot;</span>, p);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>变式：</p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P2986">「USACO10MAR」Great Cow Gathering G</a></p>
+<p>  几乎和例题是一样的，不一样之处在于，这道题的边是有权值的。那么，“节点的深度”就要变成“节点到根节点的距离”，其实也没什么大改动，代码就不放了。</p>
+</li>
+</ul>
+<hr>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><ul>
+<li><p>一道树上的区间 DP：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P1040">「NOIP2003 TG」加分二叉树</a></p>
+<p>  这题的突破点在于数的中序遍历必须是 $1,2,3,\ldots,n$，也就是说，一段连续的区间内的节点一定是在一块儿的，而且如果我们选定节点 $i$ 为 $[l,r]$ 这个区间的根节点，那么 $[l,i-1]$ 就是它的左子树，$[i+1,r]$ 就是它的右子树。</p>
+<p>  然后三重循环的区间 DP 就来了：令区间 $[l,r]$ 是<strong>一棵子树</strong>（而不是分散的），在区间范围内枚举这个子树的根节点为 $k$，根据题目给出的公式计算出能得到的最大加分。</p>
+<p>  另外，由于枚举时计算左右子树是 $[l,k-1]$ 和 $[k+1,r]$，所有有可能出现左端点比右端点还大的情况，其实这种情况就是空子树。我们可以在初始化的时候把 $dp_{i,i-1}$ 的值设为 $1$ 来解决这个问题。</p>
+<p>  输出方案的话，可以用 $f_{i,j}$ 来存把区间 $[i,j]$ 作为一棵子树时的根节点，然后再按照前序遍历的方法“根——左——右”递归输出。</p>
+<p>  贴一下代码：</p>
+  <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> rep(i, j, k) for(int i = j; i &lt;= k; ++i)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> dep(i, j, k) for(int i = j; i &gt;= k; --i)</span></span><br><span class="line">  </span><br><span class="line"><span class="type">int</span> n, p[<span class="number">35</span>], dp[<span class="number">35</span>][<span class="number">35</span>], f[<span class="number">35</span>][<span class="number">35</span>];</span><br><span class="line">  </span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">int</span> l, <span class="type">int</span> r)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(l &gt; r)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>, f[l][r]);</span><br><span class="line">    <span class="built_in">print</span>(l, f[l][r] - <span class="number">1</span>);</span><br><span class="line">    <span class="built_in">print</span>(f[l][r] + <span class="number">1</span>, r);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n);</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, n)</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;p[i]);</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, n)</span><br><span class="line">        dp[i][i] = p[i], f[i][i] = i;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">0</span>, n)</span><br><span class="line">        dp[i + <span class="number">1</span>][i] = <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">rep</span>(len, <span class="number">2</span>, n) &#123;</span><br><span class="line">        <span class="built_in">rep</span>(l, <span class="number">1</span>, n - len + <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="type">int</span> r = l + len - <span class="number">1</span>;</span><br><span class="line">            <span class="built_in">rep</span>(k, l, r) &#123;</span><br><span class="line">                <span class="type">int</span> w = dp[l][k - <span class="number">1</span>] * dp[k + <span class="number">1</span>][r] + p[k];</span><br><span class="line">                <span class="keyword">if</span>(w &gt; dp[l][r]) &#123;</span><br><span class="line">                    dp[l][r] = w;</span><br><span class="line">                    f[l][r] = k;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, dp[<span class="number">1</span>][n]);</span><br><span class="line">    <span class="built_in">print</span>(<span class="number">1</span>, n);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__title"><span class="post-copyright-info"><h>树形 DP</h></span></div><div class="post-copyright__type"><span class="post-copyright-info"><a href="https://oi.saiodgm.gq/posts/c2587cc4/">https://oi.saiodgm.gq/posts/c2587cc4/</a></span></div><div class="post-copyright-m"><div class="post-copyright-m-info"><div class="post-copyright-a"><h>作者</h><div class="post-copyright-cc-info"><h>Saiodgm</h></div></div><div class="post-copyright-c"><h>发布于</h><div class="post-copyright-cc-info"><h>2022-03-27</h></div></div><div class="post-copyright-u"><h>更新于</h><div class="post-copyright-cc-info"><h>2022-03-27</h></div></div><div class="post-copyright-c"><h>许可协议</h><div class="post-copyright-cc-info"><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a rel="noopener" target="_blank" title="CC BY-NC-SA 4.0" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></div></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></div><div class="post_share"><div class="social-share" data-image="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover8.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://npm.elemecdn.com/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'" crossorigin><script src="https://npm.elemecdn.com/social-share.js/dist/js/social-share.min.js" defer crossorigin></script></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/avatar.webp" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="avatar"/ crossorigin></div><div class="author-info__name">Saiodgm</div><div class="author-info__description">cqbz 初二最菜 OIer.</div></div><div class="card-info-data is-center"><div class="card-info-data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">40</div></a></div><div class="card-info-data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">21</div></a></div><div class="card-info-data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/cqbzljt/OIBlog"><i class="fab fa-github"></i><span>站点仓库</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="mailto:hello@saiodgm.gq" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="http://wpa.qq.com/msgrd?v=3&amp;uin=30359624&amp;site=ivrpano.com&amp;menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="https://github.com/cqbzljt" target="_blank" title="GitHub"><i class="fab fa-github"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fas fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">放暑假了，但是这暑假放了跟没放似的。。。<br>为了您最好的体验，请把本站加入广告拦截器的白名单中，谢谢配合 ψ(｀∇´)ψ<br>本站加载了 Service Worker 脚本，目前这个脚本有一点点问题，基本不影响体验，博主会尽力修的( •̀ ω •́ )✧<br>右键触发本站右键菜单，如果需要原生右键菜单请 Ctrl + 右键~</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%91%E4%B8%8A%E8%83%8C%E5%8C%85"><span class="toc-text">树上背包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%91%E7%9A%84%E7%9B%B4%E5%BE%84"><span class="toc-text">树的直径</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AA%E6%B1%82%E9%95%BF%E5%BA%A6"><span class="toc-text">只求长度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B1%82%E7%9B%B4%E5%BE%84%E4%B8%8A%E7%9A%84%E8%8A%82%E7%82%B9"><span class="toc-text">求直径上的节点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8E%E7%9B%B8%E9%82%BB%E8%8A%82%E7%82%B9%E6%9C%89%E5%85%B3%E7%9A%84%E6%A0%91%E5%BD%A2-DP"><span class="toc-text">与相邻节点有关的树形 DP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98-1"><span class="toc-text">例题 1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98-2"><span class="toc-text">例题 2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98-3"><span class="toc-text">例题 3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98-4"><span class="toc-text">例题 4</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98-5"><span class="toc-text">例题 5</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8D%A2%E6%A0%B9-DP"><span class="toc-text">换根 DP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E5%AE%83"><span class="toc-text">其它</span></a></li></ol></div></div><div class="card-widget card-recommend-post"><div class="item-headline"><i class="fas fa-dharmachakra"></i><span>相关推荐</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/7ffdbf9/" title="01 背包学习笔记"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover3.webp" alt="01 背包学习笔记" crossorigin></a><div class="content"><a class="title" href="/posts/7ffdbf9/" title="01 背包学习笔记">01 背包学习笔记</a><time datetime="2021-08-16" title="发表于 2021-08-16">2021-08-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/51bfc0ec/" title="ST 表求解 RMQ 问题"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover3.webp" alt="ST 表求解 RMQ 问题" crossorigin></a><div class="content"><a class="title" href="/posts/51bfc0ec/" title="ST 表求解 RMQ 问题">ST 表求解 RMQ 问题</a><time datetime="2022-01-26" title="发表于 2022-01-26">2022-01-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/1130b63d/" title="单调队列优化 & 斜率优化"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover4.webp" alt="单调队列优化 & 斜率优化" crossorigin></a><div class="content"><a class="title" href="/posts/1130b63d/" title="单调队列优化 & 斜率优化">单调队列优化 & 斜率优化</a><time datetime="2022-07-10" title="发表于 2022-07-10">2022-07-10</time></div></div></div></div><!--!=partial('includes/widget/card_recent_post', {}, {cache: true})--></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2022  <i id="heartbeat" class="fa fas fa-heartbeat"></i> Saiodgm</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a><span class="footer-separator">|</span><a target="_blank" rel="noopener" href="https://icp.gov.moe/?keyword=20221225">萌ICP备20221225号</a></div><div class="footer_custom_text">慎始，笃行，善终。</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><a class="icon-V hidden" onclick="switchNightMode()" title="浅色和深色模式转换"><svg width="25" height="25" viewBox="0 0 1024 1024"><use id="modeicon" xlink:href="#icon-moon"></use></svg></a><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="chat_btn" type="button" title="给博主留言"><i class="fas fa-sms"></i></button><button id="to_comment" type="button" title="显示评论" onclick="FixedCommentBtn();"><i class="fas fa-comments"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">本地搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/utils.js" crossorigin></script><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/main.js" crossorigin></script><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/tw_cn.js" crossorigin></script><script src="https://npm.elemecdn.com/@fancyapps/ui@4.0.23/dist/fancybox.umd.js" crossorigin></script><script src="https://cdnjs.cloudflare.com/ajax/libs/instant.page/5.1.0/instantpage.min.js" type="module" crossorigin></script><script src="https://npm.elemecdn.com/vanilla-lazyload@17.5.0/dist/lazyload.iife.min.js" crossorigin></script><script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/node-snackbar/0.1.16/snackbar.min.js" crossorigin></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://npm.elemecdn.com/pangu@4.0.7/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (true){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/search/local-search.js" crossorigin></script><div class="pjax-reload"><script async="async">var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';      
+    document.getElementById('loading-box').style.transition = 'opacity 3s';
+    document.getElementById('loading-box').style.opacity = '0';
+    setTimeout(function(){
+      document.getElementById('loading-box').classList.add("loaded")
+    },3000)
+
+    //用于判断是否第一次加载
+    if(sessionStorage.getItem("isReload")){
+       //若显示已经加载过
+       return true
+    }else{
+      //若为第一次加载
+     sessionStorage.setItem("isReload", true)
+     SAONotify('Welcome','欢迎光临😊<br>愿你享受愉快的一天')
+     setTimeout(function(){
+       document.getElementById("SAO-Welcome").remove();
+     },3000)
+    }
+
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').style.transition = '';
+    document.getElementById('loading-box').style.opacity = '1';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',()=> {preloader.endLoading()})
+setTimeout(function(){preloader.endLoading();}, 3000);</script></div><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.2
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container:not\([display]\)').forEach(node => {
+            const target = node.parentNode
+            if (target.nodeName.toLowerCase() === 'li') {
+              target.parentNode.classList.add('has-jax')
+            } else {
+              target.classList.add('has-jax')
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://npm.elemecdn.com/mathjax@3.2.0/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><script>(() => {
+  const $mermaidWrap = document.querySelectorAll('#article-container .mermaid-wrap')
+  if ($mermaidWrap.length) {
+    window.runMermaid = () => {
+      window.loadMermaid = true
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+      Array.from($mermaidWrap).forEach((item, index) => {
+        const mermaidSrc = item.firstElementChild
+        const mermaidThemeConfig = '%%{init:{ \'theme\':\'' + theme + '\'}}%%\n'
+        const mermaidID = 'mermaid-' + index
+        const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+        mermaid.mermaidAPI.render(mermaidID, mermaidDefinition, (svgCode) => {
+          mermaidSrc.insertAdjacentHTML('afterend', svgCode)
+        })
+      })
+    }
+
+    const loadMermaid = () => {
+      window.loadMermaid ? runMermaid() : getScript('https://npm.elemecdn.com/mermaid@8.13.10/dist/mermaid.min.js').then(runMermaid)
+    }
+
+    window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+  }
+})()</script><script>(()=>{
+  const init = () => {
+    twikoo.init(Object.assign({
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo-omega-livid.vercel.app/',
+      region: '',
+      onCommentLoaded: function () {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.vemoji)'))
+      }
+    }, null))
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-omega-livid.vercel.app/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      document.getElementById('twikoo-count').innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const runFn = () => {
+    init()
+    
+  }
+
+  const loadTwikoo = () => {
+    if (typeof twikoo === 'object') {
+      setTimeout(runFn,0)
+      return
+    } 
+    getScript('https://npm.elemecdn.com/twikoo@1.5.11/dist/twikoo.all.min.js').then(runFn)
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script>window.addEventListener('load', () => {
+  const changeContent = (content) => {
+    if (content === '') return content
+
+    content = content.replace(/<img.*?src="(.*?)"?[^\>]+>/ig, '[图片]') // replace image link
+    content = content.replace(/<a[^>]+?href=["']?([^"']+)["']?[^>]*>([^<]+)<\/a>/gi, '[链接]') // replace url
+    content = content.replace(/<pre><code>.*?<\/pre>/gi, '[代码]') // replace code
+    content = content.replace(/<[^>]+>/g,"") // remove html tag
+
+    if (content.length > 150) {
+      content = content.substring(0,150) + '...'
+    }
+    return content
+  }
+
+  const getComment = () => {
+    const runTwikoo = () => {
+      twikoo.getRecentComments({
+        envId: 'https://twikoo-omega-livid.vercel.app/',
+        region: '',
+        pageSize: 3,
+        includeReply: true
+      }).then(function (res) {
+        const twikooArray = res.map(e => {
+          return {
+            'content': changeContent(e.comment),
+            'avatar': e.avatar,
+            'nick': e.nick,
+            'url': e.url + '#' + e.id,
+            'date': new Date(e.created).toISOString()
+          }
+        })
+
+        saveToLocal.set('twikoo-newest-comments', JSON.stringify(twikooArray), 10/(60*24))
+        generateHtml(twikooArray)
+      }).catch(function (err) {
+        const $dom = document.querySelector('#card-newest-comments .aside-list')
+        $dom.innerHTML= "无法获取评论，请确认相关配置是否正确"
+      })
+    }
+
+    if (typeof twikoo === 'object') {
+      runTwikoo()
+    } else {
+      getScript('https://npm.elemecdn.com/twikoo@1.5.11/dist/twikoo.all.min.js').then(runTwikoo)
+    }
+  }
+
+  const generateHtml = array => {
+    let result = ''
+
+    if (array.length) {
+      for (let i = 0; i < array.length; i++) {
+        result += '<div class=\'aside-list-item\'>'
+
+        if (false) {
+          const name = 'data-lazy-src'
+          result += `<a href='${array[i].url}' class='thumbnail'><img ${name}='${array[i].avatar}' alt='${array[i].nick}'></a>`
+        }
+        
+        result += `<div class='content'>
+        <a class='comment' href='${array[i].url}' title='${array[i].content}'>${array[i].content}</a>
+        <div class='name'><span>${array[i].nick} / </span><time datetime="${array[i].date}">${btf.diffDate(array[i].date, true)}</time></div>
+        </div></div>`
+      }
+    } else {
+      result += '没有评论'
+    }
+
+    let $dom = document.querySelector('#card-newest-comments .aside-list')
+    $dom.innerHTML= result
+    window.lazyLoadInstance && window.lazyLoadInstance.update()
+    window.pjax && window.pjax.refresh($dom)
+  }
+
+  const newestCommentInit = () => {
+    if (document.querySelector('#card-newest-comments .aside-list')) {
+      const data = saveToLocal.get('twikoo-newest-comments')
+      if (data) {
+        generateHtml(JSON.parse(data))
+      } else {
+        getComment()
+      }
+    }
+  }
+
+  newestCommentInit()
+  document.addEventListener('pjax:complete', newestCommentInit)
+})</script><div class="aplayer no-destroy" data-id="6997741264" data-server="netease" data-type="playlist" data-fixed="true" data-mini="true" data-listFolded="true" data-order="random" data-preload="none" muted></div><script async src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/diytitle.js" crossorigin></script><script data-pjax defer src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/custom/fixed_comment.js" crossorigin></script><script data-pjax defer src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/custom/fixed_card_widget.js" crossorigin></script><script async src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/custom/leaves.js" crossorigin></script><script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.6.0/jquery.min.js" crossorigin></script><script data-pjax src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/custom.js" crossorigin></script><script defer data-pjax src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/kernel.js" crossorigin></script><script defer src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/modify.js" crossorigin></script><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/rightmenu.js" crossorigin></script><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/changebg.js" crossorigin></script><script async src="//at.alicdn.com/t/font_3113667_5ghhue7sqj5.js" crossorigin></script><script async src="//at.alicdn.com/t/font_3167278_4b5nw9t030c.js" crossorigin></script><script async src="//at.alicdn.com/t/font_2032782_ev6ytrh30f.js" crossorigin></script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.15.2/katex.js" crossorigin="anonymous"></script><script defer src="https://npm.elemecdn.com/katex@0.15.2/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script><script async src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/sun_moon.js" crossorigin></script><canvas class="fireworks" mobile="true"></canvas><script src="https://npm.elemecdn.com/butterfly-extsrc@1.1.0/dist/fireworks.min.js" crossorigin></script><script id="canvas_nest" defer="defer" color="100,100,100" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://npm.elemecdn.com/butterfly-extsrc@1.1.0/dist/canvas-nest.min.js" crossorigin></script><script src="https://npm.elemecdn.com/butterfly-extsrc@1.1.0/dist/activate-power-mode.min.js" crossorigin></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script src="//code.tidio.co/vdvuphhthk3fupcq7kxksxstjqcms2ru.js" async="async" crossorigin></script><script>function onTidioChatApiReady() {
+  window.tidioChatApi.hide();
+  window.tidioChatApi.on("close", function() {
+    window.tidioChatApi.hide();
+  });
+}
+if (window.tidioChatApi) {
+  window.tidioChatApi.on("ready", onTidioChatApiReady);
+} else {
+  document.addEventListener("tidioChat-ready", onTidioChatApiReady);
+}
+
+var chatBtnFn = () => {
+  document.getElementById("chat_btn").addEventListener("click", function(){
+    window.tidioChatApi.show();
+    window.tidioChatApi.open();
+  });
+}
+chatBtnFn()
+</script><link rel="stylesheet" href="https://npm.elemecdn.com/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'" crossorigin><script src="https://npm.elemecdn.com/aplayer@1.10.1/dist/APlayer.min.js" crossorigin></script><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/meting.js" crossorigin></script><script src="https://npm.elemecdn.com/pjax@0.2.8/pjax.min.js" crossorigin></script><script>let pjaxSelectors = ["title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show","#fixedcard-dashboard","#web_bg",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"]):not([href="/barrage/"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" crossorigin></script><div id="fixedcard-dashboard"><button class="fixedcard-activebtn" type="button" title="用户信息" onclick="FixedCardWidget(&quot;class&quot;,&quot;card-info&quot;,&quot;0&quot;)"><i class="fas fa-address-book"></i></button><button class="fixedcard-activebtn" type="button" title="最新文章" onclick="FixedCardWidget(&quot;class&quot;,&quot;card-recommend-post&quot;,&quot;0&quot;)"><i class="fas fa-dharmachakra"></i></button><div class="fixedcard-user-avatar fixedcard-activebtn" onclick="RemoveFixedCardWidget()"><img class="fixedcard-user-avatar-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/avatar.webp" title="Saiodgm" crossorigin></div></div><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><a class="rightMenu-item" href="javascript:window.history.back();"><i class="iconfont icon-back"></i></a><a class="rightMenu-item" href="javascript:window.history.forward();"><i class="iconfont icon-enter"></i></a><a class="rightMenu-item" href="javascript:window.location.reload();"><i class="iconfont icon-chexiao"></i></a><a class="rightMenu-item" href="javascript:kk.scrollToTop();"><i class="iconfont icon-top"></i></a></div><div class="rightMenu-group rightMenu-line hide" id="menu-text"><a class="rightMenu-item" href="javascript:kk.copySelect();"><i class="iconfont icon-copy"></i><span>复制</span></a><a class="rightMenu-item" href="javascript:kk.commentSelect();"><i class="fas fa-comments"></i><span>评论</span></a></div><div class="rightMenu-group rightMenu-line"><a class="rightMenu-item" href="javascript:switchNightMode();"><i class="iconfont icon-DarkTheme"></i><span>昼夜切换</span></a><a class="rightMenu-item" href="javascript:kk.switchReadMode();"><i class="iconfont icon-read"></i><span>阅读模式</span></a><a class="rightMenu-item" id="menu-translate"><i class="fas fa-language"></i><span>简繁切换</span></a><a class="rightMenu-item" href="javascript:kk.switchTheme();"><i class="iconfont icon-theme"></i><span>主题切换</span></a></div></div></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_clock_injector_config(){
+    var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+    var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img class="entered loading" id="card-clock-loading" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://npm.elemecdn.com/hexo-butterfly-clock/lib/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading"/ crossorigin></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = '/posts/'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_injector_config();
+  }
+  </script><script src="https://pv.sohu.com/cityjson?ie=utf-8" crossorigin></script><script data-pjax src="https://npm.elemecdn.com/hexo-butterfly-clock/lib/clock.min.js" crossorigin></script><script data-pjax>
+  function butterfly_footer_beautify_injector_config(){
+    var parent_div_git = document.getElementById('footer-wrap');
+    var item_html = '<div id="ghbdages" style="overflow:hidden;max-height:90px;height:auto;text-align:center;margin-top:10px"><div class="swiper-wrapper"><div class="swiper-slide"><a class="github-badge" target="_blank" href="https://hexo.io" style="margin-inline:5px" title="本站框架为 Hexo 6.2.0"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Frame-Hexo-blue?style=for-the-badge&amp;logo=hexo" alt=""/ crossorigin></a><a class="github-badge" target="_blank" href="https://butterfly.js.org/" style="margin-inline:5px" title="本站主题为 Butterfly 4.0.1"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=for-the-badge&amp;logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAABS2lUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxNDIgNzkuMTYwOTI0LCAyMDE3LzA3LzEzLTAxOjA2OjM5ICAgICAgICAiPgogPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIi8+CiA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgo8P3hwYWNrZXQgZW5kPSJyIj8+nhxg7wAAAblJREFUOI2t1LtrFUEUx/HPDT5SKBYKomJ8BSSC+Ggs1EQQROwSNQhqFay0sLJRbExKsbCwUmtB/A9ELUSwihJEbSx9g4VEkcDPYueSvWty4+vAsuc3M3znzPzOLkjSfm4leVPTf/RAj86Yxkbc8ZfRBL4r71Fc/B/Auh7H7n8Frm/oq7/J6KmLegw09AGc6gI7h3tY3DFaXFqV5Gt+jSdzONqbZLLMT9RdrgPH5oC1Y28DuD3JTJJXzbZZVJhLcKnL0Y7gccnvqrrhMFpzrk4y3qW6JHlaqthU9IskA42qlzFrytEu1cHm8j7WrgEj2FZ0q523gR8WAK5EP/YX/QUrsLroQaypA8/g/QLQQbNtdUN178/Rh+N4xKwpr1VNvQW7cKjs2F/GfmCo6GEsxbNS+XVcLlVXLtV6qBcnsa/k0/iEnWX+Nh7gCqawoYxNQatVTC8ujXRx+UJZsy7JaJKhJAeTtJp9WP/05vsRTOJhyT9jLb7hvsrtjqgDb2KmMT+hutOtqjb5jpf4OM/mHUfuSfK2HHEyyZ7acZYnOZHkfMnn/WPXgWNJriXZUVt0NslwTZ9O0tcN+BPSStKOpIECLQAAAABJRU5ErkJggg==" alt=""/ crossorigin></a><a class="github-badge" target="_blank" href="https://arcitcgn.cn/171.html" style="margin-inline:5px" title="本站使用 ADN 为静态资源提供 CDN 加速"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/CDN-ADN-black?style=for-the-badge&amp;logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAANGElEQVR4Xu2ae3BUVZ7HP+f2vbfzJJDwEDC8CQ8BowgaQJJVAVFUQEZRYZlhBrZqa5za2tmt2dqZ2UfVbs06O7UzNTPrC3wgGFEQRnyARiAkEBGQNwjyfj8SjAmk0933cfYP6Nj3mO7cboL/LJ+q+0e+33O7c7/39rnn/M6Bm/z/RqhCeyBABBEZ2ZCTi5aXCVk6QneQTgTCl5GNIeSVZmTIAUc9//uk3QLQweiJVjgcfWQx+qiBBIbcgtazIyI/AzI1hOYiXRusRmRDHe6FU7jHD+Ls24ez8xDOl3W4F77vQK47gCxE9mj0cY9gPlGCUdoDrdAAU22XjDCy+TTuiW3YNeuwVm/F3liLe0GCVNu2N2kHoIM+Er3kx2T8bDzGxFxEB7VNPBZEL+HWnsY9cQH3bB3yYjMyBFdD7Izo1g2tex6iUx3yYhVWxRqiKw/jHLiRT0VaAeQhOs0h42/nEny2C1o31Y/hgnsW99RGrLVVWBX7cXZdxD3fhLxigxXf1gAjA5GVj+g8gMDgEegju6Pdegzn0FqsD4/gHLwRQaQcQA+0wl+S9dwUzBk6GKof4yzuqeVE3lhJtPwozlc22GqbtshF5A0hMHwggSEXcc9vx958CVkb8w0do2MuHWvradFuKD3Rer1O7qrT5LtnyJetHSfIt14nd1Ux+ugABNTPSAcd9EK0PsXoo7qidRfXblxRL4p+/gz/oAfQ1XPanY6I/OfJeUu94PjjGPnhfyPr950QBer57UEAAtmIHJ2rF/yjR5hbvYBNBXmk/X2+kgtAYC4Zzz6MOUP1YthgvUL4j/9D87+HkE2q3x444DQhrwBkBsl8sITJQ/owtG9P+l1q4JLa3g+++oCxGPe9QM7SAkQX1YuxnMjiXxF69jKyQfXai84d6XxbP4YVF1F89zDumTyGh3IyyVlVxXuvf8BrW/bxee031LournpuItoMIAeR+yeyl0zEfFT1YnyJs3seV2Ycwzmkeu3Jbf0ZNm8q86eM45Fe3eilaWgxr7GJxuodVL24ghc+2czHjttOb4yJmI8eotMV9fceO46TH3mK4I/V824UpoFZ1Iuiv3+an9dW8HWomsiCX/LKkxOYWVzEHQV5FAjR9o31hQHmH8lZrF50/LGSDtX5iM7quTea3Cxy171A5fbF7LylgFtU3y9JO8HeBPrdgz5e1WNIkB8QXfY1sk71bjSXQ1zefZjdoTCh85c4r/p+SRpAMfqobmg9VD3GBdyzm7DWqfr3ReUXrL+ei4ckAQgQtxMYFXvntsZBnH0ncY+p+vfFms9Y7TjX19klvLgMROYAAoNVPZ6DOHvVd34/AkUl6KWx0VoqWGCtw/qoFvdCiyg0jcElpXTrXwTSMzsMS65OGIVI8F1C0Fh7gd2ffoRtRVUXkgSQi+iQ7PGXII8qrz0Tgj8j459/QHCOi/93MYAGWg3W+gqi73uMLr37Mes3f6ZH0VCkm9JnAvD+H/6THWveU+UYCQPIRuRmI3JUPYYF0a/jJiYAd2PcOwHzEbh6QfFeW0SQ4XIiCz0dqhCCMTNm06No6NW/tZQ+k/NHDvLZu0uQ3icnnoQBBCHDhKCqx3CQTvzjn4nImkVwfkdEfnw7v9RgV67F+sgj9igaypgZszyaX6SUbHx7EeePfKVa8SQMQAMt2e9YXv1BtiQ7Fv2+UoxJ8W38EkI2vUnk5UbkNy2i0DTGPflDuvTuF9fUP2cO7OXzlW+pskrCABywnSRz+AAEgogMuNpfzCbjb9qqCiWiGuvTaqxPPWKv24oZPfVJj+YX13GoXvoadaeOq5ZKwgBCyKYIhFU9ho4wOiA6ApRiTBqLfp/axg+XkQ1LiLx0BXm5RQzoOvc+PZf8HoVxTf1zcu8Otq56R5VbI2EAl5GNDbjfJOrLAhDogVaYi8ibRXB+JiJLbeOH9VhrarArPWLf4lHc9fDjHs0vjmVRVf4K9efOqFZrJAwghGw6i3tqBIxUvRh90QZMxpw2Gn2c6vmhHnlpCZGXw8jmFlE3TEpnzSOva3rj+6M7tvDFhytUOREJA4hC5AjuQVWPZzTGuOHod8b6glSpIPr+VuxNHnHAqDEUT3zEo/nFjkaoenMhjXUXVSsRCQMA2I+9ywZLT1D87I3WX9X8Uod7sZzIwigy0iKaGZmUzZ5PTn56s8tDW2vY+Yl3INUGSQP4Emd3He7FW9B6qt71shprxU7sLR5x8JgyRtz/kEfzSzTczIbFL3OlPqXSWNIATuIe24+zq70DuIB79i0ir1jxawPB7BxKZ88ns0NeXFP/HKzZwO51q1W5LZIG0IwMVWFV/BXG5GSDolRZRfSdvdg7POKwsoncVjrBo/kl0nSFysUv0dyYcj0yaQAAVVgV53BP90BL752scAr3+NtEXvOs8mR2yKNs1nyCWdlxTf2zd0MF+zZUqLIf2gzgKM5XVVgVMwnOVb10+AuRtw7i7PWItz/wMEUlCStPSWlubKBqyQIiobRK8W0GYIG1kmj5Q5jTYyO/dDmGc2g50Tc8U+Xc/M6UzZ6PmZEZ19Q/u9d+xIGaSlX2S5sBAGzDrlmPteYxzJmq5xcJ8l2iSw7jHPAYd0yeSv+7SjyaX67UX6Jy8ctEw98OpFLEVwBhZPNiIi+Nx5iQ7rLXVzj7VxBZ4hHzunWn9JmfoBsp7SdoYefHqzi87TNVTgVfAQA0I5sspJXOy8AFdxmRRSdwj3qMUVNm0GdEwqF2UhprL7BhyQLs6LcDqTTwFYABxkyCc7uipTU+/xJn9yqib3vEgp69uPepuWi6r//hO3zx4QqO7tyqyqni68uL0UdPxpiu6n6wwV5K5NUzuCc9xt3TnqJw6AiP5pf6c6epKn8F105Yr2gNA0yBEPHD7zYDMCH4DMF5ndG6qp4fdmNv+4DoMo/YtU9/xj45J+UaX4wt773DyX07VbkteqIVhqDpIrJlLaHNAEZjjIsVOlPl2srR8ou43y5etBQ6Bw6Ja+qf2pPH2Pj267hOSusBOhi3od+xEWutoicmA5F5PYVOAWICxpQNWB8fiA1+ug8YTEmahU6AzSvKOXPAO5DywRD04beg9VCX75MGMBb9vjKMB1U9FcZglD2n5S76NeF/3COjG+TYmT+ka5/0ptHnj3xFzbLFycrcrZGByJyO+cwGrE/U9YqEAeQgcq+n0BlDAnlG9p1ztJxXl3fvWf5ZybT0BlNSSmqWvcH5I0mLNK3xGObMvgQG/oHm/1C9hAFcT6EzhgAuawHO6iZ5gUDvrNLZv6DgVo00Fng4e3Afm1eUq3JbjMO4/6dk/NPzhH/bgKxX/VYDyEN0mkVwfhYivdnZNSRw2jAJIznRazDb7nxAU5b3/CFdl43vLKL2pO+FWAHiXowHfkPW86dxT6wh+he1DSQIYALmlHsw0pqdxRZLNBANgQDnDBMnoLNh7DQaOhSAm1LnfZWT+3by+cqlqpyILET2dMxZf0fmr0xE8H8JPVePbLVS9J0AChBdniY4L9myWDI2YH1Sh3thCuYTp4xgRlRKjvQdzvbbx4NM49F3bZvq8lepP3datVQMMG9Hv2suGc9OwngsgAj8jtC/JtvD8J0AJmNOG4l+j6r7oQFZ/yLh323Drtks3C0lWs4vgkawsPLe6VzJ7pje3T++63O2fbhclWMYYHZB61aMPmoSxtQyjEmd0braYC8m/OJrRP6cbIutJ4CuaN2fIvgTPUEVuC0qiH6wBXtjBBleKptf2BY6t3XwoIef2zO0pCydux90bB5fv9QONnw97SJm3bXN1dJEBDshCm5F6z2QwJBBBIYVovWJlectiL5JeMF/0/wvsX2FifAE8CjmE8PR74zX/HIJWVtOZEEEGQaQ4B4KmvsOj32sXmZkX11KTQUtwMhDX/DrXdWlHcgdbyPs2DtcgAiA3toS/NfIugWEf/8q4T95ltsS0BJAIVqfmQTnpru/dzXRlduxP/eIw8omymFlEz2aTzKsMLPXv0Wny/U4BERbT6UF0a1Ym54n/NtqrE/9bs5uCWAqwacGERgWb/rlWpl7oQXfbkPJ7JBHaZqFTi1Ayf4a7t9Vifvdm+yhGRnag7P9XSKLVxNdGb+b3A86QF8CA3+AOae1R8oPHxBdvgd7u0e8/YGHGTSm1KP5QQiyw0389fpy8kKN2Eo/bUG0AfebU7jHdmBvqcT6eDv25kSvubbQBYjHMWf1JzBINf1wBvfkUiKvenranE4FlM6al26h09xfXb1p79o1R7DydGxTghtCNl1C1p7DPX0K5/gZ3JMNyHp1bJ8q+jD0O6YTfEY1/PIe0aUHcPZ4xDsnT2XAqDEezS+hxsb6ykX/tTBc790uc4PQf0Twp73Q+sVvd/GDAHEc5/AyIos8d6Fjt+6Mv1boTHHWhhCCPetW8+WmStW6UYgHMadmQsqbGwSIs7intmBv9ATQoXNXBpWUEjCS9tqtIqXkxO4v2trYdJOb3OQmN2kn/g+/n/ea8Z8NDwAAAABJRU5ErkJggg==" alt=""/ crossorigin></a></div><div class="swiper-slide"><a class="github-badge" target="_blank" href="https://vercel.com/" style="margin-inline:5px" title="本站主站部署于 Vercel"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Hosted-Vercel-brightgreen?style=for-the-badge&amp;logo=Vercel" alt=""/ crossorigin></a><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" title="本站项目由 Github 托管"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Source-Github-d021d6?style=for-the-badge&amp;logo=GitHub" alt=""/ crossorigin></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" title="本站采用知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议进行许可"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=for-the-badge&amp;logo=Claris" alt=""/ crossorigin></a></div></div></div><style>a.github-badge:hover:before {display:none}</style>';
+    console.log('已挂载butterfly_footer_beautify')
+    parent_div_git.insertAdjacentHTML("beforeend",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_footer_beautify_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_footer_beautify_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js" crossorigin></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-footer-beautify@latest/lib/swiperbdage_init.min.js" crossorigin></script><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js" crossorigin></script><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '50ms');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '50ms');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('article-sort-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '50ms');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '50ms');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-clock');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '50ms');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('categoryBar');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '50ms');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '2s');
+    arr[i].setAttribute('data-wow-delay', '50ms');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script></div><script defer src="https://unpkg.zhimg.com/hexo-butterfly-wowjs/lib/wow.min.js" crossorigin></script><script defer src="https://unpkg.zhimg.com/hexo-butterfly-wowjs/lib/wow_init.js" crossorigin></script><script data-pjax src="https://npm.elemecdn.com/hexo-filter-gitcalendar/lib/gitcalendar.js" crossorigin></script><script data-pjax>
+  function gitcalendar_injector_config(){
+      var parent_div_git = document.getElementById('recent-posts');
+      var item_html = '<div class="recent-post-item" style="width:100%;height:auto;padding:10px;"><style>#git_container{min-height: 280px}@media screen and (max-width:650px) {#git_container{min-height: 0px}}</style><div id="git_loading" style="width:10%;height:100%;margin:0 auto;display: block;"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50" xml:space="preserve"><path fill="#d0d0d0" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z" transform="rotate(275.098 25 25)"><animatetransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animatetransform></path></svg><style>#git_container{display: none;}</style></div><div id="git_container"></div></div>';
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+      console.log('已挂载gitcalendar')
+      }
+
+    if( document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+        gitcalendar_injector_config()
+        GitCalendarInit("https://github-calendar-api.vercel.app/api?cqbzljt",['#e4dfd7', '#f9f4dc', '#f7e8aa', '#f7e8aa', '#f8df72', '#fcd217', '#fcc515', '#f28e16', '#fb8b05', '#d85916', '#f43e06'],'cqbzljt')
+    }
+  </script><!-- hexo injector body_end end --><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/wanko.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false});</script></body></html>

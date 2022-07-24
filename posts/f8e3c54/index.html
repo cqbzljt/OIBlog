@@ -1,0 +1,889 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>状压 DP 总结 &amp; 练习简要题解 | Saiodgm の 博客儿</title><meta name="keywords" content="动态规划"><meta name="author" content="Saiodgm"><meta name="copyright" content="Saiodgm"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="都是套路，但是细节巨多。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="状压 DP 总结 &amp; 练习简要题解">
+<meta property="og:url" content="https://oi.saiodgm.gq/posts/f8e3c54/">
+<meta property="og:site_name" content="Saiodgm の 博客儿">
+<meta property="og:description" content="都是套路，但是细节巨多。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover8.webp">
+<meta property="article:published_time" content="2022-01-26T23:00:54.000Z">
+<meta property="article:modified_time" content="2022-02-01T10:18:50.000Z">
+<meta property="article:author" content="Saiodgm">
+<meta property="article:tag" content="动态规划">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover8.webp"><link rel="shortcut icon" href="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/favicon.webp" crossorigin><link rel="canonical" href="https://oi.saiodgm.gq/posts/f8e3c54/"><link rel="preconnect" href="//fastly.jsdelivr.net"/ crossorigin><link rel="preconnect" href="//busuanzi.ibruce.info"/ crossorigin><script>window.setCustom = () => { };
+(async () => {
+  const CACHE_NAME = 'SaiodgmSW';
+  window.db = {
+    read: (key, config) => {
+      if (!config) { config = { type: "text" } }
+      return new Promise((resolve, reject) => {
+        caches.open(CACHE_NAME).then(cache => {
+          cache.match(new Request(`https://LOCALCACHE/${encodeURIComponent(key)}`)).then(function (res) {
+            if (!res) resolve(null)
+            res.text().then(text => resolve(text))
+          }).catch(() => {
+            resolve(null)
+          })
+        })
+      })
+    },
+    write: (key, value) => {
+      return new Promise((resolve, reject) => {
+        caches.open(CACHE_NAME).then(function (cache) {
+          cache.put(new Request(`https://LOCALCACHE/${encodeURIComponent(key)}`), new Response(value));
+          resolve()
+        }).catch(() => {
+          reject()
+        })
+      })
+    }
+  };
+  function ranN(minNum, maxNum) {
+    return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10)
+  }
+  if ('serviceWorker' in navigator) {
+    if (Number(window.localStorage.getItem('SaiodgmSW_Set')) < 1) {
+      setTimeout(async () => {
+        console.log('检测到您的浏览器没有安装 SaiodgmSW，开始注册')
+        window.stop()
+        window.localStorage.setItem('SaiodgmSW_Set', 1)
+        const replacehtml = await fetch('https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/swnotice.html')
+        document.body.innerHTML = await replacehtml.text()
+      }, 0);
+    }
+    const $ = document.querySelector.bind(document);
+    navigator.serviceWorker.register(`/sw.js?time=${ranN(1, 88888888888888888888)}`)
+      .then(async () => {
+        if (Number(window.localStorage.getItem('SaiodgmSW_Set')) < 2) {
+          $('#info').innerText = '安装成功,稍等片刻...';
+
+          setTimeout(() => {
+            window.localStorage.setItem('SaiodgmSW_Set', 2)
+            window.location.reload()
+          }, 500)
+        }
+        if (Number(window.localStorage.getItem('SaiodgmSW_Set')) == 2) {
+          window.localStorage.setItem('SaiodgmSW_Set', 3)
+        }
+      })
+      .catch(err => console.error(`SaiodgmSWError:${err}`))
+  } else { $('#info').innerText = '很抱歉,我们已不再支持您的浏览器.'; }
+})();
+</script><link rel="stylesheet" href="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/css/index.css" crossorigin><link rel="stylesheet" href="https://npm.elemecdn.com/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" media="print" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/node-snackbar/0.1.16/snackbar.min.css" media="print" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://npm.elemecdn.com/@fancyapps/ui@4.0.23/dist/fancybox.css" media="print" onload="this.media='all'" crossorigin><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  noticeOutdate: {"limitDay":150,"position":"top","messagePrev":"距离本篇文章上次更新已经过去了","messageNext":"天，其中的某些内容可能已经过时，请自行判断。"},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":400},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://fastly.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://fastly.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '状压 DP 总结 & 练习简要题解',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-02-01 10:18:50'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/css/custom.css"  media="defer" onload="this.media='all'" crossorigin><link rel="stylesheet" tag="theme" href="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/css/themes/candyhome.css" crossorigin><link rel="stylesheet" href="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/css/custom/twikoo_beautify.css"  media="defer" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/css/custom/fixed_comment.css"  media="defer" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/css/rightmenu.css" crossorigin><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.15.2/katex.css" crossorigin="anonymous"><link rel="stylesheet" href="//at.alicdn.com/t/font_3149728_qa1hwao2rmc.css" crossorigin><link rel="stylesheet" href="//at.alicdn.com/t/font_3261135_xhnqceobyje.css" crossorigin><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/SAO-Notify.js" async crossorigin></script><svg aria-hidden="true" style="position:absolute; overflow:hidden; width:0; height:0"><symbol id="icon-sun" viewBox="0 0 1024 1024"><path d="M960 512l-128 128v192h-192l-128 128-128-128H192v-192l-128-128 128-128V192h192l128-128 128 128h192v192z" fill="#FFD878" p-id="8420"></path><path d="M736 512a224 224 0 1 0-448 0 224 224 0 1 0 448 0z" fill="#FFE4A9" p-id="8421"></path><path d="M512 109.248L626.752 224H800v173.248L914.752 512 800 626.752V800h-173.248L512 914.752 397.248 800H224v-173.248L109.248 512 224 397.248V224h173.248L512 109.248M512 64l-128 128H192v192l-128 128 128 128v192h192l128 128 128-128h192v-192l128-128-128-128V192h-192l-128-128z" fill="#4D5152" p-id="8422"></path><path d="M512 320c105.888 0 192 86.112 192 192s-86.112 192-192 192-192-86.112-192-192 86.112-192 192-192m0-32a224 224 0 1 0 0 448 224 224 0 0 0 0-448z" fill="#4D5152" p-id="8423"></path></symbol><symbol id="icon-moon" viewBox="0 0 1024 1024"><path d="M611.370667 167.082667a445.013333 445.013333 0 0 1-38.4 161.834666 477.824 477.824 0 0 1-244.736 244.394667 445.141333 445.141333 0 0 1-161.109334 38.058667 85.077333 85.077333 0 0 0-65.066666 135.722666A462.08 462.08 0 1 0 747.093333 102.058667a85.077333 85.077333 0 0 0-135.722666 65.024z" fill="#FFB531" p-id="11345"></path><path d="M329.728 274.133333l35.157333-35.157333a21.333333 21.333333 0 1 0-30.165333-30.165333l-35.157333 35.157333-35.114667-35.157333a21.333333 21.333333 0 0 0-30.165333 30.165333l35.114666 35.157333-35.114666 35.157334a21.333333 21.333333 0 1 0 30.165333 30.165333l35.114667-35.157333 35.157333 35.157333a21.333333 21.333333 0 1 0 30.165333-30.165333z" fill="#030835" p-id="11346"></path></symbol></svg><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-clock/lib/clock.min.css" / crossorigin><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-footer-beautify@1.0.0/lib/runtime.css" media="print" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@1.0.17/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@1.0.17/lib/tag_plugins.css" media="defer" onload="this.media='all'" crossorigin><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@1.0.17/lib/assets/carousel-touch.js" crossorigin></script><link rel="stylesheet" href="https://unpkg.zhimg.com/hexo-butterfly-wowjs/lib/animate.min.css" media="print" onload="this.media='all'" crossorigin><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-filter-gitcalendar/lib/gitcalendar.css" media="print" onload="this.media='all'" crossorigin><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="Saiodgm の 博客儿" type="application/atom+xml">
+</head><body><a href="javascript:void(0);" onclick="preloader.endLoading();" title="点击跳过动画"></a><div id="loading-box"><div class="gear-loader"><div class="gear-loader_overlay"></div><div class="gear-loader_cogs"><div class="gear-loader_cogs__top"><div class="gear-top_part"></div><div class="gear-top_part"></div><div class="gear-top_part"></div><div class="gear-top_hole"></div></div><div class="gear-loader_cogs__left"><div class="gear-left_part"></div><div class="gear-left_part"></div><div class="gear-left_part"></div><div class="gear-left_hole"></div></div><div class="gear-loader_cogs__bottom"><div class="gear-bottom_part"></div><div class="gear-bottom_part"></div><div class="gear-bottom_part"></div><div class="gear-bottom_hole"></div></div></div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/avatar.webp" onerror="onerror=null;src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="avatar"/ crossorigin></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">40</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">21</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://saiodgm.gq/"><i class="fa-fw iconfont icon-shouye"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw iconfont icon-shouji"></i><span> 博客</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-shangpin"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw iconfont icon-rili"></i><span> 文章列表</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw iconfont icon-biaoqian"></i><span> 全部标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw iconfont icon-fenlei"></i><span> 全部分类</span></a></li><li><a class="site-page child" href="/random/"><i class="fa-fw iconfont icon-lvhang"></i><span> 随便看看</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-xihuan"></i><span> 导航</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw iconfont icon-liwu"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw iconfont icon-wode"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/update/"><i class="fa-fw iconfont icon-renwu"></i><span> 更新日志</span></a></li><li><a class="site-page child" href="/barrage/"><i class="fa-fw iconfont icon-xinxi"></i><span> 留言信箱</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-pisa"></i><span> 娱乐</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/bber/"><i class="fa-fw iconfont icon-xiaoxi"></i><span> 说说</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw iconfont icon-tupian"></i><span> 照片</span></a></li><li><a class="site-page child" href="/bangumis/"><i class="fa-fw iconfont icon-yingshi"></i><span> 追番</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-fenxiang"></i><span> 网站</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://stats.uptimerobot.com/xB56lILy8w"><i class="fa-fw iconfont icon-shezhi2"></i><span> 状态监控</span></a></li><li><a class="site-page child" target="_blank" rel="noopener" href="https://admin.saiodgm.gq/"><i class="fa-fw iconfont icon-shezhi"></i><span> 后台管理</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://travellings.link"><i class="fa-fw iconfont icon-jiasu"></i><span> 开往</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover8.webp')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Saiodgm の 博客儿</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://saiodgm.gq/"><i class="fa-fw iconfont icon-shouye"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw iconfont icon-shouji"></i><span> 博客</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-shangpin"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw iconfont icon-rili"></i><span> 文章列表</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw iconfont icon-biaoqian"></i><span> 全部标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw iconfont icon-fenlei"></i><span> 全部分类</span></a></li><li><a class="site-page child" href="/random/"><i class="fa-fw iconfont icon-lvhang"></i><span> 随便看看</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-xihuan"></i><span> 导航</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw iconfont icon-liwu"></i><span> 友情链接</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw iconfont icon-wode"></i><span> 关于本站</span></a></li><li><a class="site-page child" href="/update/"><i class="fa-fw iconfont icon-renwu"></i><span> 更新日志</span></a></li><li><a class="site-page child" href="/barrage/"><i class="fa-fw iconfont icon-xinxi"></i><span> 留言信箱</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-pisa"></i><span> 娱乐</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/bber/"><i class="fa-fw iconfont icon-xiaoxi"></i><span> 说说</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw iconfont icon-tupian"></i><span> 照片</span></a></li><li><a class="site-page child" href="/bangumis/"><i class="fa-fw iconfont icon-yingshi"></i><span> 追番</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw iconfont icon-fenxiang"></i><span> 网站</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://stats.uptimerobot.com/xB56lILy8w"><i class="fa-fw iconfont icon-shezhi2"></i><span> 状态监控</span></a></li><li><a class="site-page child" target="_blank" rel="noopener" href="https://admin.saiodgm.gq/"><i class="fa-fw iconfont icon-shezhi"></i><span> 后台管理</span></a></li></ul></div><div class="menus_item"><a class="site-page" target="_blank" rel="noopener" href="https://travellings.link"><i class="fa-fw iconfont icon-jiasu"></i><span> 开往</span></a></div></div></div><div id="nav-right"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div id="darkmode_navswitch"><a class="nav-rightbutton site-page darkmode_switchbutton" onclick="switchNightMode()" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></a></div><div id="change_bg"><a class="site-page" href="/changebg/"><i class="fas fa-palette fa-fw"></i></a></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div class="coverdiv" id="coverdiv"><img class="cover entered loading" id="post-cover" alt="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover8.webp" crossorigin></div><div id="post-info"><h1 class="post-title">状压 DP 总结 &amp; 练习简要题解<a class="post-edit-link" href="https://admin.saiodgm.gq/edit.html?file=_posts/「Algorithm」状态压缩DP.md" title="编辑" target="_blank"><i class="fas fa-pencil-alt"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-01-26T23:00:54.000Z" title="发表于 2022-01-26 23:00:54">2022-01-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-02-01T10:18:50.000Z" title="更新于 2022-02-01 10:18:50">2022-02-01</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">7.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>31分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="状压 DP 总结 &amp; 练习简要题解"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>状压 DP 就是状态压缩 DP，表现为把某一些状态（比如说某个元素是否被取过）压缩成二进制（当然也有别的进制），用这个进制下某个数的表示来表示一个状态，然后把这个状态作为 $dp$ 数组的一维来状态转移。</p>
+<p>比如说有 $5$ 个元素，$1,2,4$ 已经被取过，$3,5$ 还没有。可以用如下二进制数来表示：</p>
+<script type="math/tex; mode=display">
+(11010)_2=(26)_{10}</script><p>那么 $dp$ 数组就可以开一维来记录状态，当这一维的下标为 $26$ 时，就代表这个状态。<del>所以状压题的数据范围非常的明显，当然，这种数据范围也不排除暴搜的可能性。</del></p>
+<p><del>对，总结就这么点。</del> 其实做状压 DP 就是不停地做题。</p>
+<hr>
+<h2 id="练习题目记录（怎么错的）"><a href="#练习题目记录（怎么错的）" class="headerlink" title="练习题目记录（怎么错的）"></a>练习题目记录（怎么错的）</h2><p>因为蒟蒻 ljt 做状压每一道都要调很久很久，所以 ta 决定把这些玩意儿记录下来。</p>
+<p>当然这个东西是写给自己看的，所以写得比较混乱，如果您需要且看不懂的话可以问我 qwq。<del>当然肯定是没人需要的。</del></p>
+<p>A. 牧场的安排</p>
+<ul>
+<li>$\text{82pts}$ 初始化了第一行，结果没考虑到数据只有一行的情况。</li>
+</ul>
+<p>B. 最小总代价</p>
+<ul>
+<li>$\text{0pts}$ 题意理解错了又没看样例。</li>
+<li>$\text{95pts}$ <code>(1 &lt;&lt; N) - 1</code> 误打成了 <code>(1 &lt;&lt; N + 1) - 1</code>（忘改过来了）。</li>
+</ul>
+<p>C. 项链</p>
+<ul>
+<li>$\text{0pts}$  四重循环被老爷机制裁了。</li>
+<li>$\text{10pts}$ 比较玄学，把范围改成 $0\sim n-1$ 就过了。</li>
+</ul>
+<p>D. 国王</p>
+<ul>
+<li>$\text{0pts}$ <code>num(y)</code> 误打成了 <code>num(x)</code>（记得分清楚每个变量的意义！）。</li>
+</ul>
+<p>E. Hie with the Pie</p>
+<ul>
+<li>$\text{0pts}$ 没有理解做法，Floyd 的用处。</li>
+<li>$\text{15pts}$ 没加多组数据。</li>
+</ul>
+<p>F. Traveling</p>
+<ul>
+<li>$\text{0pts}$ 锅太多了，主要有以下几个：<ul>
+<li>预处理错误，没有真正弄明白预处理数组的意义。</li>
+<li>循环顺序错误，枚举状态应该写在在最外面。</li>
+<li>你没事加什么并查集啊！</li>
+<li>数组两维大小不一样，开反了。</li>
+</ul>
+</li>
+</ul>
+<p>H. 炮兵阵地</p>
+<ul>
+<li>$\text{0pts}$ 运算符优先级的问题，众所周知 <code>+</code> 优先级比三目运算符高。 /yiw</li>
+<li>$\text{40pts}$ 数组开小了。</li>
+</ul>
+<p>O. 集合选数</p>
+<ul>
+<li>$\text{0pts}$ 把加法原理和乘法原理弄混。</li>
+<li>$\text{30pts}$ 构造矩阵的问题，$o$ 只需要乘一遍就可以了，我多乘了一遍，没有去重。</li>
+<li>$\text{60pts}$ <code>memset</code> 速度过慢。</li>
+<li>$\text{90pts}$ 打表出奇迹！</li>
+</ul>
+<hr>
+<h2 id="简要题解"><a href="#简要题解" class="headerlink" title="简要题解"></a>简要题解</h2><h3 id="A-牧场的安排"><a href="#A-牧场的安排" class="headerlink" title="A. 牧场的安排"></a>A. 牧场的安排</h3><blockquote>
+<p>题意：有一个 $N\times M$ 的矩阵，有些格子里面可以种草，但是不能有相邻的格子同时种草（相邻指上下左右）。给出一个矩阵 $a$，$a_{i,j}=1/0$ 代表 $i$ 行 $j$ 列的格子可以/不可以种草。求种草的方案总数，答案需要 $\bmod\ 10^8$。$1\le N,M\le 12$。</p>
+</blockquote>
+<p>$dp_{i,j}$ 代表前 $i$ 行，最后一行状态为 $j$ 时的方案数量。其中 $j$ 是一个二进制数，<strong>从高位到低位</strong>编号为 $1,2,3,\ldots$ 分别代表第 $1,2,3,\ldots$ 块地种不种草，$1$ 代表种了，$0$ 代表没种。</p>
+<p>然后每枚举到某一行的某个状态时，在这个状态下，我们需要知道三件事：</p>
+<ol>
+<li>这一行的状态有相邻的格子种草吗？</li>
+<li>这一行和上一行有相邻的格子种草吗？</li>
+<li>这一行是否有一些格子本来不能种草却被种上了？</li>
+</ol>
+<p>只有这三个问题的回答都是“不”，这个状态才是合法的。</p>
+<p>要知道这三个问题的答案，我们还需要知道上一行的状态（回答第二个问题和状态转移）。所以可以再打一层循环枚举上一层的状态。那如何判断这三个问题呢？使用位运算就可以了。</p>
+<p>首先看第一个，要判断一个二进制数当中是否有相邻的 $1$。我们知道按位与可以找到两个数同一个位置上同时存在的 $1$，那我们换个思考方向，如果把这个数本身左移或者右移一位呢？此时这两个数要是再按位与之后结果还是不为 $0$，那么就说明这两个数至少有一个地方有同一个位置上同时存在 $1$。而因为其中一个数是由另一个数左移/右移过来的，也就是说明至少有一个位置上的 $1$ 左边/右边有一个相邻的 $1$，也就是说有两个 $1$ 相邻，则不符合条件。</p>
+<p>举个例子：<code>100101100101</code></p>
+<p>左移一位后按位与：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> 100101100101</span><br><span class="line">100101100101</span><br><span class="line">--------------</span><br><span class="line">0000001000000</span><br></pre></td></tr></table></figure>
+<p>可以看到结果不为 $0$，则说明这个状态是不合法的。实际上，确实有两个 $1$ 连在一起了。</p>
+<p>再来看第二个。要判断两个数是否有同一个位置上同时存在 $1$，这个很简单，甚至不需要任何处理，直接把两个数按位与一下即可，要是结果不为 $0$ 则代表状态不合法。</p>
+<p>最后看第三个。其实我们检查的是<strong>一个二进制数的 $\textbf{1}$ 的集合是否完全包含另一个二进制数的 $\textbf{1}$ 的集合</strong>（这里的“集合”是指 $1$ 的位置的集合）。那么我们可以把两个数按位或，再检查按位或之后的结果是否等于集合范围更大的那个数。如果不相等，则代表大集合不能完全包含小集合，不合法。（思考一下，为什么？）</p>
+<p>确定好了三个条件之后，我们终于可以愉快地转移状态了。</p>
+<script type="math/tex; mode=display">
+dp_{i,j}=\sum\limits_{k=0}^{2^n-1}dp_{i-1,k}</script><p>（当然计算和的时候要满足三个条件了才能加。）</p>
+<p>初始化 $dp_{0,0}=1$。<del>个人觉得状压 DP 的初始化是个很玄学的东西。</del></p>
+<p>时间复杂度 $\Theta(n2^n)$。</p>
+<p>Code：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> rep(i, j, k) for(int i = j; i &lt;= k; ++i)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> dep(i, j, k) for(int i = j; i &gt;= k; --i)</span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">5101</span>, mod = (<span class="type">int</span>)<span class="number">1e8</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> n, m, N, x, ans, num[<span class="number">15</span>], dp[<span class="number">15</span>][maxn];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d&quot;</span>, &amp;n, &amp;m);</span><br><span class="line">    N = (<span class="number">1</span> &lt;&lt; m) - <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, n) &#123;</span><br><span class="line">        <span class="built_in">rep</span>(j, <span class="number">1</span>, m) &#123;</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;x);</span><br><span class="line">            num[i] = (num[i] &lt;&lt; <span class="number">1</span>) + x; <span class="comment">// 把给出的矩阵转换成 n 个二进制数方便判断</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    dp[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">1</span>; <span class="comment">// 初始化</span></span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, n) &#123; <span class="comment">// 第 i 行</span></span><br><span class="line">        <span class="built_in">rep</span>(j, <span class="number">0</span>, N) &#123; <span class="comment">// 第 i 行的状态</span></span><br><span class="line">            <span class="keyword">if</span>(j &amp; (j &lt;&lt; <span class="number">1</span>) || (j | num[i]) ^ num[i]) <span class="comment">// 这里想写成 != 也可以，想写成异或也行，看大家的习惯咯</span></span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            <span class="built_in">rep</span>(k, <span class="number">0</span>, N) &#123; <span class="comment">// 第 i-1 行的状态</span></span><br><span class="line">                <span class="keyword">if</span>(!(k &amp; j))</span><br><span class="line">                    dp[i][j] = (dp[i][j] + dp[i - <span class="number">1</span>][k]) % mod; <span class="comment">// 状态转移</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(i == n)</span><br><span class="line">                ans = (ans + dp[i][j]) % mod; <span class="comment">// 计算答案，也可以拎出来单独写循环</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, ans);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="B-最小总代价"><a href="#B-最小总代价" class="headerlink" title="B. 最小总代价"></a>B. 最小总代价</h3><blockquote>
+<p>题意：$n$ 个人传物品，从任意一个人开始，每个人只能接一次物品。每两个人之间传物品都要付出一定的代价，求把物品传给所有的人的最小代价和。$2\le n\le 16$。</p>
+</blockquote>
+<p>PS. 这道题我写的是 $\Theta(n^22^n)$，但其实有更优的 $\Theta(n2^n)$ 算法。不过没关系，因为状压的解题思路都差不多，那种思路我会在后面介绍，所以也可以看一看我当初的想法。</p>
+<p>$dp_{i,j,k}$ 表示目前传到的人数的个数为 $i$，状态为 $j$（从<strong>低位往高位数</strong>第 $i$ 位代表第 $i$ 个人是否已经被传到），且东西是第 $k$ 个人给出的（给谁了不知道）时的最小代价和。<del>所以很明显这个 $i$ 是不需要的 qwq。</del></p>
+<blockquote>
+<p>这里注意一下，上一道题是从高位到低位，这道题是从低位到高位，这是题目给法不一样造成的结果。上一道题题目是直接给出了我们需要使用的矩阵，那么从左往右遍历比较方便，而这道题我们需要知道在传递之前到传递之后状态的变化（而不是通过枚举得到两个状态，详情见后文），所以左移多少位肯定是从低位往高位写比较舒服。不管怎么样，我们写代码都是为了思考方便、写起来方便而定义的，当然如果两样都需要，我们就要考虑考虑如何处理这个冲突了。</p>
+</blockquote>
+<p>在转移的时候，还需要加一层循环，枚举是谁收到了 $k$ 给的物品，这样才可以确定加上的代价。</p>
+<p>至于转移过程中还有一些剪枝或者判断，只有合法的情况才能继续下一层循环。这个过程可以看代码。</p>
+<p>转移状态：</p>
+<script type="math/tex; mode=display">
+dp_{i,j|2^{k-1},k}=\min\limits_{l=1}^{n}\{dp_{i-1,j,l}+a_{k,l}\}</script><p>初始化 $dp$ 极大值，$dp_{1,0\sim 2^n-1,1\sim n}=0$。</p>
+<p>Code：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> rep(i, j, k) for(int i = j; i &lt;= k; ++i)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> dep(i, j, k) for(int i = j; i &gt;= k; --i)</span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = (<span class="number">1</span> &lt;&lt; <span class="number">16</span>) + <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">min</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> </span>&#123; <span class="keyword">return</span> x &lt; y ? x : y; &#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> n, N, ans = <span class="number">1</span> &lt;&lt; <span class="number">30</span>, a[<span class="number">20</span>][<span class="number">20</span>], dp[<span class="number">20</span>][maxn][<span class="number">20</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">num</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123; <span class="comment">// 这个函数用来统计一个数的二进制中有多少个 1</span></span><br><span class="line">    <span class="type">int</span> s = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(x) &#123;</span><br><span class="line">        s += (x &amp; <span class="number">1</span>);</span><br><span class="line">        x &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">memset</span>(dp, <span class="number">0x3f</span>, <span class="built_in">sizeof</span>(dp));</span><br><span class="line">    <span class="built_in">memset</span>(dp[<span class="number">1</span>], <span class="number">0</span>, <span class="built_in">sizeof</span>(dp[<span class="number">1</span>]));</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n);</span><br><span class="line">    N = (<span class="number">1</span> &lt;&lt; n) - <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, n)</span><br><span class="line">        <span class="built_in">rep</span>(j, <span class="number">1</span>, n)</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;a[i][j]);</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">2</span>, n) &#123; <span class="comment">// 收到的是第几个人 </span></span><br><span class="line">        <span class="built_in">rep</span>(f, <span class="number">1</span>, n) &#123; <span class="comment">// 从谁那里传过来的 </span></span><br><span class="line">            <span class="built_in">rep</span>(j, <span class="number">0</span>, N) &#123; <span class="comment">// 上一个状态 </span></span><br><span class="line">                <span class="keyword">if</span>(!(j &amp; (<span class="number">1</span> &lt;&lt; f - <span class="number">1</span>)) || <span class="built_in">num</span>(j) != i - <span class="number">1</span>) <span class="comment">// 判断此状态是否和 i、k 贴合</span></span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                <span class="built_in">rep</span>(k, <span class="number">1</span>, n) &#123; <span class="comment">// 谁收到了 </span></span><br><span class="line">                    <span class="keyword">if</span>(!(j &amp; (<span class="number">1</span> &lt;&lt; k - <span class="number">1</span>)) &amp;&amp; f != k)</span><br><span class="line">                        dp[i][j | (<span class="number">1</span> &lt;&lt; k - <span class="number">1</span>)][k] = <span class="built_in">min</span>(dp[i][j | (<span class="number">1</span> &lt;&lt; k - <span class="number">1</span>)][k], dp[i - <span class="number">1</span>][j][f] + a[f][k]);</span><br><span class="line">                    <span class="keyword">if</span>(i == n)</span><br><span class="line">                        ans = <span class="built_in">min</span>(ans, dp[i][j | (<span class="number">1</span> &lt;&lt; k - <span class="number">1</span>)][k]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, ans);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="C-项链"><a href="#C-项链" class="headerlink" title="C. 项链"></a>C. 项链</h3><blockquote>
+<p>题意：有 $n$ 个贝壳和 $m$ 组贝壳能连接的关系，每一组关系形如 $a_i,b_i$ 代表第 $a_i$ 和第 $b_i$ 个贝壳可以连接。项链是首尾相接的，而且要求用上所有的贝壳。求组成项链的方案数量。多组数据，$1\le T\le 5$，$1\le n\le 18$。</p>
+</blockquote>
+<p>这道题打 $\Theta(n^22^n)$ 会 T + M 到飞起，所以还是老老实实打 $\Theta(n2^n)$ 吧。</p>
+<p>因为项链是环状，所以哪一个贝壳在第一个都无所谓。既然如此，我们不妨让第一个贝壳为首，只要最后一个贝壳可以和它相连就可以了。这样我们就把环搞成了链。</p>
+<p>接着，$dp_{i,j}$ 表示目前的最后一个贝壳是第 $i$ 个，状态为 $j$（这次还是从低到高）时的方案总数量。状态转移时枚举上一个贝壳是哪一个，如果两个贝壳可以连接就加上。<del>都是套路。</del></p>
+<script type="math/tex; mode=display">
+dp_{i,j}=\sum\limits_{k=1}^n dp_{k,j-2^i}</script><p>初始化 $dp_{0,0}=1$。</p>
+<p>记得要开 <code>long long</code>。</p>
+<p>Code：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> ll long long</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> rep(i, j, k) for(int i = j; i &lt;= k; ++i)</span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = (<span class="number">1</span> &lt;&lt; <span class="number">18</span>) + <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> n, m, u, v;</span><br><span class="line">ll dp[<span class="number">20</span>][maxn];</span><br><span class="line"><span class="type">bool</span> b[<span class="number">20</span>][<span class="number">20</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="built_in">scanf</span>(<span class="string">&quot;%d %d&quot;</span>, &amp;n, &amp;m) != EOF) &#123;</span><br><span class="line">        <span class="built_in">memset</span>(dp, <span class="number">0</span>, <span class="keyword">sizeof</span> dp);</span><br><span class="line">        <span class="built_in">memset</span>(b, <span class="number">0</span>, <span class="keyword">sizeof</span> b);</span><br><span class="line">        <span class="type">int</span> N = (<span class="number">1</span> &lt;&lt; n) - <span class="number">1</span>;</span><br><span class="line">        <span class="built_in">rep</span>(i, <span class="number">1</span>, m) &#123;</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%d %d&quot;</span>, &amp;u, &amp;v);</span><br><span class="line">            --u, --v;</span><br><span class="line">            b[u][v] = b[v][u] = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        dp[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="built_in">rep</span>(i, <span class="number">0</span>, n - <span class="number">1</span>)</span><br><span class="line">            b[i][i] = <span class="number">1</span>;</span><br><span class="line">        <span class="built_in">rep</span>(j, <span class="number">0</span>, N) &#123;</span><br><span class="line">            <span class="built_in">rep</span>(i, <span class="number">0</span>, n - <span class="number">1</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span>(!(j &amp; (<span class="number">1</span> &lt;&lt; i)))</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                <span class="built_in">rep</span>(k, <span class="number">0</span>, n - <span class="number">1</span>) &#123;</span><br><span class="line">                    <span class="keyword">if</span>(j &amp; (<span class="number">1</span> &lt;&lt; k) &amp;&amp; b[i][k])</span><br><span class="line">                        dp[i][j] += dp[k][j - (<span class="number">1</span> &lt;&lt; i)];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        ll ans = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">rep</span>(i, <span class="number">0</span>, n - <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span>(b[i][<span class="number">0</span>])</span><br><span class="line">                ans += dp[i][N];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%lld\n&quot;</span>, ans);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>PS. 话说，你们有没有发现其实状压从 $0$ 开始貌似更好操作一些，因为二进制的最低为代表的是 $2^0$ 而不是 $2^1$ 嘛。比如这道题，我之前是从 $1$ 开始的死活过不了，结果改成从 $0$ 开始就神奇地过了 <del>（XSC062：说啥呢，还不是老子给你改的）</del>，只可惜我从 $1$ 开始写习惯了，所以一般来说只要能过我都还是从 $1$ 开始……</p>
+<hr>
+<h3 id="D-国王"><a href="#D-国王" class="headerlink" title="D. 国王"></a>D. 国王</h3><p><del>其实就是互不侵犯，鬼知道为啥要改名。</del></p>
+<blockquote>
+<p>题意：在 $n\times n$ 的棋盘上放 $k$ 个国王，国王可攻击相邻的 $8$ 个格子，求使它们无法互相攻击的方案总数。</p>
+</blockquote>
+<p>这道题因为规定了个数为 $k$ 个，所以除了状压需要的第 $i$ 行和状态为 $j$ 之外（这次 $j$ 从高到低和从低到高没有影响，可以自己想一想为什么 qwq），还需要一维确定目前已经有的个数。</p>
+<p>$dp_{i,j,k}$ 代表前 $i$ 行，第 $i$ 行状态为 $j$，已经放了 $k$ 个国王时的方案总数量。</p>
+<p>判断是否相邻方法和 A 题类似，都是用位运算。这道题多了四个角落的格子，其实很好解决，只需要把上一行左移一位按位与，右移一位按位与，看结果是不是 $0$ 即可（原理也在 A 当中说了）。</p>
+<p>状态转移：</p>
+<script type="math/tex; mode=display">
+dp_{i,j,k}=\sum\limits_{l=0}^{2^n-1}dp_{i-1,l,k-\text{numone}(l)}</script><p>（$\text{numone}$ 指一个二进制数中 $1$ 的个数，所以 $numone$ 可以预处理或者是打一个函数。）</p>
+<p>Code：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cctype&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> ll long long</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> rep(i, j, k) for(int i = j; i &lt;= k; ++i)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> dep(i, j, k) for(int i = j; i &gt;= k; --i)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> IO &#123;</span><br><span class="line">    <span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">read</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> x = <span class="number">0</span>, w = <span class="number">0</span>;</span><br><span class="line">        <span class="type">char</span> ch = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(!<span class="built_in">isdigit</span>(ch)) &#123;</span><br><span class="line">            w |= ch == <span class="string">&#x27;-&#x27;</span>;</span><br><span class="line">            ch = <span class="built_in">getchar</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span>(<span class="built_in">isdigit</span>(ch)) &#123;</span><br><span class="line">        	x = (x &lt;&lt; <span class="number">3</span>) + (x &lt;&lt; <span class="number">1</span>) + (ch ^ <span class="number">48</span>);</span><br><span class="line">            ch = <span class="built_in">getchar</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> w ? -x : x;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">write</span><span class="params">(ll x)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(x &lt; <span class="number">0</span>) <span class="built_in">putchar</span>(<span class="string">&#x27;-&#x27;</span>), x = -x;</span><br><span class="line">        <span class="keyword">if</span>(x &gt; <span class="number">9</span>) <span class="built_in">write</span>(x / <span class="number">10</span>);</span><br><span class="line">        <span class="built_in">putchar</span>(x % <span class="number">10</span> + <span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> IO;</span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">1050</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> n, k;</span><br><span class="line">ll ans, dp[<span class="number">15</span>][<span class="number">105</span>][maxn];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">num</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> s = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(x) &#123;</span><br><span class="line">        s += x &amp; <span class="number">1</span>; <span class="comment">// 末位是不是 1</span></span><br><span class="line">        x &gt;&gt;= <span class="number">1</span>; <span class="comment">// 右移一位，把判断过的末位扔掉</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    n = <span class="built_in">read</span>(), k = <span class="built_in">read</span>();</span><br><span class="line">    <span class="keyword">if</span>(k &gt; (n * n) &gt;&gt; <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="built_in">putchar</span>(<span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> N = (<span class="number">1</span> &lt;&lt; n) - <span class="number">1</span>;</span><br><span class="line">    dp[<span class="number">0</span>][<span class="number">0</span>][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, n) &#123;</span><br><span class="line">        <span class="built_in">rep</span>(j, <span class="number">0</span>, k) &#123;</span><br><span class="line">            <span class="built_in">rep</span>(x, <span class="number">0</span>, N) &#123;</span><br><span class="line">                <span class="keyword">if</span>(x &amp; (x &lt;&lt; <span class="number">1</span>) || j &lt; <span class="built_in">num</span>(x))</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                <span class="built_in">rep</span>(y, <span class="number">0</span>, N) &#123; <span class="comment">// 枚举上一行的状态</span></span><br><span class="line">                    <span class="keyword">if</span>(j &gt;= <span class="built_in">num</span>(y) &amp;&amp; !(x &amp; y) &amp;&amp; !(y &amp; (y &lt;&lt; <span class="number">1</span>)) &amp;&amp; !(x &amp; (y &lt;&lt; <span class="number">1</span>)) &amp;&amp; !(x &amp; (y &gt;&gt; <span class="number">1</span>))) <span class="comment">// 判断条件</span></span><br><span class="line">                        dp[i][j][y] += dp[i - <span class="number">1</span>][j - <span class="built_in">num</span>(y)][x];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">0</span>, N)</span><br><span class="line">        ans += dp[n][k][i]; <span class="comment">// 统计答案</span></span><br><span class="line">    <span class="built_in">write</span>(ans);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>PS. 有一个点需要大家注意，就是打状压的时候一定要弄清楚每一层循环的变量代表的是啥，状态转移的时候需要注意，尤其是同一种类型的变量！不然打错了很难调出来。</p>
+<hr>
+<h3 id="E-Hie-with-the-Pie"><a href="#E-Hie-with-the-Pie" class="headerlink" title="E. Hie with the Pie"></a>E. Hie with the Pie</h3><blockquote>
+<p>题意：一个有 $n+1$ 个点的有向完全图，结点依次编号为 $0,1,\ldots,n$，给出其邻接矩阵（注意从 $i$ 到 $j$ 的距离不一定等于从 $j$ 到 $i$ 的距离）。请求出从 $0$ 号点出发，走过 $1$ 到 $n$ 号点至少一次，然后再回到 $0$ 号点的最短路。$1\le n\le 10$。</p>
+</blockquote>
+<p>注意到每个点都必须走，于是想到状压。</p>
+<p>$dp_{i,j}$ 表示从 $0$ 出发，到了 $i$ 点，且状态为 $j$ 时的最短路。状态转移时，枚举上一个经过的点为 $k$，此时我们发现状态转移需要知道任意两个点 （$i$ 和 $k$）之间的最短路，所以我们先跑一遍 Floyd 预处理出任意两个点之间的最短路再转移，方程如下：</p>
+<script type="math/tex; mode=display">
+dp_{i,j}=\min\limits_{k=1}^n\{dp_{k,j-2^{i-1}}+f(i,k)\}</script><p>然鹅，这道题难在于细节。</p>
+<p>首先注意循环几层的顺序，外层必须是 $j$，因为 $j$ 的转移是从小到大的转移，而 $i$ 和 $k$ 都是无序的，为了保证 dp 的无后效性必须先枚举 $j$。</p>
+<p><del>某搜索大佬：关我什么事。</del></p>
+<p>其次注意答案的求法，我们不能直接枚举 $\min\{dp_{i,2^n-1}\}$，因为题目要求我们必须返回 $0$ 点，所以还得加上一个 $i$ 返回 $0$ 的最短路，即求 $\min\{dp_{i,2^n-1}+f(0,i)\}$。</p>
+<p>Code：（长得和题解有点不一样，凑合着看吧 qwq）</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> rep(i, j, k) for(int i = j; i &lt;= k; ++i)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> dep(i, j, k) for(int i = j; i &gt;= k; --i)</span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = (<span class="number">1</span> &lt;&lt; <span class="number">11</span>) + <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> n, G[<span class="number">15</span>][<span class="number">15</span>], dp[<span class="number">15</span>][maxn], f[<span class="number">15</span>][<span class="number">15</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">min</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> </span>&#123; <span class="keyword">return</span> x &lt; y ? x : y; &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">Floyd</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, n)</span><br><span class="line">        <span class="built_in">rep</span>(j, <span class="number">1</span>, n)</span><br><span class="line">            f[i][j] = G[i][j];</span><br><span class="line">    <span class="built_in">rep</span>(k, <span class="number">1</span>, n)</span><br><span class="line">        <span class="built_in">rep</span>(i, <span class="number">1</span>, n)</span><br><span class="line">            <span class="built_in">rep</span>(j, <span class="number">1</span>, n)</span><br><span class="line">                f[i][j] = <span class="built_in">min</span>(f[i][j], f[i][k] + f[k][j]);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n) != EOF) &#123;</span><br><span class="line">        <span class="built_in">memset</span>(dp, <span class="number">0x3f</span>, <span class="built_in">sizeof</span>(dp));</span><br><span class="line">        ++n;</span><br><span class="line">        <span class="type">int</span> N = (<span class="number">1</span> &lt;&lt; n) - <span class="number">1</span>;</span><br><span class="line">        <span class="built_in">rep</span>(i, <span class="number">1</span>, n)</span><br><span class="line">            <span class="built_in">rep</span>(j, <span class="number">1</span>, n)</span><br><span class="line">                <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;G[i][j]);</span><br><span class="line">        dp[<span class="number">1</span>][<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">Floyd</span>();</span><br><span class="line">        <span class="built_in">rep</span>(k, <span class="number">0</span>, N) &#123;</span><br><span class="line">            <span class="built_in">rep</span>(i, <span class="number">1</span>, n) &#123;</span><br><span class="line">                <span class="keyword">if</span>(!(k &amp; (<span class="number">1</span> &lt;&lt; i - <span class="number">1</span>)))</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                <span class="built_in">rep</span>(j, <span class="number">1</span>, n) &#123;</span><br><span class="line">                    <span class="keyword">if</span>(i == j || !(k &amp; (<span class="number">1</span> &lt;&lt; j - <span class="number">1</span>)))</span><br><span class="line">                        <span class="keyword">continue</span>;</span><br><span class="line">                    dp[i][k] = <span class="built_in">min</span>(dp[i][k], dp[j][k ^ (<span class="number">1</span> &lt;&lt; i - <span class="number">1</span>)] + f[j][i]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> ans = <span class="number">1</span> &lt;&lt; <span class="number">30</span>;</span><br><span class="line">        <span class="built_in">rep</span>(i, <span class="number">1</span>, n)</span><br><span class="line">            ans = <span class="built_in">min</span>(ans, dp[i][N] + f[i][<span class="number">1</span>]);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, ans);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="F-Traveling"><a href="#F-Traveling" class="headerlink" title="F. Traveling"></a>F. Traveling</h3><blockquote>
+<p>题意：一个人要去 $N$ 个城市旅游，他可以从任意城市开始，城市之间有 $m$ 个道路，每个道路所花费的费用不用，求解出遍历所有城市，且每个城市去过的次数不超过两次的最小花费。$1\le N\le 10$。</p>
+</blockquote>
+<p>肉眼可见这题是个三进制的问题。不同于二进制，三进制没有系统内置的位运算，我们该怎么处理呢？</p>
+<p>我们可以开两个数组进行预处理：$mi3$ 和 $num3$。$mi3_i$ 的值为 $3^i$，$num3_{i,j}$ 代表 $i$ 这个数的三进制的第 $j$ 位是 $0,1$ 还是 $2$。为了方便思考，$num3_i$ 按照高位到低位从左到右排。 比如一个数 $15$，三进制为 $121$，那么 $num3_{15}$ 如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">num3[15]:</span><br><span class="line">下标: 0 1 2 3 4 5 6 7 8 9 10</span><br><span class="line">权值: 0 0 0 0 0 0 0 0 1 2 1</span><br></pre></td></tr></table></figure>
+<p>因为 $N\le 10$，所以这个数最多也就到 $3^{10}-1$，再多开一位，下标范围就是 $0\sim 10$。</p>
+<p>至于使用方法嘛……往下看！</p>
+<p>预处理工作做完后，输入图。为了方便，我们还是以 $0\sim n-1$ 编号城市。</p>
+<p>接下来就是 dp：</p>
+<p>$dp_{i,j}$ 代表到了第 $i$ 个城市之后状态为 $j$ 的最小代价，这里 $j$ 从低位到高位表示的城市编号依次递增。</p>
+<p>接着再套一层循环，枚举上一步是从 $k$ 城市到 $i$ 城市，计算就可以了。emm，注意还是要先跑一遍 Floyd。</p>
+<script type="math/tex; mode=display">
+dp_{i,j}=\min\limits_{k=0}^{n-1}\{dp_{k,j-3^i+f(i,k)}\}</script><p>状态转移方程很简单，相信大家都会，但是有几个细节我错了很久：</p>
+<ol>
+<li>状态转移时几层循环的顺序。注意到状态转移的时候，只有 $j$ 是一直在增加的，$i$ 和 $k$ 都是乱的。所以第一层循环应该是 $j$，其次是 $i$，最后是 $k$。</li>
+<li>因为此处 $j$ 是按照从低位到高位从右到左的顺序排，但是预处理是从高位到低位从左到右，所以可以注意到状态转移时可以直接使用 $3^i$，但是在判断的时候需要特别注意是 $3^{i/k}$ 还是 $3^{10-i/k}$。</li>
+</ol>
+<p>我在调这道题的时候 mjl 叫我写注释，所以我写了一个比较详细的注释，大家可以参考。</p>
+<p><del>感谢 XSC062 救了我一命！不过这个代码我不知道是有 UB 还是什么，使用 <code>C++17(Clang)</code> 可以 AC，而使用 <code>C++14(GCC8)</code> 会 WA $\text{5pts}$，如果有大佬愿意帮我看一下是怎么回事，那也是极好的。</del></p>
+<p>Code：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> ll long long</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> rep(i, j, k) for(int i = j; i &lt;= k; ++i)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> dep(i, j, k) for(int i = j; i &gt;= k; --i)</span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">15</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N3 = <span class="number">6e4</span> + <span class="number">5</span>; <span class="comment">// 3 ^ 10</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> n, m, f[maxn][maxn], dp[maxn][N3];</span><br><span class="line"><span class="type">int</span> mi3[maxn], num3[N3][maxn];</span><br><span class="line"><span class="type">bool</span> b[N3];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">min</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> </span>&#123; <span class="keyword">return</span> x &lt; y ? x : y; &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    mi3[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, <span class="number">10</span>)</span><br><span class="line">        mi3[i] = mi3[i - <span class="number">1</span>] * <span class="number">3</span>;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">0</span>, N3) &#123;</span><br><span class="line">        <span class="type">int</span> x = i, s = <span class="number">10</span>;</span><br><span class="line">        <span class="keyword">while</span>(x) &#123;</span><br><span class="line">            num3[i][s] = x % <span class="number">3</span>;</span><br><span class="line">            x /= <span class="number">3</span>;</span><br><span class="line">            --s;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span>(~<span class="built_in">scanf</span>(<span class="string">&quot;%d %d&quot;</span>, &amp;n, &amp;m)) &#123;</span><br><span class="line">        <span class="built_in">rep</span>(i, <span class="number">0</span>, N3)</span><br><span class="line">            b[i] = <span class="number">1</span>;</span><br><span class="line">        <span class="built_in">rep</span>(i, <span class="number">0</span>, N3) &#123;</span><br><span class="line">            <span class="built_in">rep</span>(j, <span class="number">10</span> - n + <span class="number">1</span>, <span class="number">10</span>)</span><br><span class="line">                b[i] &amp;= num3[i][j] &gt; <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">memset</span>(f, <span class="number">0x3f</span>, <span class="built_in">sizeof</span>(f));</span><br><span class="line">        <span class="built_in">memset</span>(dp, <span class="number">0x3f</span>, <span class="built_in">sizeof</span>(dp));</span><br><span class="line">        <span class="built_in">rep</span>(i, <span class="number">0</span>, n - <span class="number">1</span>)</span><br><span class="line">            dp[i][mi3[i]] = <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> u, v, w;</span><br><span class="line">        <span class="built_in">rep</span>(i, <span class="number">1</span>, m) &#123;</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%d %d %d&quot;</span>, &amp;u, &amp;v, &amp;w);</span><br><span class="line">            --u, --v;</span><br><span class="line">            f[u][v] = f[v][u] = <span class="built_in">min</span>(f[u][v], w);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">rep</span>(j, <span class="number">0</span>, mi3[n] - <span class="number">1</span>) &#123; <span class="comment">// j 表示到了 i 之后的状态，三进制表示下最低位代表 0 城市(3^0)，倒数第二位表示 1 城市(3^1)，i 城市即为 3^i </span></span><br><span class="line">            <span class="built_in">rep</span>(i, <span class="number">0</span>, n - <span class="number">1</span>) &#123; <span class="comment">// 目前到了第 i 个城市</span></span><br><span class="line">                <span class="keyword">if</span>(!num3[j][<span class="number">10</span> - i]) <span class="comment">// 如果 j 表示 i 去过的位数为 0 则说明没去过 i，不合法</span></span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                <span class="comment">// 这里是 10 - i 是因为 num3 数组是从左到右编号递增，但是 j 是从右往左依次递增，所以要转换一下 </span></span><br><span class="line">                <span class="built_in">rep</span>(k, <span class="number">0</span>, n - <span class="number">1</span>) <span class="comment">// 从 k 城市到的 i 城市</span></span><br><span class="line">                    <span class="keyword">if</span>(num3[j][<span class="number">10</span> - k] &gt; <span class="number">0</span>) <span class="comment">// j 当中也必须经过至少一次 k 才合法，10 - k 同理 </span></span><br><span class="line">                        dp[i][j] = <span class="built_in">min</span>(dp[i][j], dp[k][j - mi3[i]] + f[i][k]); <span class="comment">// 状态转移，之前的状态少去了一次 i 所以要减 3^i </span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> ans = <span class="number">1</span> &lt;&lt; <span class="number">30</span>;</span><br><span class="line">        <span class="built_in">rep</span>(j, <span class="number">0</span>, n - <span class="number">1</span>)</span><br><span class="line">            <span class="built_in">rep</span>(i, <span class="number">0</span>, mi3[n] - <span class="number">1</span>)</span><br><span class="line">                <span class="keyword">if</span>(b[i])</span><br><span class="line">                    ans = <span class="built_in">min</span>(ans, dp[j][i]); <span class="comment">// 如果所有城市都去过就统计答案 </span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, ans == <span class="number">0x3f3f3f3f</span> ? <span class="number">-1</span> : ans);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="H-炮兵阵地"><a href="#H-炮兵阵地" class="headerlink" title="H. 炮兵阵地"></a>H. 炮兵阵地</h3><blockquote>
+<p>题意：有 $N\times M$ 的地区，每一个可能是山地（<code>H</code>）或者平原（<code>P</code>），只有平原才能有炮兵。每个炮兵的攻击范围是上下左右两个格子。给出地形图，求炮兵不相互攻击时最多能部署的炮兵数量。$1\le N\le 100,1\le M \le 10$。</p>
+</blockquote>
+<p><del>别问我 G 去哪了，问就是还没做出来。</del></p>
+<p>这题就是一个 A 和 D 的缝合怪，确定一个攻击范围，然后山地上不能有炮兵就像 A 的有些格子不能种草一样。因为上下左右是两格，所以状态转移的时候不仅要枚举上一行的状态，还要枚举上上一行的状态，这么搞不 <code>TLE&amp;MLE</code> 才怪呢。</p>
+<p>怎么解决呢，其实有一个办法，就是我们先把所有满足条件的一行的排列 dfs 出来，<del>通过实验</del>我们发现最多也就只有 $60$ 种符合要求的排列，所以枚举状态的时候每一层最多就 $60$，就不会时间内存双爆炸啦。</p>
+<p>注意一下这里是求最多能放多少个炮兵，所以两层状态的答案是要加起来取 $\max$ 而非乘起来。<del>今天也是把加法原理和乘法原理弄混的一天呢。</del></p>
+<p>其他就没什么好说的了。</p>
+<p>Code：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> ll long long</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> rep(i, j, k) for(int i = j; i &lt;= k; ++i)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> dep(i, j, k) for(int i = j; i &gt;= k; --i)</span></span><br><span class="line"></span><br><span class="line"><span class="type">char</span> a[<span class="number">105</span>][<span class="number">105</span>];</span><br><span class="line"><span class="type">int</span> n, m, N, tot, num[<span class="number">105</span>], qn[<span class="number">65</span>], sum[<span class="number">65</span>], dp[<span class="number">105</span>][<span class="number">65</span>][<span class="number">65</span>];</span><br><span class="line"><span class="type">bool</span> b[<span class="number">105</span>], q[<span class="number">65</span>][<span class="number">105</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">max</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> </span>&#123; <span class="keyword">return</span> x &gt; y ? x : y; &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">dfs</span><span class="params">(<span class="type">int</span> t, <span class="type">int</span> ls)</span> </span>&#123; <span class="comment">// 求满足条件的所有一行的情况，两个炮兵之间至少相隔两个格子，不考虑山地和平原</span></span><br><span class="line">    <span class="keyword">if</span>(t == m + <span class="number">1</span>) &#123;</span><br><span class="line">        ++tot;</span><br><span class="line">        <span class="built_in">rep</span>(i, <span class="number">1</span>, m)</span><br><span class="line">            q[tot][i] = b[i];</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(ls &gt; <span class="number">2</span>) &#123;</span><br><span class="line">        b[t] = <span class="number">1</span>;</span><br><span class="line">        <span class="built_in">dfs</span>(t + <span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line">        b[t] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">dfs</span>(t + <span class="number">1</span>, ls + <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">getnum</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> s = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(x) &#123;</span><br><span class="line">        s += x &amp; <span class="number">1</span>;</span><br><span class="line">        x &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d %d&quot;</span>, &amp;n, &amp;m);</span><br><span class="line">    N = (<span class="number">1</span> &lt;&lt; m) - <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">dfs</span>(<span class="number">1</span>, <span class="number">3</span>);</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, tot)</span><br><span class="line">        <span class="built_in">rep</span>(j, <span class="number">1</span>, m)</span><br><span class="line">            qn[i] = (qn[i] &lt;&lt; <span class="number">1</span>) + q[i][j];</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, tot)</span><br><span class="line">        sum[i] = <span class="built_in">getnum</span>(qn[i]);</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, n) &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">        <span class="built_in">rep</span>(j, <span class="number">1</span>, m)</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%c&quot;</span>, &amp;a[i][j]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, n)</span><br><span class="line">        <span class="built_in">rep</span>(j, <span class="number">1</span>, m)	</span><br><span class="line">            num[i] = (num[i] &lt;&lt; <span class="number">1</span>) + (a[i][j] == <span class="string">&#x27;H&#x27;</span> ? <span class="number">0</span> : <span class="number">1</span>);</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, n) &#123;</span><br><span class="line">        <span class="built_in">rep</span>(j, <span class="number">1</span>, tot) &#123;</span><br><span class="line">            <span class="keyword">if</span>((qn[j] | num[i]) ^ num[i]) <span class="comment">// 山地上不能有炮兵，此处判断和 A 题相似</span></span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            <span class="built_in">rep</span>(k, <span class="number">1</span>, tot) &#123;</span><br><span class="line">                <span class="keyword">if</span>(qn[k] &amp; qn[j])</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                <span class="built_in">rep</span>(l, <span class="number">1</span>, tot)</span><br><span class="line">                    <span class="keyword">if</span>(!(qn[l] &amp; qn[j]))</span><br><span class="line">                        dp[i][j][k] = <span class="built_in">max</span>(dp[i][j][k], dp[i - <span class="number">1</span>][k][l] + sum[j]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> ans = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, tot)</span><br><span class="line">        <span class="built_in">rep</span>(j, <span class="number">1</span>, tot)</span><br><span class="line">            ans = <span class="built_in">max</span>(ans, dp[n][i][j]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, ans);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="O-集合选数"><a href="#O-集合选数" class="headerlink" title="O. 集合选数"></a>O. 集合选数</h3><blockquote>
+<p>题意：有一种集合，若 $x$ 在集合中，则 $2x$ 和 $3x$ 都不能在集合中。对于任意一个正整数 $n$，求出 ${1, 2,\ldots, n}$ 这个集合的满足上述约束条件的子集的个数，结果对 $10^9+1$ 取模。$1\le n\le 10^5$。</p>
+</blockquote>
+<p><del>这思路，老师不讲真的可以想到吗！</del></p>
+<p>这题乍一看没什么头绪，咱要不先列个表：</p>
+<script type="math/tex; mode=display">
+\begin{matrix}
+1 & 2 & 4 & 8 &\cdots\\ 
+3 & 6 & 12 & 24 &\cdots\\
+9 & 18 & 36 & 72 &\cdots \\
+\cdots
+\end{matrix}</script><p>观察一下，思考一下：当选 $1$ 的时候，$2,3$ 不能选；选 $2$ 的时候，$1,4,6$ 不能选；选 $6$ 的时候，$2,3,12,18$ 不能选……</p>
+<p>有没有发现什么？</p>
+<p>这不就是在这个矩阵中不能取相邻的数吗！</p>
+<p>那我们就构造一个这样的矩阵，左上角数字为 $1$，最上面一行为 $2$ 的幂次，最左边一行为 $3$ 的幂次，剩下的数就由那一个位置上对应的 $2$ 的幂次和 $3$ 的幂次相乘，然后按照 A 题的求法求是不是就可以了？</p>
+<p>想到这一层，我们就已经成功了一半。接下来的一半，还得看几个细节：</p>
+<p>一、有些数，比如 $5$，貌似不在这个矩阵里面。</p>
+<p>这个东西解决办法也不难，如果找到有数字不在之前列到过的矩阵里面，我们只需要以这个数为左上角，然后再构造矩阵：</p>
+<script type="math/tex; mode=display">
+\begin{matrix}
+5(1\times 5) & 10(2\times 5) & 20(4\times 5) & 40(8\times 5) &\cdots\\ 
+15(3\times 5) & 30(6\times 5) & 60(12\times 5) & 120(24\times 5) &\cdots\\
+45(9\times 5) & 90(18\times 5) & 180(36\times 5) & 360(72\times 5) &\cdots \\
+\cdots
+\end{matrix}</script><p>没错，我们只需要在刚才那个矩阵的基础上，把每个数都乘以左上角那个数，就可以了！</p>
+<p>用一个 <code>bool</code> 数组存一下每个数字是否已经存在，在构造矩阵的过程中，遇到一个数就把它标记为已经出现过。求解答案时依次枚举 $1\sim n$，如果发现有数没有枚举到，就以这个数为左上角构造矩阵再求解。</p>
+<p>由于各个矩阵之间没有什么关系，所以方案的选择是任意的，即每个矩阵得出的答案相乘。</p>
+<p>另外，需要注意一下，如果你和我一样是按照先构造第一行和第一列，再相乘构造整个矩阵的话，记得两数相乘时需要除以左上角那个数，因为相乘的时候两边系数都算了一次，需要去重。</p>
+<p>二、矩阵的大小？</p>
+<p>构造第一行和第一列的时候，肯定是到 $n$ 就结束了。但是相乘的时候，仍然会有数大小超过 $n$，那么这些超过 $n$ 就不能选，类似于 A 里面有些格子里不能种草，这个用一个 <code>bool</code> 数组标记即可。</p>
+<p>因为 $n$ 最多为 $10^5$，$\log_2(10^5)\approx 17,\log_3\approx 12$，所以矩阵的大小不会超过 $17\times 12$，数组没有必要开太大。</p>
+<p>另外，因为 $dp$ 数组等大小比较大，大家一定要注意不能用 <code>memset</code>，直接需要清空多少就清空多少，不然会 T 飞。<del>当然，如果您是 $90$ 分的话，打表也是一个不错的选择。</del></p>
+<p>Code：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> ll long long</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> rep(i, j, k) for(int i = j; i &lt;= k; ++i)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> dep(i, j, k) for(int i = j; i &gt;= k; --i)</span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = (<span class="number">1</span> &lt;&lt; <span class="number">17</span>) + <span class="number">5</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">100000</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> mod = <span class="number">1000000001</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> n, x2[<span class="number">20</span>], x3[<span class="number">20</span>], _x2, _x3, __x2, __x3, num[<span class="number">20</span>], dp[<span class="number">20</span>][maxn];</span><br><span class="line">ll a[<span class="number">20</span>][<span class="number">20</span>];</span><br><span class="line"><span class="type">bool</span> b[<span class="number">20</span>][<span class="number">20</span>], gz[maxn];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">void</span> <span class="title">Make</span><span class="params">(<span class="type">int</span> o)</span> </span>&#123; <span class="comment">// 构造矩阵，一个横杠是矩阵的长宽，两个横杠是权值</span></span><br><span class="line">    _x2 = <span class="number">0</span>, _x3 = <span class="number">0</span>, __x2 = o, __x3 = o;</span><br><span class="line">    <span class="keyword">while</span>(__x2 &lt;= n)</span><br><span class="line">        x2[++_x2] = __x2, __x2 &lt;&lt;= <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(__x3 &lt;= n)</span><br><span class="line">        x3[++_x3] = __x3, __x3 = (__x3 &lt;&lt; <span class="number">1</span>) + __x3;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, _x2)</span><br><span class="line">        a[<span class="number">1</span>][i] = x2[i], gz[x2[i]] = <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, _x3)</span><br><span class="line">        a[i][<span class="number">1</span>] = x3[i], gz[x3[i]] = <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">2</span>, _x3)</span><br><span class="line">        <span class="built_in">rep</span>(j, <span class="number">2</span>, _x2)</span><br><span class="line">            a[i][j] = a[<span class="number">1</span>][j] * a[i][<span class="number">1</span>] / o;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, _x3)</span><br><span class="line">        <span class="built_in">rep</span>(j, <span class="number">1</span>, _x2) &#123;</span><br><span class="line">            b[i][j] = (a[i][j] &lt;= n);</span><br><span class="line">            <span class="keyword">if</span>(b[i][j])</span><br><span class="line">                gz[a[i][j]] = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">Solve</span><span class="params">()</span> </span>&#123;</span><br><span class="line"><span class="comment">//    memset(dp, 0, sizeof(dp));</span></span><br><span class="line"><span class="comment">//    memset(num, 0, sizeof(num));</span></span><br><span class="line">    <span class="type">int</span> ans = <span class="number">0</span>, q = (<span class="number">1</span> &lt;&lt; _x2) - <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, _x3)</span><br><span class="line">        <span class="built_in">rep</span>(j, <span class="number">0</span>, q)</span><br><span class="line">            dp[i][j] = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, _x3)</span><br><span class="line">        num[i] = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, _x3)</span><br><span class="line">        <span class="built_in">rep</span>(j, <span class="number">1</span>, _x2)</span><br><span class="line">            num[i] = (num[i] &lt;&lt; <span class="number">1</span>) + b[i][j];</span><br><span class="line">    dp[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, _x3) &#123;</span><br><span class="line">        <span class="built_in">rep</span>(j, <span class="number">0</span>, q) &#123;</span><br><span class="line">            <span class="keyword">if</span>(j &amp; (j &lt;&lt; <span class="number">1</span>) || (j | num[i]) ^ num[i])</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            <span class="built_in">rep</span>(k, <span class="number">0</span>, q) &#123;</span><br><span class="line">                <span class="keyword">if</span>(!(k &amp; j))</span><br><span class="line">                    dp[i][j] = (dp[i][j] + dp[i - <span class="number">1</span>][k]) % mod;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">0</span>, q)</span><br><span class="line">        ans = (ans + dp[_x3][i]) % mod;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n);</span><br><span class="line">    <span class="keyword">if</span>(n == <span class="number">100000</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;964986022&quot;</span>); <span class="comment">// 打表出奇迹</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    ll s = <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">rep</span>(i, <span class="number">1</span>, n) &#123;</span><br><span class="line">        <span class="keyword">if</span>(gz[i])</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        <span class="built_in">Make</span>(i);</span><br><span class="line">        s = (s * <span class="built_in">Solve</span>()) % mod;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lld&quot;</span>, s);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__title"><span class="post-copyright-info"><h>状压 DP 总结 &amp; 练习简要题解</h></span></div><div class="post-copyright__type"><span class="post-copyright-info"><a href="https://oi.saiodgm.gq/posts/f8e3c54/">https://oi.saiodgm.gq/posts/f8e3c54/</a></span></div><div class="post-copyright-m"><div class="post-copyright-m-info"><div class="post-copyright-a"><h>作者</h><div class="post-copyright-cc-info"><h>Saiodgm</h></div></div><div class="post-copyright-c"><h>发布于</h><div class="post-copyright-cc-info"><h>2022-01-26</h></div></div><div class="post-copyright-u"><h>更新于</h><div class="post-copyright-cc-info"><h>2022-02-01</h></div></div><div class="post-copyright-c"><h>许可协议</h><div class="post-copyright-cc-info"><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a rel="noopener" target="_blank" title="CC BY-NC-SA 4.0" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></div></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">动态规划</a></div><div class="post_share"><div class="social-share" data-image="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover8.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://npm.elemecdn.com/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'" crossorigin><script src="https://npm.elemecdn.com/social-share.js/dist/js/social-share.min.js" defer crossorigin></script></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/avatar.webp" onerror="this.onerror=null;this.src='https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/friend_404.gif'" alt="avatar"/ crossorigin></div><div class="author-info__name">Saiodgm</div><div class="author-info__description">cqbz 初二最菜 OIer.</div></div><div class="card-info-data is-center"><div class="card-info-data-item"><a href="/archives/"><div class="headline">文章</div><div class="length-num">40</div></a></div><div class="card-info-data-item"><a href="/tags/"><div class="headline">标签</div><div class="length-num">21</div></a></div><div class="card-info-data-item"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/cqbzljt/OIBlog"><i class="fab fa-github"></i><span>站点仓库</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="mailto:hello@saiodgm.gq" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="http://wpa.qq.com/msgrd?v=3&amp;uin=30359624&amp;site=ivrpano.com&amp;menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="https://github.com/cqbzljt" target="_blank" title="GitHub"><i class="fab fa-github"></i></a><a class="social-icon" href="/atom.xml" target="_blank" title="RSS"><i class="fas fa-rss"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">放暑假了，但是这暑假放了跟没放似的。。。<br>为了您最好的体验，请把本站加入广告拦截器的白名单中，谢谢配合 ψ(｀∇´)ψ<br>本站加载了 Service Worker 脚本，目前这个脚本有一点点问题，基本不影响体验，博主会尽力修的( •̀ ω •́ )✧<br>右键触发本站右键菜单，如果需要原生右键菜单请 Ctrl + 右键~</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-text">概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0%E9%A2%98%E7%9B%AE%E8%AE%B0%E5%BD%95%EF%BC%88%E6%80%8E%E4%B9%88%E9%94%99%E7%9A%84%EF%BC%89"><span class="toc-text">练习题目记录（怎么错的）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E8%A6%81%E9%A2%98%E8%A7%A3"><span class="toc-text">简要题解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#A-%E7%89%A7%E5%9C%BA%E7%9A%84%E5%AE%89%E6%8E%92"><span class="toc-text">A. 牧场的安排</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#B-%E6%9C%80%E5%B0%8F%E6%80%BB%E4%BB%A3%E4%BB%B7"><span class="toc-text">B. 最小总代价</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#C-%E9%A1%B9%E9%93%BE"><span class="toc-text">C. 项链</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#D-%E5%9B%BD%E7%8E%8B"><span class="toc-text">D. 国王</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#E-Hie-with-the-Pie"><span class="toc-text">E. Hie with the Pie</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#F-Traveling"><span class="toc-text">F. Traveling</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#H-%E7%82%AE%E5%85%B5%E9%98%B5%E5%9C%B0"><span class="toc-text">H. 炮兵阵地</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#O-%E9%9B%86%E5%90%88%E9%80%89%E6%95%B0"><span class="toc-text">O. 集合选数</span></a></li></ol></li></ol></div></div><div class="card-widget card-recommend-post"><div class="item-headline"><i class="fas fa-dharmachakra"></i><span>相关推荐</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/7ffdbf9/" title="01 背包学习笔记"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover3.webp" alt="01 背包学习笔记" crossorigin></a><div class="content"><a class="title" href="/posts/7ffdbf9/" title="01 背包学习笔记">01 背包学习笔记</a><time datetime="2021-08-16" title="发表于 2021-08-16">2021-08-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/51bfc0ec/" title="ST 表求解 RMQ 问题"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover3.webp" alt="ST 表求解 RMQ 问题" crossorigin></a><div class="content"><a class="title" href="/posts/51bfc0ec/" title="ST 表求解 RMQ 问题">ST 表求解 RMQ 问题</a><time datetime="2022-01-26" title="发表于 2022-01-26">2022-01-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/1130b63d/" title="单调队列优化 & 斜率优化"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/cover4.webp" alt="单调队列优化 & 斜率优化" crossorigin></a><div class="content"><a class="title" href="/posts/1130b63d/" title="单调队列优化 & 斜率优化">单调队列优化 & 斜率优化</a><time datetime="2022-07-10" title="发表于 2022-07-10">2022-07-10</time></div></div></div></div><!--!=partial('includes/widget/card_recent_post', {}, {cache: true})--></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2022  <i id="heartbeat" class="fa fas fa-heartbeat"></i> Saiodgm</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a><span class="footer-separator">|</span><a target="_blank" rel="noopener" href="https://icp.gov.moe/?keyword=20221225">萌ICP备20221225号</a></div><div class="footer_custom_text">慎始，笃行，善终。</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><a class="icon-V hidden" onclick="switchNightMode()" title="浅色和深色模式转换"><svg width="25" height="25" viewBox="0 0 1024 1024"><use id="modeicon" xlink:href="#icon-moon"></use></svg></a><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="chat_btn" type="button" title="给博主留言"><i class="fas fa-sms"></i></button><button id="to_comment" type="button" title="显示评论" onclick="FixedCommentBtn();"><i class="fas fa-comments"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">本地搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/utils.js" crossorigin></script><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/main.js" crossorigin></script><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/tw_cn.js" crossorigin></script><script src="https://npm.elemecdn.com/@fancyapps/ui@4.0.23/dist/fancybox.umd.js" crossorigin></script><script src="https://cdnjs.cloudflare.com/ajax/libs/instant.page/5.1.0/instantpage.min.js" type="module" crossorigin></script><script src="https://npm.elemecdn.com/vanilla-lazyload@17.5.0/dist/lazyload.iife.min.js" crossorigin></script><script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/node-snackbar/0.1.16/snackbar.min.js" crossorigin></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://npm.elemecdn.com/pangu@4.0.7/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (true){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/search/local-search.js" crossorigin></script><div class="pjax-reload"><script async="async">var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';      
+    document.getElementById('loading-box').style.transition = 'opacity 3s';
+    document.getElementById('loading-box').style.opacity = '0';
+    setTimeout(function(){
+      document.getElementById('loading-box').classList.add("loaded")
+    },3000)
+
+    //用于判断是否第一次加载
+    if(sessionStorage.getItem("isReload")){
+       //若显示已经加载过
+       return true
+    }else{
+      //若为第一次加载
+     sessionStorage.setItem("isReload", true)
+     SAONotify('Welcome','欢迎光临😊<br>愿你享受愉快的一天')
+     setTimeout(function(){
+       document.getElementById("SAO-Welcome").remove();
+     },3000)
+    }
+
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').style.transition = '';
+    document.getElementById('loading-box').style.opacity = '1';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',()=> {preloader.endLoading()})
+setTimeout(function(){preloader.endLoading();}, 3000);</script></div><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.2
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container:not\([display]\)').forEach(node => {
+            const target = node.parentNode
+            if (target.nodeName.toLowerCase() === 'li') {
+              target.parentNode.classList.add('has-jax')
+            } else {
+              target.classList.add('has-jax')
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://npm.elemecdn.com/mathjax@3.2.0/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><script>(() => {
+  const $mermaidWrap = document.querySelectorAll('#article-container .mermaid-wrap')
+  if ($mermaidWrap.length) {
+    window.runMermaid = () => {
+      window.loadMermaid = true
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+      Array.from($mermaidWrap).forEach((item, index) => {
+        const mermaidSrc = item.firstElementChild
+        const mermaidThemeConfig = '%%{init:{ \'theme\':\'' + theme + '\'}}%%\n'
+        const mermaidID = 'mermaid-' + index
+        const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+        mermaid.mermaidAPI.render(mermaidID, mermaidDefinition, (svgCode) => {
+          mermaidSrc.insertAdjacentHTML('afterend', svgCode)
+        })
+      })
+    }
+
+    const loadMermaid = () => {
+      window.loadMermaid ? runMermaid() : getScript('https://npm.elemecdn.com/mermaid@8.13.10/dist/mermaid.min.js').then(runMermaid)
+    }
+
+    window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+  }
+})()</script><script>(()=>{
+  const init = () => {
+    twikoo.init(Object.assign({
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo-omega-livid.vercel.app/',
+      region: '',
+      onCommentLoaded: function () {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.vemoji)'))
+      }
+    }, null))
+  }
+
+  const getCount = () => {
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-omega-livid.vercel.app/',
+      region: '',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(function (res) {
+      document.getElementById('twikoo-count').innerText = res[0].count
+    }).catch(function (err) {
+      console.error(err);
+    });
+  }
+
+  const runFn = () => {
+    init()
+    
+  }
+
+  const loadTwikoo = () => {
+    if (typeof twikoo === 'object') {
+      setTimeout(runFn,0)
+      return
+    } 
+    getScript('https://npm.elemecdn.com/twikoo@1.5.11/dist/twikoo.all.min.js').then(runFn)
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else loadTwikoo()
+  } else {
+    window.loadOtherComment = () => {
+      loadTwikoo()
+    }
+  }
+})()</script></div><script>window.addEventListener('load', () => {
+  const changeContent = (content) => {
+    if (content === '') return content
+
+    content = content.replace(/<img.*?src="(.*?)"?[^\>]+>/ig, '[图片]') // replace image link
+    content = content.replace(/<a[^>]+?href=["']?([^"']+)["']?[^>]*>([^<]+)<\/a>/gi, '[链接]') // replace url
+    content = content.replace(/<pre><code>.*?<\/pre>/gi, '[代码]') // replace code
+    content = content.replace(/<[^>]+>/g,"") // remove html tag
+
+    if (content.length > 150) {
+      content = content.substring(0,150) + '...'
+    }
+    return content
+  }
+
+  const getComment = () => {
+    const runTwikoo = () => {
+      twikoo.getRecentComments({
+        envId: 'https://twikoo-omega-livid.vercel.app/',
+        region: '',
+        pageSize: 3,
+        includeReply: true
+      }).then(function (res) {
+        const twikooArray = res.map(e => {
+          return {
+            'content': changeContent(e.comment),
+            'avatar': e.avatar,
+            'nick': e.nick,
+            'url': e.url + '#' + e.id,
+            'date': new Date(e.created).toISOString()
+          }
+        })
+
+        saveToLocal.set('twikoo-newest-comments', JSON.stringify(twikooArray), 10/(60*24))
+        generateHtml(twikooArray)
+      }).catch(function (err) {
+        const $dom = document.querySelector('#card-newest-comments .aside-list')
+        $dom.innerHTML= "无法获取评论，请确认相关配置是否正确"
+      })
+    }
+
+    if (typeof twikoo === 'object') {
+      runTwikoo()
+    } else {
+      getScript('https://npm.elemecdn.com/twikoo@1.5.11/dist/twikoo.all.min.js').then(runTwikoo)
+    }
+  }
+
+  const generateHtml = array => {
+    let result = ''
+
+    if (array.length) {
+      for (let i = 0; i < array.length; i++) {
+        result += '<div class=\'aside-list-item\'>'
+
+        if (false) {
+          const name = 'data-lazy-src'
+          result += `<a href='${array[i].url}' class='thumbnail'><img ${name}='${array[i].avatar}' alt='${array[i].nick}'></a>`
+        }
+        
+        result += `<div class='content'>
+        <a class='comment' href='${array[i].url}' title='${array[i].content}'>${array[i].content}</a>
+        <div class='name'><span>${array[i].nick} / </span><time datetime="${array[i].date}">${btf.diffDate(array[i].date, true)}</time></div>
+        </div></div>`
+      }
+    } else {
+      result += '没有评论'
+    }
+
+    let $dom = document.querySelector('#card-newest-comments .aside-list')
+    $dom.innerHTML= result
+    window.lazyLoadInstance && window.lazyLoadInstance.update()
+    window.pjax && window.pjax.refresh($dom)
+  }
+
+  const newestCommentInit = () => {
+    if (document.querySelector('#card-newest-comments .aside-list')) {
+      const data = saveToLocal.get('twikoo-newest-comments')
+      if (data) {
+        generateHtml(JSON.parse(data))
+      } else {
+        getComment()
+      }
+    }
+  }
+
+  newestCommentInit()
+  document.addEventListener('pjax:complete', newestCommentInit)
+})</script><div class="aplayer no-destroy" data-id="6997741264" data-server="netease" data-type="playlist" data-fixed="true" data-mini="true" data-listFolded="true" data-order="random" data-preload="none" muted></div><script async src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/diytitle.js" crossorigin></script><script data-pjax defer src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/custom/fixed_comment.js" crossorigin></script><script data-pjax defer src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/custom/fixed_card_widget.js" crossorigin></script><script async src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/custom/leaves.js" crossorigin></script><script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.6.0/jquery.min.js" crossorigin></script><script data-pjax src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/custom.js" crossorigin></script><script defer data-pjax src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/kernel.js" crossorigin></script><script defer src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/modify.js" crossorigin></script><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/rightmenu.js" crossorigin></script><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/changebg.js" crossorigin></script><script async src="//at.alicdn.com/t/font_3113667_5ghhue7sqj5.js" crossorigin></script><script async src="//at.alicdn.com/t/font_3167278_4b5nw9t030c.js" crossorigin></script><script async src="//at.alicdn.com/t/font_2032782_ev6ytrh30f.js" crossorigin></script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.15.2/katex.js" crossorigin="anonymous"></script><script defer src="https://npm.elemecdn.com/katex@0.15.2/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script><script async src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/sun_moon.js" crossorigin></script><canvas class="fireworks" mobile="true"></canvas><script src="https://npm.elemecdn.com/butterfly-extsrc@1.1.0/dist/fireworks.min.js" crossorigin></script><script id="canvas_nest" defer="defer" color="100,100,100" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://npm.elemecdn.com/butterfly-extsrc@1.1.0/dist/canvas-nest.min.js" crossorigin></script><script src="https://npm.elemecdn.com/butterfly-extsrc@1.1.0/dist/activate-power-mode.min.js" crossorigin></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script src="//code.tidio.co/vdvuphhthk3fupcq7kxksxstjqcms2ru.js" async="async" crossorigin></script><script>function onTidioChatApiReady() {
+  window.tidioChatApi.hide();
+  window.tidioChatApi.on("close", function() {
+    window.tidioChatApi.hide();
+  });
+}
+if (window.tidioChatApi) {
+  window.tidioChatApi.on("ready", onTidioChatApiReady);
+} else {
+  document.addEventListener("tidioChat-ready", onTidioChatApiReady);
+}
+
+var chatBtnFn = () => {
+  document.getElementById("chat_btn").addEventListener("click", function(){
+    window.tidioChatApi.show();
+    window.tidioChatApi.open();
+  });
+}
+chatBtnFn()
+</script><link rel="stylesheet" href="https://npm.elemecdn.com/aplayer@1.10.1/dist/APlayer.min.css" media="print" onload="this.media='all'" crossorigin><script src="https://npm.elemecdn.com/aplayer@1.10.1/dist/APlayer.min.js" crossorigin></script><script src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/js/meting.js" crossorigin></script><script src="https://npm.elemecdn.com/pjax@0.2.8/pjax.min.js" crossorigin></script><script>let pjaxSelectors = ["title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show","#fixedcard-dashboard","#web_bg",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"]):not([href="/barrage/"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" crossorigin></script><div id="fixedcard-dashboard"><button class="fixedcard-activebtn" type="button" title="用户信息" onclick="FixedCardWidget(&quot;class&quot;,&quot;card-info&quot;,&quot;0&quot;)"><i class="fas fa-address-book"></i></button><button class="fixedcard-activebtn" type="button" title="最新文章" onclick="FixedCardWidget(&quot;class&quot;,&quot;card-recommend-post&quot;,&quot;0&quot;)"><i class="fas fa-dharmachakra"></i></button><div class="fixedcard-user-avatar fixedcard-activebtn" onclick="RemoveFixedCardWidget()"><img class="fixedcard-user-avatar-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://adn.arcitcgn.cn/npm/saiodgm-oiblog@1.3.1/img/avatar.webp" title="Saiodgm" crossorigin></div></div><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><a class="rightMenu-item" href="javascript:window.history.back();"><i class="iconfont icon-back"></i></a><a class="rightMenu-item" href="javascript:window.history.forward();"><i class="iconfont icon-enter"></i></a><a class="rightMenu-item" href="javascript:window.location.reload();"><i class="iconfont icon-chexiao"></i></a><a class="rightMenu-item" href="javascript:kk.scrollToTop();"><i class="iconfont icon-top"></i></a></div><div class="rightMenu-group rightMenu-line hide" id="menu-text"><a class="rightMenu-item" href="javascript:kk.copySelect();"><i class="iconfont icon-copy"></i><span>复制</span></a><a class="rightMenu-item" href="javascript:kk.commentSelect();"><i class="fas fa-comments"></i><span>评论</span></a></div><div class="rightMenu-group rightMenu-line"><a class="rightMenu-item" href="javascript:switchNightMode();"><i class="iconfont icon-DarkTheme"></i><span>昼夜切换</span></a><a class="rightMenu-item" href="javascript:kk.switchReadMode();"><i class="iconfont icon-read"></i><span>阅读模式</span></a><a class="rightMenu-item" id="menu-translate"><i class="fas fa-language"></i><span>简繁切换</span></a><a class="rightMenu-item" href="javascript:kk.switchTheme();"><i class="iconfont icon-theme"></i><span>主题切换</span></a></div></div></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_clock_injector_config(){
+    var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+    var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img class="entered loading" id="card-clock-loading" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://npm.elemecdn.com/hexo-butterfly-clock/lib/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading"/ crossorigin></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = '/posts/'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_injector_config();
+  }
+  </script><script src="https://pv.sohu.com/cityjson?ie=utf-8" crossorigin></script><script data-pjax src="https://npm.elemecdn.com/hexo-butterfly-clock/lib/clock.min.js" crossorigin></script><script data-pjax>
+  function butterfly_footer_beautify_injector_config(){
+    var parent_div_git = document.getElementById('footer-wrap');
+    var item_html = '<div id="ghbdages" style="overflow:hidden;max-height:90px;height:auto;text-align:center;margin-top:10px"><div class="swiper-wrapper"><div class="swiper-slide"><a class="github-badge" target="_blank" href="https://hexo.io" style="margin-inline:5px" title="本站框架为 Hexo 6.2.0"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Frame-Hexo-blue?style=for-the-badge&amp;logo=hexo" alt=""/ crossorigin></a><a class="github-badge" target="_blank" href="https://butterfly.js.org/" style="margin-inline:5px" title="本站主题为 Butterfly 4.0.1"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=for-the-badge&amp;logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAABS2lUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxNDIgNzkuMTYwOTI0LCAyMDE3LzA3LzEzLTAxOjA2OjM5ICAgICAgICAiPgogPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIi8+CiA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgo8P3hwYWNrZXQgZW5kPSJyIj8+nhxg7wAAAblJREFUOI2t1LtrFUEUx/HPDT5SKBYKomJ8BSSC+Ggs1EQQROwSNQhqFay0sLJRbExKsbCwUmtB/A9ELUSwihJEbSx9g4VEkcDPYueSvWty4+vAsuc3M3znzPzOLkjSfm4leVPTf/RAj86Yxkbc8ZfRBL4r71Fc/B/Auh7H7n8Frm/oq7/J6KmLegw09AGc6gI7h3tY3DFaXFqV5Gt+jSdzONqbZLLMT9RdrgPH5oC1Y28DuD3JTJJXzbZZVJhLcKnL0Y7gccnvqrrhMFpzrk4y3qW6JHlaqthU9IskA42qlzFrytEu1cHm8j7WrgEj2FZ0q523gR8WAK5EP/YX/QUrsLroQaypA8/g/QLQQbNtdUN178/Rh+N4xKwpr1VNvQW7cKjs2F/GfmCo6GEsxbNS+XVcLlVXLtV6qBcnsa/k0/iEnWX+Nh7gCqawoYxNQatVTC8ujXRx+UJZsy7JaJKhJAeTtJp9WP/05vsRTOJhyT9jLb7hvsrtjqgDb2KmMT+hutOtqjb5jpf4OM/mHUfuSfK2HHEyyZ7acZYnOZHkfMnn/WPXgWNJriXZUVt0NslwTZ9O0tcN+BPSStKOpIECLQAAAABJRU5ErkJggg==" alt=""/ crossorigin></a><a class="github-badge" target="_blank" href="https://arcitcgn.cn/171.html" style="margin-inline:5px" title="本站使用 ADN 为静态资源提供 CDN 加速"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/CDN-ADN-black?style=for-the-badge&amp;logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAANGElEQVR4Xu2ae3BUVZ7HP+f2vbfzJJDwEDC8CQ8BowgaQJJVAVFUQEZRYZlhBrZqa5za2tmt2dqZ2UfVbs06O7UzNTPrC3wgGFEQRnyARiAkEBGQNwjyfj8SjAmk0933cfYP6Nj3mO7cboL/LJ+q+0e+33O7c7/39rnn/M6Bm/z/RqhCeyBABBEZ2ZCTi5aXCVk6QneQTgTCl5GNIeSVZmTIAUc9//uk3QLQweiJVjgcfWQx+qiBBIbcgtazIyI/AzI1hOYiXRusRmRDHe6FU7jHD+Ls24ez8xDOl3W4F77vQK47gCxE9mj0cY9gPlGCUdoDrdAAU22XjDCy+TTuiW3YNeuwVm/F3liLe0GCVNu2N2kHoIM+Er3kx2T8bDzGxFxEB7VNPBZEL+HWnsY9cQH3bB3yYjMyBFdD7Izo1g2tex6iUx3yYhVWxRqiKw/jHLiRT0VaAeQhOs0h42/nEny2C1o31Y/hgnsW99RGrLVVWBX7cXZdxD3fhLxigxXf1gAjA5GVj+g8gMDgEegju6Pdegzn0FqsD4/gHLwRQaQcQA+0wl+S9dwUzBk6GKof4yzuqeVE3lhJtPwozlc22GqbtshF5A0hMHwggSEXcc9vx958CVkb8w0do2MuHWvradFuKD3Rer1O7qrT5LtnyJetHSfIt14nd1Ux+ugABNTPSAcd9EK0PsXoo7qidRfXblxRL4p+/gz/oAfQ1XPanY6I/OfJeUu94PjjGPnhfyPr950QBer57UEAAtmIHJ2rF/yjR5hbvYBNBXmk/X2+kgtAYC4Zzz6MOUP1YthgvUL4j/9D87+HkE2q3x444DQhrwBkBsl8sITJQ/owtG9P+l1q4JLa3g+++oCxGPe9QM7SAkQX1YuxnMjiXxF69jKyQfXai84d6XxbP4YVF1F89zDumTyGh3IyyVlVxXuvf8BrW/bxee031LournpuItoMIAeR+yeyl0zEfFT1YnyJs3seV2Ycwzmkeu3Jbf0ZNm8q86eM45Fe3eilaWgxr7GJxuodVL24ghc+2czHjttOb4yJmI8eotMV9fceO46TH3mK4I/V824UpoFZ1Iuiv3+an9dW8HWomsiCX/LKkxOYWVzEHQV5FAjR9o31hQHmH8lZrF50/LGSDtX5iM7quTea3Cxy171A5fbF7LylgFtU3y9JO8HeBPrdgz5e1WNIkB8QXfY1sk71bjSXQ1zefZjdoTCh85c4r/p+SRpAMfqobmg9VD3GBdyzm7DWqfr3ReUXrL+ei4ckAQgQtxMYFXvntsZBnH0ncY+p+vfFms9Y7TjX19klvLgMROYAAoNVPZ6DOHvVd34/AkUl6KWx0VoqWGCtw/qoFvdCiyg0jcElpXTrXwTSMzsMS65OGIVI8F1C0Fh7gd2ffoRtRVUXkgSQi+iQ7PGXII8qrz0Tgj8j459/QHCOi/93MYAGWg3W+gqi73uMLr37Mes3f6ZH0VCkm9JnAvD+H/6THWveU+UYCQPIRuRmI3JUPYYF0a/jJiYAd2PcOwHzEbh6QfFeW0SQ4XIiCz0dqhCCMTNm06No6NW/tZQ+k/NHDvLZu0uQ3icnnoQBBCHDhKCqx3CQTvzjn4nImkVwfkdEfnw7v9RgV67F+sgj9igaypgZszyaX6SUbHx7EeePfKVa8SQMQAMt2e9YXv1BtiQ7Fv2+UoxJ8W38EkI2vUnk5UbkNy2i0DTGPflDuvTuF9fUP2cO7OXzlW+pskrCABywnSRz+AAEgogMuNpfzCbjb9qqCiWiGuvTaqxPPWKv24oZPfVJj+YX13GoXvoadaeOq5ZKwgBCyKYIhFU9ho4wOiA6ApRiTBqLfp/axg+XkQ1LiLx0BXm5RQzoOvc+PZf8HoVxTf1zcu8Otq56R5VbI2EAl5GNDbjfJOrLAhDogVaYi8ibRXB+JiJLbeOH9VhrarArPWLf4lHc9fDjHs0vjmVRVf4K9efOqFZrJAwghGw6i3tqBIxUvRh90QZMxpw2Gn2c6vmhHnlpCZGXw8jmFlE3TEpnzSOva3rj+6M7tvDFhytUOREJA4hC5AjuQVWPZzTGuOHod8b6glSpIPr+VuxNHnHAqDEUT3zEo/nFjkaoenMhjXUXVSsRCQMA2I+9ywZLT1D87I3WX9X8Uod7sZzIwigy0iKaGZmUzZ5PTn56s8tDW2vY+Yl3INUGSQP4Emd3He7FW9B6qt71shprxU7sLR5x8JgyRtz/kEfzSzTczIbFL3OlPqXSWNIATuIe24+zq70DuIB79i0ir1jxawPB7BxKZ88ns0NeXFP/HKzZwO51q1W5LZIG0IwMVWFV/BXG5GSDolRZRfSdvdg7POKwsoncVjrBo/kl0nSFysUv0dyYcj0yaQAAVVgV53BP90BL752scAr3+NtEXvOs8mR2yKNs1nyCWdlxTf2zd0MF+zZUqLIf2gzgKM5XVVgVMwnOVb10+AuRtw7i7PWItz/wMEUlCStPSWlubKBqyQIiobRK8W0GYIG1kmj5Q5jTYyO/dDmGc2g50Tc8U+Xc/M6UzZ6PmZEZ19Q/u9d+xIGaSlX2S5sBAGzDrlmPteYxzJmq5xcJ8l2iSw7jHPAYd0yeSv+7SjyaX67UX6Jy8ctEw98OpFLEVwBhZPNiIi+Nx5iQ7rLXVzj7VxBZ4hHzunWn9JmfoBsp7SdoYefHqzi87TNVTgVfAQA0I5sspJXOy8AFdxmRRSdwj3qMUVNm0GdEwqF2UhprL7BhyQLs6LcDqTTwFYABxkyCc7uipTU+/xJn9yqib3vEgp69uPepuWi6r//hO3zx4QqO7tyqyqni68uL0UdPxpiu6n6wwV5K5NUzuCc9xt3TnqJw6AiP5pf6c6epKn8F105Yr2gNA0yBEPHD7zYDMCH4DMF5ndG6qp4fdmNv+4DoMo/YtU9/xj45J+UaX4wt773DyX07VbkteqIVhqDpIrJlLaHNAEZjjIsVOlPl2srR8ou43y5etBQ6Bw6Ja+qf2pPH2Pj267hOSusBOhi3od+xEWutoicmA5F5PYVOAWICxpQNWB8fiA1+ug8YTEmahU6AzSvKOXPAO5DywRD04beg9VCX75MGMBb9vjKMB1U9FcZglD2n5S76NeF/3COjG+TYmT+ka5/0ptHnj3xFzbLFycrcrZGByJyO+cwGrE/U9YqEAeQgcq+n0BlDAnlG9p1ztJxXl3fvWf5ZybT0BlNSSmqWvcH5I0mLNK3xGObMvgQG/oHm/1C9hAFcT6EzhgAuawHO6iZ5gUDvrNLZv6DgVo00Fng4e3Afm1eUq3JbjMO4/6dk/NPzhH/bgKxX/VYDyEN0mkVwfhYivdnZNSRw2jAJIznRazDb7nxAU5b3/CFdl43vLKL2pO+FWAHiXowHfkPW86dxT6wh+he1DSQIYALmlHsw0pqdxRZLNBANgQDnDBMnoLNh7DQaOhSAm1LnfZWT+3by+cqlqpyILET2dMxZf0fmr0xE8H8JPVePbLVS9J0AChBdniY4L9myWDI2YH1Sh3thCuYTp4xgRlRKjvQdzvbbx4NM49F3bZvq8lepP3datVQMMG9Hv2suGc9OwngsgAj8jtC/JtvD8J0AJmNOG4l+j6r7oQFZ/yLh323Drtks3C0lWs4vgkawsPLe6VzJ7pje3T++63O2fbhclWMYYHZB61aMPmoSxtQyjEmd0braYC8m/OJrRP6cbIutJ4CuaN2fIvgTPUEVuC0qiH6wBXtjBBleKptf2BY6t3XwoIef2zO0pCydux90bB5fv9QONnw97SJm3bXN1dJEBDshCm5F6z2QwJBBBIYVovWJlectiL5JeMF/0/wvsX2FifAE8CjmE8PR74zX/HIJWVtOZEEEGQaQ4B4KmvsOj32sXmZkX11KTQUtwMhDX/DrXdWlHcgdbyPs2DtcgAiA3toS/NfIugWEf/8q4T95ltsS0BJAIVqfmQTnpru/dzXRlduxP/eIw8omymFlEz2aTzKsMLPXv0Wny/U4BERbT6UF0a1Ym54n/NtqrE/9bs5uCWAqwacGERgWb/rlWpl7oQXfbkPJ7JBHaZqFTi1Ayf4a7t9Vifvdm+yhGRnag7P9XSKLVxNdGb+b3A86QF8CA3+AOae1R8oPHxBdvgd7u0e8/YGHGTSm1KP5QQiyw0389fpy8kKN2Eo/bUG0AfebU7jHdmBvqcT6eDv25kSvubbQBYjHMWf1JzBINf1wBvfkUiKvenranE4FlM6al26h09xfXb1p79o1R7DydGxTghtCNl1C1p7DPX0K5/gZ3JMNyHp1bJ8q+jD0O6YTfEY1/PIe0aUHcPZ4xDsnT2XAqDEezS+hxsb6ykX/tTBc790uc4PQf0Twp73Q+sVvd/GDAHEc5/AyIos8d6Fjt+6Mv1boTHHWhhCCPetW8+WmStW6UYgHMadmQsqbGwSIs7intmBv9ATQoXNXBpWUEjCS9tqtIqXkxO4v2trYdJOb3OQmN2kn/g+/n/ea8Z8NDwAAAABJRU5ErkJggg==" alt=""/ crossorigin></a></div><div class="swiper-slide"><a class="github-badge" target="_blank" href="https://vercel.com/" style="margin-inline:5px" title="本站主站部署于 Vercel"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Hosted-Vercel-brightgreen?style=for-the-badge&amp;logo=Vercel" alt=""/ crossorigin></a><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" title="本站项目由 Github 托管"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Source-Github-d021d6?style=for-the-badge&amp;logo=GitHub" alt=""/ crossorigin></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" title="本站采用知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议进行许可"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=for-the-badge&amp;logo=Claris" alt=""/ crossorigin></a></div></div></div><style>a.github-badge:hover:before {display:none}</style>';
+    console.log('已挂载butterfly_footer_beautify')
+    parent_div_git.insertAdjacentHTML("beforeend",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_footer_beautify_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_footer_beautify_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js" crossorigin></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-footer-beautify@latest/lib/swiperbdage_init.min.js" crossorigin></script><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js" crossorigin></script><div class="js-pjax"><script async="async">var arr = document.getElementsByClassName('recent-post-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '50ms');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '50ms');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('article-sort-item');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '50ms');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-widget');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '50ms');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('card-clock');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '50ms');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('categoryBar');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__zoomIn');
+    arr[i].setAttribute('data-wow-duration', '1s');
+    arr[i].setAttribute('data-wow-delay', '50ms');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script><script async="async">var arr = document.getElementsByClassName('flink-list-card');
+for(var i = 0;i<arr.length;i++){
+    arr[i].classList.add('wow');
+    arr[i].classList.add('animate__flipInY');
+    arr[i].setAttribute('data-wow-duration', '2s');
+    arr[i].setAttribute('data-wow-delay', '50ms');
+    arr[i].setAttribute('data-wow-offset', '100');
+    arr[i].setAttribute('data-wow-iteration', '1');
+  }</script></div><script defer src="https://unpkg.zhimg.com/hexo-butterfly-wowjs/lib/wow.min.js" crossorigin></script><script defer src="https://unpkg.zhimg.com/hexo-butterfly-wowjs/lib/wow_init.js" crossorigin></script><script data-pjax src="https://npm.elemecdn.com/hexo-filter-gitcalendar/lib/gitcalendar.js" crossorigin></script><script data-pjax>
+  function gitcalendar_injector_config(){
+      var parent_div_git = document.getElementById('recent-posts');
+      var item_html = '<div class="recent-post-item" style="width:100%;height:auto;padding:10px;"><style>#git_container{min-height: 280px}@media screen and (max-width:650px) {#git_container{min-height: 0px}}</style><div id="git_loading" style="width:10%;height:100%;margin:0 auto;display: block;"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50" xml:space="preserve"><path fill="#d0d0d0" d="M25.251,6.461c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615V6.461z" transform="rotate(275.098 25 25)"><animatetransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animatetransform></path></svg><style>#git_container{display: none;}</style></div><div id="git_container"></div></div>';
+      parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+      console.log('已挂载gitcalendar')
+      }
+
+    if( document.getElementById('recent-posts') && (location.pathname ==='/'|| '/' ==='all')){
+        gitcalendar_injector_config()
+        GitCalendarInit("https://github-calendar-api.vercel.app/api?cqbzljt",['#e4dfd7', '#f9f4dc', '#f7e8aa', '#f7e8aa', '#f8df72', '#fcd217', '#fcc515', '#f28e16', '#fb8b05', '#d85916', '#f43e06'],'cqbzljt')
+    }
+  </script><!-- hexo injector body_end end --><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/wanko.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false});</script></body></html>
